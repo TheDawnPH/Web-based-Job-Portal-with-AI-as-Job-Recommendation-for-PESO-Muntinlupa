@@ -1,16 +1,11 @@
 <?php
-
-session_start();
-
-require_once "config.php";
-
-// get job id from url
-$job_id = $_GET['job_id'];
+http_response_code(404);
 ?>
 
 <html>
+
 <head>
-    <title>PESO Job Portal - Job Details</title>
+    <title>404 Page Not Found</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -23,10 +18,13 @@ $job_id = $_GET['job_id'];
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 </head>
+
 <body>
-    <?php include "nav.php"; ?>
+    <?php include 'nav.php'; ?>
     <div class="container">
-        <!-- insert pending job details here--> 
+        <h1>404 Not Found</h1>
+        <p>The page you are looking for could not be found.</p>
     </div>
 </body>
+
 </html>

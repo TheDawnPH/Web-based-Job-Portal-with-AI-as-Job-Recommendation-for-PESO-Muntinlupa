@@ -48,7 +48,7 @@ session_start();
                 echo '<div class="col-md-4">';
                 echo '<h1>Available Jobs</h1>';
                 echo '<hr>';
-                echo '<!-- insert php code here --><br>';
+                echo '<!-- insert php code here that sorts job applications based on ai --><br>';
                 echo '</div>';
             }
             ?>

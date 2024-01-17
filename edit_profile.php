@@ -8,7 +8,7 @@ require_once "config.php";
 ?>
 <html>
 <head>
-    <title>PESO Job Portal - Verify Email</title>
+    <title>PESO Job Portal - Profile</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -21,4 +21,15 @@ require_once "config.php";
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 </head>
+<body>
+    <?php include "nav.php"; ?>
+    <div class="container">
+        <div class="col-md-4">
+            <!-- insert editable profile here -->
+        </div>
+        <div class="col-md-4">
+            <!-- insert editable profile picture here -->
+        </div>
+    </div>
+</body>
 </html>
