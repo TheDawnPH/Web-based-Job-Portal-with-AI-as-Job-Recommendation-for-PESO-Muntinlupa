@@ -26,7 +26,7 @@ $job_id = $_GET['job_id'];
 <body>
     <?php include "nav.php"; ?>
     <div class="container">
-        <!-- insert pending job details here--> 
+        <!-- insert pending job details here-->
     </div>
 </body>
 </html>

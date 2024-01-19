@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if (empty($email_err) && empty($password_err)) {
-        $sql = "SELECT user_id, user_type, fname, mname, lname, suffix, email, user_password, verification_status, company_account FROM users WHERE email = ?";
+        $sql = "SELECT user_id, user_type, fname, mname, lname, suffix, email, user_password, verification_status FROM users WHERE email = ?";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_email);
@@ -38,20 +38,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_store_result($stmt);
 
                 if (mysqli_stmt_num_rows($stmt) == 1) {
-                    mysqli_stmt_bind_result($stmt, $user_id, $user_type, $fname, $mname, $lname, $suffix, $email, $hashed_password, $verification_status, $company_account);
+                    mysqli_stmt_bind_result($stmt, $user_id, $user_type, $fname, $mname, $lname, $suffix, $email, $hashed_password, $verification_status);
 
                     if (mysqli_stmt_fetch($stmt)) {
                         if (password_verify($password, $hashed_password)) {
                             if ($verification_status == 1) {
                                 session_start();
 
+                                // set session variables
                                 $_SESSION["loggedin"] = true;
                                 $_SESSION["user_id"] = $user_id;
                                 $_SESSION["user_type"] = $user_type;
-                                $_SESSION["fname"] = $fname;
-                                $_SESSION["lname"] = $lname;
-                                $_SESSION["suffix"] = $suffix;
-                                $_SESSION["email"] = $email;
+                                // use cookies on fname, lname, suffix, email
+                                $_COOKIE["fname"] = $fname;
+                                $_COOKIE["lname"] = $lname;
+                                $_COOKIE["suffix"] = $suffix;
+                                $_COOKIE["email"] = $email;
 
                                 header("location: index.php");
                             } else {
@@ -96,14 +98,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="container">
-    <a href="index.php" class="btn btn-secondary">Back to Homepage</a><br><br>
+        <a href="index.php" class="btn btn-secondary">Back to Homepage</a><br><br>
         <div class="row">
             <div class="col-md">
                 <img src="img/peso_muntinlupa.png" alt="PESO Logo" class="img-fluid">
             </div>
             <div class="col-md">
-            <br>
-            <h1>Login</h1>
+                <br>
+                <h1>Login</h1>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <?php
                     if (!empty($verification_err)) {
@@ -112,14 +114,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ?>
                     <div class="mb-4">
                         <label for="email" class="form-label">Email</label>
-                        <input type="text" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" id="email"
+                        <input type="text" name="email"
+                            class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" id="email"
                             aria-describedby="emailHelp" value="<?php echo $email; ?>">
                         <div class="invalid-feedback"><?php echo $email_err; ?></div>
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="text" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="password"
-                            aria-describedby="passwordHelp" value="<?php echo $password; ?>">
+                        <input type="text" name="password"
+                            class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>"
+                            id="password" aria-describedby="passwordHelp" value="<?php echo $password; ?>">
                         <div class="invalid-feedback"><?php echo $password_err; ?></div>
                     </div>
                     <div class="mb-4 text-end"><a href="forgot_password.php">Forgot Password?</a></div>

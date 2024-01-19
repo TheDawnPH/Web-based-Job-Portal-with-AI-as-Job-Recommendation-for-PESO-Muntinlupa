@@ -44,7 +44,7 @@ session_start();
     </div>
     <div class="container">
         <div class="row gx-5">
-            <?php if(isset($_SESSION["user_type"]) && $_SESSION["user_type"] === applicant){
+            <?php if(isset($_SESSION["user_type"]) && $_SESSION["user_type"] === 'applicant'){
                 echo '<div class="col-md-4">';
                 echo '<h1>Available Jobs</h1>';
                 echo '<hr>';
@@ -57,6 +57,7 @@ session_start();
                 <hr>
                 <!-- insert php code here --><br>
             </div>
+            <?php if(!isset($_SESSION["user_type"])) {?>
             <div class="col-md-4">
                 <h1>Login or Register</h1>
                 <hr>
@@ -65,6 +66,8 @@ session_start();
                     <a href="register.php" class="btn btn-primary btn-lg">Register</a>
                 </div><br>
             </div>
+            <?php
+            }?>
             <div class="col-md-4">
                 <h1>Facebook Feed</h1>
                 <hr>

@@ -11,6 +11,22 @@ require_once "config.php";
 $user_type = $fname = $mname = $lname = $suffix = $email = $password = $confirm_password = "";
 $user_type_err = $fname_err = $mname_err = $lname_err = $suffix_err = $email_err = $password_err = $confirm_password_err = "";
 
+function isEmailExists($conn, $email)
+{
+    $sql = "SELECT user_id FROM users WHERE email = ?";
+    if ($stmt = mysqli_prepare($conn, $sql)) {
+        mysqli_stmt_bind_param($stmt, "s", $param_email);
+        $param_email = $email;
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        $result = mysqli_stmt_num_rows($stmt);
+        mysqli_stmt_close($stmt);
+        return $result > 0;
+    }
+    return false;
+}
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty(trim($_POST["user_type"]))) {
@@ -37,11 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $lname = trim($_POST["lname"]);
     }
 
-    if (empty(trim($_POST["suffix"]))) {
-        $suffix_err = "Please enter suffix.";
-    } else {
-        $suffix = trim($_POST["suffix"]);
-    }
+    $suffix = trim($_POST["suffix"]);
+    
 
     if (empty(trim($_POST["email"]))) {
         $email_err = "Please enter email.";
@@ -64,6 +77,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    if (empty($email_err) && isEmailExists($conn, $email)) {
+        $email_err = "Email already exists.";
+    }
 
     if (empty($user_type_err) && empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
         $sql = "INSERT INTO users (user_type, fname, mname, lname, suffix, email, user_password, verification_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -81,12 +97,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_verification_code = md5($email . time());
 
             if (mysqli_stmt_execute($stmt)) {
-                // use phpmailer
-                require_once "phpmailer/PHPMailerAutoload.php";
-                require_once "phpmailer/class.phpmailer.php";
-                require_once "phpmailer/class.smtp.php";
+                // phpmailer
+                require 'PHPMailer/src/Exception.php';
+                require 'PHPMailer/src/PHPMailer.php';
+                require 'PHPMailer/src/SMTP.php';
 
-                $mail = new PHPMailer();
+                $mail = new PHPMailer\PHPMailer\PHPMailer();
                 $mail->IsSMTP();
                 $mail->Mailer = "smtp";
                 $mail->SMTPDebug  = 1;
@@ -158,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-md">
                 <br>
                 <h1>Register</h1>
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"], ENT_QUOTES, 'utf-8'); ?>" method="post">
                     <?php
                     if (!empty($alert)) {
                         echo '<div class="alert alert-success">' . $alert . '</div>';
@@ -214,18 +230,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="text" name="password" class="form-control" id="password"
+                        <input type="password" name="password" class="form-control" id="password"
                             aria-describedby="passwordHelp">
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Confirm Password</label>
-                        <input type="text" name="confirm_password" class="form-control" id="confirm_password"
+                        <input type="password" name="confirm_password" class="form-control" id="confirm_password"
                             aria-describedby="confirm_passwordHelp">
                     </div>
                     <div class="mb-4">
-                    <div class="form-text">By Registering yourself in this website, you agree on <a href="https://privacy.gov.ph/data-privacy-act/" target="_blank">Privacy Notice from Republic Act 10173 or Data Privacy Act of 2012</a>.</div>
+                        <div class="form-text">By Registering yourself in this website, you agree on <a
+                                href="https://privacy.gov.ph/data-privacy-act/" target="_blank">Privacy Notice from
+                                Republic Act 10173 or Data Privacy Act of 2012</a>.</div>
                     </div>
-                    <a href="register.php" class="btn btn-primary">Register</a>
+                    <input type="submit" class="btn btn-primary" value="Register">
                 </form>
             </div>
         </div>

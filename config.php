@@ -9,7 +9,7 @@ exec($cmd);
 
 date_default_timezone_set('Asia/Manila');
 
-$website = "jobportal.pesomuntinlupa.xyz";
+$website = "jobportal.muntinlupa.site";
 
 // Database connection
 define('DB_SERVER', 'localhost');
@@ -88,7 +88,7 @@ if($conn === false){
         fname VARCHAR(255) NOT NULL,
         mname VARCHAR(255) NOT NULL,
         lname VARCHAR(255) NOT NULL,
-        suffix VARCHAR(255) NOT NULL,
+        suffix VARCHAR(255),
         email VARCHAR(255) NOT NULL,
         user_password VARCHAR(255) NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -99,7 +99,7 @@ if($conn === false){
         birth_day INT(2),
         birth_month INT(2),
         birth_year INT(4),
-        contact_number INT(11),
+        contact_number VARCHAR(255),
         house_number VARCHAR(255),
         street VARCHAR(255),
         subdivision VARCHAR(255),
@@ -115,6 +115,7 @@ if($conn === false){
         sex VARCHAR(255),
         twentyfirstCat_id INT(255),
         tswo_id INT(255),
+        profile_image text,
         FOREIGN KEY (cscategory_id) REFERENCES cscategory(cscategory_id),
         FOREIGN KEY (twentyfirstCat_id) REFERENCES twentyfirstCat(twentyfirstCat_id),
         FOREIGN KEY (tswo_id) REFERENCES tswo(tswo_id)

@@ -24,7 +24,7 @@ $applications = "<a class='nav-link' href='job_applications.php'> Job Applicatio
         </li> --->
         <li class="nav-item">
           <?php
-            if(isset($_SESSION['logged_in'])){
+            if(isset($_SESSION['loggedin'])){
               echo $logout;
             } else {
               echo $login;
@@ -33,14 +33,14 @@ $applications = "<a class='nav-link' href='job_applications.php'> Job Applicatio
         </li>
         <li class="nav-item">
           <?php
-            if(isset($_SESSION['logged_in'])){
+            if(isset($_SESSION['loggedin'])){
               echo $profile;
             }
           ?>
         </li>
         <li class="nav-item">
           <?php
-            if(isset($_SESSION['logged_in'])){
+            if(isset($_SESSION['loggedin'])){
               echo $applications;
             }
           ?>
