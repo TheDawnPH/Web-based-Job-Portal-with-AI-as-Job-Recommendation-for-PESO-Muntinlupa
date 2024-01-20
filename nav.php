@@ -19,9 +19,6 @@ $applications = "<a class='nav-link' href='job_applications.php'> Job Applicatio
         <li class="nav-item">
           <a class="nav-link" href="index.php">Home</a>
         </li>
-        <!--- <li class="nav-item">
-          <a class="nav-link" href="about.php">About</a>
-        </li> --->
         <li class="nav-item">
           <?php
             if(isset($_SESSION['loggedin'])){
@@ -40,11 +37,28 @@ $applications = "<a class='nav-link' href='job_applications.php'> Job Applicatio
         </li>
         <li class="nav-item">
           <?php
-            if(isset($_SESSION['loggedin'])){
+            if(isset($_SESSION['loggedin']) && $_SESSION['user_type'] === 'applicant'){
               echo $applications;
             }
           ?>
         </li>
+        <?php
+          // Check if the user is logged in and is of type 'company'
+          if(isset($_SESSION['loggedin']) && $_SESSION['user_type'] === 'company'){
+        ?>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Company Tools
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="company/add_job_applications">Add Job Listing</a></li>
+              <li><a class="dropdown-item" href="company/job_listings">View Job Listing</a></li>
+              <li><a class="dropdown-item" href="company/job_applicants">View Job Applicants</a></li>
+            </ul>
+          </li>
+        <?php
+          }
+        ?>
       </ul>
     </div>
   </div>
