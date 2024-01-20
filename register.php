@@ -108,10 +108,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->SMTPDebug  = 1;
                 $mail->SMTPAuth   = TRUE;
                 $mail->SMTPSecure = "tls";
-                $mail->Port       = 587;
-                $mail->Host       = "smtp.gmail.com";
-                $mail->Username   = ""; // email address
-                $mail->Password   = ""; // password
+                $mail->Port       = $smtp_port;
+                $mail->Host       = $smtp_host;
+                $mail->Username   = $stmp_username; // email address
+                $mail->Password   = $smtp_password; // password
                 $mail->IsHTML(true);
                 $mail->AddAddress($email, $fname . " " . $lname);
                 $mail->SetFrom("", "PESO Muntinlupa");
@@ -123,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $content .= "PESO Muntinlupa";
                 $mail->MsgHTML($content);
                 if (!$mail->Send()) {
-                    echo "Error while sending Email.";
+                    echo $warning = "Error while sending Email.";
                     var_dump($mail);
                 } else {
                     echo $alert = "Please check your email for the verification link.";

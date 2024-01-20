@@ -11,7 +11,7 @@ if (!isset($_SESSION["user_type"]) || empty($_SESSION["user_type"])) {
 
 // get user type and user id
 $user_type = $_SESSION["user_type"];
-$user_id = $_SESSION["user_id"];
+$user_id = mysqli_real_escape_string($conn, $_SESSION["user_id"]);
 
 
 if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
@@ -20,10 +20,13 @@ if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
     $profile_user_id = "";
 }
 
-// get user data from user id
-$sql = "SELECT * FROM users WHERE user_id = '$user_id'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
+$stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
+$stmt->bind_param("s", $_SESSION["user_id"]);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$stmt->close();
+
 
 // Define variables and initialize with empty values
 $gender = $row['sex']; // Assuming 'gender' is a column in your users table
@@ -109,16 +112,122 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
                         <p class="card-text"><strong>School Name:</strong>
                             <?php echo "{$school_name} ({$school_year_begin} - {$school_year_end})"; ?></p>
                         <p class="card-text"><strong>Technical School Name:</strong>
-                        <br><br>
-                        <?php
+                            <br><br>
+                            <?php
                         // Show the "Edit Profile" link only if the user IDs do not match
                         if ($user_id != $profile_user_id) {
                             echo '<a href="edit_profile.php" class="btn btn-primary">Edit Profile</a>';
+                        }
+
+                        // show request company_verification button if user is company to have permission to post job listing
+                        if ($user_type === "company") {
+                            echo '<a href="request_company_verification.php" class="btn btn-primary">Request Company Verification</a>';
                         }
                         ?>
                     </div>
                 </div>
             </div>
+            <?php if ($user_type === "admin") : ?>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Files</h5>
+                        <!-- Add content for file information here -->
+                        <?php
+                    // if user is applicant show button link to view nsrp form and biodata
+                    if ($user_type === "applicant") {
+                        // get applicant documents data from user id
+                        $sql = "SELECT * FROM applicant_documents WHERE user_id = '$user_id'";
+                        $result = mysqli_query($conn, $sql);
+                        $row = mysqli_fetch_assoc($result);
+
+                        // if nsrp_form is present show button link to view nsrp_form
+                        if ($row['nsrp_form'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['nsrp_form'] . '" class="btn btn-primary">View NSRP Form</a>';
+                        }
+                        // if biodata_form is present show button link to view biodata_form
+                        if ($row['biodata_form'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['biodata_form'] . '" class="btn btn-primary">View Biodata Form</a>';
+                        }
+                    }
+
+                    // if user is company show button link to view loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, sketch_map, 2303_bir document
+                    if ($user_type === "company") {
+                        // get company documents data from user id
+                        $sql = "SELECT * FROM company_documents WHERE user_id = '$user_id'";
+                        $result = mysqli_query($conn, $sql);
+                        $row = mysqli_fetch_assoc($result);
+
+                        // if loi is present show button link to view loi
+                        if ($row['loi'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['loi'] . '" class="btn btn-primary">View LOI</a>';
+                        }
+                        // if cp is present show button link to view cp
+                        if ($row['cp'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['cp'] . '" class="btn btn-primary">View CP</a>';
+                        }
+                        // if sec_accredit is present show button link to view sec_accredit
+                        if ($row['sec_accredit'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['sec_accredit'] . '" class="btn btn-primary">View SEC Accreditation</a>';
+                        }
+                        // if cda_license is present show button link to view cda_license
+                        if ($row['cda_license'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['cda_license'] . '" class="btn btn-primary">View CDA License</a>';
+                        }
+                        // if dole_license is present show button link to view dole_license
+                        if ($row['dole_license'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['dole_license'] . '" class="btn btn-primary">View DOLE License</a>';
+                        }
+                        // if loc is present show button link to view loc
+                        if ($row['loc'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['loc'] . '" class="btn btn-primary">View LOC</a>';
+                        }
+                        // if mbpermit is present show button link to view mbpermit
+                        if ($row['mbpermit'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['mbpermit'] . '" class="btn btn-primary">View MB Permit</a>';
+                        }
+                        // if job_vacant is present show button link to view job_vacant
+                        if ($row['job_vacant'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['job_vacant'] . '" class="btn btn-primary">View Job Vacant</a>';
+                        }
+                        // if job_solicitation is present show button link to view job_solicitation
+                        if ($row['job_solicitation'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['job_solicitation'] . '" class="btn btn-primary">View Job Solicitation</a>';
+                        }
+                        // if phjobnet_reg is present show button link to view phjobnet_reg
+                        if ($row['phjobnet_reg'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['phjobnet_reg'] . '" class="btn btn-primary">View PH Jobnet Registration</a>';
+                        }
+                        // if cert_nopendingcase is present show button link to view cert_nopendingcase
+                        if ($row['cert_nopendingcase'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['cert_nopendingcase'] . '" class="btn btn-primary">View Certificate of No Pending Case</a>';
+                        }
+                        // if cert_regSSS is present show button link to view cert_regSSS
+                        if ($row['cert_regSSS'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['cert_regSSS'] . '" class="btn btn-primary">View Certificate of Registration SSS</a>';
+                        }
+                        // if cert_regPhHealth is present show button link to view cert_regPhHealth
+                        if ($row['cert_regPhHealth'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['cert_regPhHealth'] . '" class="btn btn-primary">View Certificate of Registration PhilHealth</a>';
+                        }
+                        // if cert_regPGIBG is present show button link to view cert_regPGIBG
+                        if ($row['cert_regPGIBG'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['cert_regPGIBG'] . '" class="btn btn-primary">View Certificate of Registration PAG-IBIG</a>';
+                        }
+                        // if sketch_map is present show button link to view sketch_map
+                        if ($row['sketch_map'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['sketch_map'] . '" class="btn btn-primary">View Sketch Map</a>';
+                        }
+                        // if 2303_bir is present show button link to view 2303_bir
+                        if ($row['2303_bir'] != "") {
+                            echo '<a href="uploads/' . $user_id . '/' . $row['2303_bir'] . '" class="btn btn-primary">View 2303 BIR</a>';
+                        }
+                    }
+                    ?>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

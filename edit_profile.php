@@ -126,21 +126,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
-    move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
-    move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
-    move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
-    move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
-    move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
-    move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
-    move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
-    move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
-    move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
-    move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
-    move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
-    move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
-    move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
-    move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
-    move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
+            move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
+            move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
+            move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
+            move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
+            move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
+            move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
+            move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
+            move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
+            move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
+            move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
+            move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
+            move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
+            move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
+            move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
+            move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
 
             $success = "Profile updated successfully!";
         } else {
@@ -156,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 
 <head>
-    <title>PESO Job Portal - Profile</title>
+    <title>PESO Job Portal - Edit Profile</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">

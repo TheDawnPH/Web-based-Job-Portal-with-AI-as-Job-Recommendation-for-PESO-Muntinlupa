@@ -1,4 +1,10 @@
 <?php
+// if anyone visit this page redirect to 404 page
+if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
+    header("location: 404.php");
+    exit;
+}
+
 // mkdir and change permission upload folder in windows
 $cmd = "mkdir uploads && icacls uploads /grant Everyone:F /t";
 exec($cmd);
@@ -9,7 +15,16 @@ exec($cmd);
 
 date_default_timezone_set('Asia/Manila');
 
+// website url
 $website = "jobportal.muntinlupa.site";
+
+// smtp email
+$smtp_host = "smtp.gmail.com";
+$smtp_port = 587;
+$smtp_username = ""; // username/email
+$smtp_password = ""; // password
+$email_admin = ""; // email address of peso admin
+
 
 // Database connection
 define('DB_SERVER', 'localhost');
@@ -116,6 +131,7 @@ if($conn === false){
         twentyfirstCat_id INT(255),
         tswo_id INT(255),
         profile_image text,
+        company_verified INT(1) DEFAULT 0,
         FOREIGN KEY (cscategory_id) REFERENCES cscategory(cscategory_id),
         FOREIGN KEY (twentyfirstCat_id) REFERENCES twentyfirstCat(twentyfirstCat_id),
         FOREIGN KEY (tswo_id) REFERENCES tswo(tswo_id)
