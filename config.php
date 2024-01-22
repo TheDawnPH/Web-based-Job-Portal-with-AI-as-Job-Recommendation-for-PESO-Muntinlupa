@@ -44,14 +44,6 @@ date_default_timezone_set('Asia/Manila');
 // website url
 $website = $_ENV['WEBSITE_URL'];
 
-// smtp email
-$smtp_host = $_ENV['SMTP_HOST'];
-$smtp_port = $_ENV['SMTP_PORT'];
-$smtp_username = $_ENV['SMTP_USER'];
-$smtp_password = $_ENV['SMTP_PASS'];
-$email_admin = $_ENV['SMTP_EMAIL'];
-
-
 // Database connection
 define('DB_SERVER', $_ENV['DB_HOST']);
 define('DB_USERNAME', $_ENV['DB_USER']);

@@ -6,7 +6,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     exit;
 }
 
-require_once "config.php";
+require "config.php";
 
 $email = "";
 $email_err = "";
@@ -44,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             require 'PHPMailer/src/Exception.php';
                             require 'PHPMailer/src/PHPMailer.php';
                             require 'PHPMailer/src/SMTP.php';
+                            loadEnv();
 
                             $mail = new PHPMailer\PHPMailer\PHPMailer();
                             $mail->IsSMTP();
@@ -51,10 +52,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $mail->SMTPDebug  = 1;
                             $mail->SMTPAuth   = TRUE;
                             $mail->SMTPSecure = "tls";
-                            $mail->Port       = $smtp_port;
-                            $mail->Host       = $smtp_host;
-                            $mail->Username   = $stmp_username; // email address
-                            $mail->Password   = $smtp_password; // password
+                            $mail->Port       = $_ENV['SMTP_PORT'];
+                            $mail->Host       = $_ENV['SMTP_HOST'];
+                            $mail->Username   = $_ENV['SMTP_USER']; // email address
+                            $mail->Password   = $_ENV['SMTP_PASS']; // password
                             $mail->IsHTML(true);
                             $mail->AddAddress($email, $fname . " " . $lname);
                             $mail->SetFrom("", "PESO Muntinlupa");

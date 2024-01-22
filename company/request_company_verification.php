@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once "config.php";
+require "config.php";
 
 if (!isset($_SESSION["user_type"]) || empty($_SESSION["user_type"])) {
     header("location: login.php");
@@ -20,34 +20,35 @@ $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
 // smtp email to peso admin, use phpmailer
-                require 'PHPMailer/src/Exception.php';
-                require 'PHPMailer/src/PHPMailer.php';
-                require 'PHPMailer/src/SMTP.php';
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+loadEnv();
 
-                $mail = new PHPMailer\PHPMailer\PHPMailer();
-                $mail->IsSMTP();
-                $mail->Mailer = "smtp";
-                $mail->SMTPDebug  = 1;
-                $mail->SMTPAuth   = TRUE;
-                $mail->SMTPSecure = "tls";
-                $mail->Port       = $smtp_port;
-                $mail->Host       = $smtp_host;
-                $mail->Username   = $stmp_username; // email address
-                $mail->Password   = $smtp_password; // password
-                $mail->IsHTML(true);
-                $mail->AddAddress($email_admin, "PESO Admin");
-                $mail->SetFrom("", $fname . " " . $lname);
-                $mail->Subject = "PESO Muntinlupa - Email Verification";
-                // set content of email that redirect admin to verify company
-                $content = "Hello! There is a request to verification of company. Please click the link below to verify the company.<br><br><a href='http://{$website}/admin/verify_company.php?user_id={$user_id}'>Verify Company</a><br><br>Thank you!";
-                $mail->MsgHTML($content);
-                if (!$mail->Send()) {
-                    // echo $warning = "Error while sending Email.";
-                    // var_dump($mail);
-                } else {
-                    // echo $alert = "Please check your email for the verification link.";
-                }
-                // end of phpmailer
+$mail = new PHPMailer\PHPMailer\PHPMailer();
+$mail->IsSMTP();
+$mail->Mailer = "smtp";
+$mail->SMTPDebug  = 1;
+$mail->SMTPAuth   = TRUE;
+$mail->SMTPSecure = "tls";
+$mail->Port       = $_ENV['SMTP_PORT'];
+$mail->Host       = $_ENV['SMTP_HOST'];
+$mail->Username   = $_ENV['SMTP_USER']; // email address
+$mail->Password   = $_ENV['SMTP_PASS']; // password
+$mail->IsHTML(true);
+$mail->AddAddress($_ENV['SMTP_EMAIL'], "PESO Admin");
+$mail->SetFrom("", $fname . " " . $lname);
+$mail->Subject = "PESO Muntinlupa - Email Verification";
+// set content of email that redirect admin to verify company
+$content = "Hello! There is a request to verification of company. Please click the link below to verify the company.<br><br><a href='http://{$website}/admin/verify_company.php?user_id={$user_id}'>Verify Company</a><br><br>Thank you!";
+$mail->MsgHTML($content);
+if (!$mail->Send()) {
+    // echo $warning = "Error while sending Email.";
+    // var_dump($mail);
+} else {
+    // echo $alert = "Please check your email for the verification link.";
+}
+// end of phpmailer
 
 ?>
 
@@ -61,10 +62,8 @@ $row = mysqli_fetch_assoc($result);
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 </head>
 
