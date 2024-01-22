@@ -1,3 +1,7 @@
 # Job Portal for Muntinlupa
 
-not working yet.
+## Intial Setup
+- Please configure everyhting on .env file
+
+### WIP
+yes, wip

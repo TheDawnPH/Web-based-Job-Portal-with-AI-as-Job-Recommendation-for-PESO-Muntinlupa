@@ -1,4 +1,28 @@
 <?php
+// env function
+function loadEnv($path = __DIR__)
+{
+    $envFile = $path . '/.env';
+
+    if (!file_exists($envFile)) {
+        return false;
+    }
+
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    foreach ($lines as $line) {
+        if (strpos($line, '=') !== false) {
+            list($key, $value) = explode('=', $line, 2);
+            $_ENV[trim($key)] = trim($value);
+        }
+    }
+
+    return true;
+}
+
+// Load environment variables from .env file
+loadEnv();
+
 // if anyone visit this page redirect to 404 page
 if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
     header("location: 404.php");
@@ -16,22 +40,22 @@ exec($cmd);
 date_default_timezone_set('Asia/Manila');
 
 // website url
-$website = "jobportal.muntinlupa.site";
+$website = $_ENV['WEBSITE_URL'];
 
 // smtp email
-$smtp_host = "smtp.gmail.com";
-$smtp_port = 587;
-$smtp_username = ""; // username/email
-$smtp_password = ""; // password
-$email_admin = ""; // email address of peso admin
+$smtp_host = $_ENV['SMTP_HOST'];
+$smtp_port = $_ENV['SMTP_PORT'];
+$smtp_username = $_ENV['SMTP_USER'];
+$smtp_password = $_ENV['SMTP_PASS'];
+$email_admin = $_ENV['SMTP_EMAIL'];
 
 
 // Database connection
-define('DB_SERVER', 'localhost');
-define('DB_USERNAME', 'root');
-define('DB_PASSWORD', '');
-define('DB_NAME', 'peso_db');
-define('DB_PORT', '3306');
+define('DB_SERVER', $_ENV['DB_HOST']);
+define('DB_USERNAME', $_ENV['DB_USER']);
+define('DB_PASSWORD', $_ENV['DB_PASS']);
+define('DB_NAME', $_ENV['DB_NAME']);
+define('DB_PORT', $_ENV['DB_PORT']);
 
 // Get connection
 $conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_PORT);
