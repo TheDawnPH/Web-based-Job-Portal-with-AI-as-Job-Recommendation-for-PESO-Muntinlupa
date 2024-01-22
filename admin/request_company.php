@@ -1,7 +1,8 @@
 <?php
 session_start();
+$root = $_SERVER['DOCUMENT_ROOT'];
 
-require_once "config.php";
+require $root . "/config.php";
 
 // check if user_type is admin, if not redirect to 404 page
 if ($_SESSION["user_type"] != "admin") {

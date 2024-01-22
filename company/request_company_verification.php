@@ -4,7 +4,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 session_start();
 
-require "config.php";
+$root = $_SERVER['DOCUMENT_ROOT'];
+
+require $root . "/config.php";
 
 if (!isset($_SESSION["user_type"]) || empty($_SESSION["user_type"])) {
     header("location: login.php");
@@ -18,15 +20,14 @@ if ($_SESSION["user_type"] == "applicant") {
 }
 
 // get fname and lname from user id
-$sql = "SELECT * FROM users WHERE user_id = '$user_id'";
+$sql = "SELECT * FROM users WHERE user_id = '$_SESSION[user_id]'";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
 // smtp email to peso admin, use phpmailer
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-loadEnv();
+require $root .'/PHPMailer/src/Exception.php';
+require $root .'/PHPMailer/src/PHPMailer.php';
+require $root .'/PHPMailer/src/SMTP.php';
 
 $mail = new PHPMailer();
 $mail->IsSMTP();
@@ -40,10 +41,10 @@ $mail->Username   = $_ENV['SMTP_USER']; // email address
 $mail->Password   = $_ENV['SMTP_PASS']; // password
 $mail->IsHTML(true);
 $mail->AddAddress($_ENV['SMTP_EMAIL'], "PESO Admin");
-$mail->SetFrom($_ENV['SMTP_USER'], $fname . " " . $lname);
+$mail->SetFrom($_ENV['SMTP_USER'], $row['fname'] . " " . $row['lname']);
 $mail->Subject = "PESO Muntinlupa - Email Verification";
 // set content of email that redirect admin to verify company
-$content = "Hello! There is a request to verification of company. Please click the link below to verify the company.<br><br><a href='http://{$website}/admin/verify_company.php?user_id={$user_id}'>Verify Company</a><br><br>Thank you!";
+$content = "Hello! There is a request to verification of company. Please click the link below to verify the company.<br><br><a href='http://{$website}/admin/verify_company.php?user_id={$_SESSION['user_id']}'>Verify Company</a><br><br>Thank you!";
 $mail->MsgHTML($content);
 if (!$mail->Send()) {
     // echo $warning = "Error while sending Email.";
@@ -71,15 +72,17 @@ if (!$mail->Send()) {
 </head>
 
 <body>
-    <?php include('nav.php'); ?>
+    <?php include $root . '/nav.php'; ?>
     <div class="container">
+        <br>
         <div class="alert alert-success" role="alert">
             <h4 class="alert-heading">Request Company Verification</h4>
             <p>Thank you for registering as a company. Please wait for the PESO to verify your company.</p>
             <hr>
-            <p class="mb-0">You will be notified via email once your company is verified.</p>
+            <p class="mb-0">You will be notified via email once your company is verified.</p><br>
             <a href="index.php" class="btn btn-primary">Go back to home</a>
         </div>
+    </div>
 </body>
 
 </html>

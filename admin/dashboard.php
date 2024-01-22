@@ -1,6 +1,7 @@
 <?php
+$root = $_SERVER['DOCUMENT_ROOT'];
 
-require_once "config.php";
+require $root . "/config.php";
 
 session_start();
 

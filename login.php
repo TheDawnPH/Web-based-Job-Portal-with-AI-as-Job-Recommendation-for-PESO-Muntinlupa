@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if (empty($email_err) && empty($password_err)) {
-        $sql = "SELECT user_id, user_type, fname, mname, lname, suffix, email, user_password, verification_status FROM users WHERE email = ?";
+        $sql = "SELECT user_id, user_type, fname, mname, lname, suffix, email, user_password, verification_status, company_verified FROM users WHERE email = ?";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_email);
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_store_result($stmt);
 
                 if (mysqli_stmt_num_rows($stmt) == 1) {
-                    mysqli_stmt_bind_result($stmt, $user_id, $user_type, $fname, $mname, $lname, $suffix, $email, $hashed_password, $verification_status);
+                    mysqli_stmt_bind_result($stmt, $user_id, $user_type, $fname, $mname, $lname, $suffix, $email, $hashed_password, $verification_status, $company_verified);
 
                     if (mysqli_stmt_fetch($stmt)) {
                         if (password_verify($password, $hashed_password)) {
@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $_SESSION["loggedin"] = true;
                                 $_SESSION["user_id"] = $user_id;
                                 $_SESSION["user_type"] = $user_type;
+                                $_SESSION["company_verified"] = $company_verified;
                                 // use cookies on fname, lname, suffix, email
                                 $_COOKIE["fname"] = $fname;
                                 $_COOKIE["lname"] = $lname;

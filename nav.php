@@ -1,15 +1,14 @@
 <?php
-// if user not logged in, show this a tag
-$login = "<a class='nav-link' href='login.php'>Login/Register</a>";
-$profile = "<a class='nav-link' href='profile.php'>Profile</a>";
-$logout = "<a class='nav-link' href='logout.php'>Logout</a>";
-$applications = "<a class='nav-link' href='job_applications.php'> Job Applications</a>";
+$login = "<a class='nav-link' href='/login.php'>Login/Register</a>";
+$profile = "<a class='nav-link' href='/profile.php'>Profile</a>";
+$logout = "<a class='nav-link' href='/logout.php'>Logout</a>";
+$applications = "<a class='nav-link' href='/job_applications.php'> Job Applications</a>";
 
 ?>
 <nav class="navbar navbar-expand-lg" data-bs-theme="dark" style="background-color: #000080">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
-        <img src="img/peso_muntinlupa.png" alt="PESO Muntinlupa Logo" width="30" class="d-inline-block align-text-center">&nbsp;&nbsp;Muntinlupa Job Portal
+        <img src="/img/peso_muntinlupa.png" alt="PESO Muntinlupa Logo" width="30" class="d-inline-block align-text-center">&nbsp;&nbsp;Muntinlupa Job Portal
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -51,20 +50,12 @@ $applications = "<a class='nav-link' href='job_applications.php'> Job Applicatio
               Company Tools
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="company/add_job_applications.php">Add Job Listing</a></li>
-              <li><a class="dropdown-item" href="company/job_listings.php">View Job Listing</a></li>
-              <li><a class="dropdown-item" href="company/job_applicants.php">View Job Applicants</a></li>
+              <li><a class="dropdown-item" href="/company/add_job_applications.php">Add Job Listing</a></li>
+              <li><a class="dropdown-item" href="/company/job_listings.php">View Job Listing</a></li>
+              <li><a class="dropdown-item" href="/company/job_applicants.php">View Job Applicants</a></li>
               <?php
-                // get user details from database
-                $sql = "SELECT * FROM users WHERE user_id = ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $_SESSION['id']);
-                $stmt->execute();
-
-                $result = $stmt->get_result();
-                $row = $result->fetch_assoc();
-                if($row['company_verified'] == 0){
-                  echo "<li><a class='dropdown-item' href='company/request_company_verification.php'>Request Verification</a></li>";
+                if($_SESSION['company_verified'] == 0){
+                  echo "<li><a class='dropdown-item' href='/company/request_company_verification.php'>Request Verification</a></li>";
                 }
               ?>
             </ul>

@@ -26,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($code)) {
             $_SESSION["loggedin"] = true;
             $_SESSION["user_id"] = $row["user_id"];
             $_SESSION["user_type"] = $row["user_type"];
+            $_SESSION["company_verified"] = $row["company_verified"];
         } else {
             $message =  "Email verification failed. Please re-register again.";
         }

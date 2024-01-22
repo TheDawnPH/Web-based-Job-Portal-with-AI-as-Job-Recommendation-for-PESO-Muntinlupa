@@ -23,7 +23,10 @@ function loadEnv($path = __DIR__)
 }
 
 // Load environment variables from .env file
-loadEnv();
+// if loadEnv is already loaded, don't load it again
+if (!isset($_ENV['DB_HOST'])) {
+    loadEnv();
+}
 
 // if anyone visit this page redirect to 404 page
 if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
