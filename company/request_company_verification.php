@@ -1,4 +1,7 @@
 <?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+
 session_start();
 
 require "config.php";
@@ -25,12 +28,12 @@ require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 loadEnv();
 
-$mail = new PHPMailer\PHPMailer\PHPMailer();
+$mail = new PHPMailer();
 $mail->IsSMTP();
 $mail->Mailer = "smtp";
 $mail->SMTPDebug  = 1;
 $mail->SMTPAuth   = TRUE;
-$mail->SMTPSecure = "tls";
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 $mail->Port       = $_ENV['SMTP_PORT'];
 $mail->Host       = $_ENV['SMTP_HOST'];
 $mail->Username   = $_ENV['SMTP_USER']; // email address
