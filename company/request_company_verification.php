@@ -40,7 +40,7 @@ $mail->Username   = $_ENV['SMTP_USER']; // email address
 $mail->Password   = $_ENV['SMTP_PASS']; // password
 $mail->IsHTML(true);
 $mail->AddAddress($_ENV['SMTP_EMAIL'], "PESO Admin");
-$mail->SetFrom("", $fname . " " . $lname);
+$mail->SetFrom($_ENV['SMTP_USER'], $fname . " " . $lname);
 $mail->Subject = "PESO Muntinlupa - Email Verification";
 // set content of email that redirect admin to verify company
 $content = "Hello! There is a request to verification of company. Please click the link below to verify the company.<br><br><a href='http://{$website}/admin/verify_company.php?user_id={$user_id}'>Verify Company</a><br><br>Thank you!";
