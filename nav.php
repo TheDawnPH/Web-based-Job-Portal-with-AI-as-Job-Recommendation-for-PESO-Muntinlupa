@@ -51,9 +51,22 @@ $applications = "<a class='nav-link' href='job_applications.php'> Job Applicatio
               Company Tools
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="company/add_job_applications">Add Job Listing</a></li>
-              <li><a class="dropdown-item" href="company/job_listings">View Job Listing</a></li>
-              <li><a class="dropdown-item" href="company/job_applicants">View Job Applicants</a></li>
+              <li><a class="dropdown-item" href="company/add_job_applications.php">Add Job Listing</a></li>
+              <li><a class="dropdown-item" href="company/job_listings.php">View Job Listing</a></li>
+              <li><a class="dropdown-item" href="company/job_applicants.php">View Job Applicants</a></li>
+              <?php
+                // get user details from database
+                $sql = "SELECT * FROM users WHERE user_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $_SESSION['id']);
+                $stmt->execute();
+
+                $result = $stmt->get_result();
+                $row = $result->fetch_assoc();
+                if($row['company_verified'] == 0){
+                  echo "<li><a class='dropdown-item' href='company/request_company_verification.php'>Request Verification</a></li>";
+                }
+              ?>
             </ul>
           </li>
         <?php

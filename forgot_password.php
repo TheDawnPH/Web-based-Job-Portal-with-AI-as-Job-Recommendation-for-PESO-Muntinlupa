@@ -70,10 +70,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $content .= "PESO Muntinlupa";
                             $mail->MsgHTML($content);
                             if (!$mail->Send()) {
-                                echo $warning = "Error while sending Email.";
+                                $warning = "Error while sending Email.";
                                 // var_dump($mail);
                             } else {
-                                echo $alert = "Please check your email for the verification link.";
+                                $alert = "Please check your email for the verification link.";
                             }
                             // end of phpmailer
                             $alert = "Please check your email for the verification link.";
@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $email_err = "No account found with that email.";
                 }
             } else {
-                echo "Oops! Something went wrong. Please try again later.";
+                $warning = "Oops! Something went wrong. Please try again later.";
             }
         }
         mysqli_stmt_close($stmt);
@@ -119,11 +119,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-md">
                 <br>
                 <h1>Forgot Password</h1>
-                <?php if (!empty($alert)) { ?>
-                    <div class="alert alert-success" role="alert">
-                        <?php echo $alert; ?>
-                    </div>
-                <?php } ?>
+                <?php
+                if (!empty($alert)) {
+                    echo '<div class="alert alert-success">' . $alert . '</div>';
+                }
+                if (!empty($warning)) {
+                    echo '<div class="alert alert-danger">' . $warning . '</div>';
+                }
+                if (!empty($email_err)) {
+                    echo '<div class="alert alert-danger">' . $email_err . '</div>';
+                }
+                ?>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     <div class="mb-4">
                         <label for="email" class="form-label">Email</label>

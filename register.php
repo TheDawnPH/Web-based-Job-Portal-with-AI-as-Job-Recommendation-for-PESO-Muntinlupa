@@ -118,21 +118,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->Subject = "PESO Muntinlupa - Email Verification";
                 $content = "<b>Hi " . $fname . " " . $lname . ",</b><br><br>";
                 $content .= "Please click the link below to verify your email address.<br><br>";
-                $content .= "<a href='http://".$website."verify.php?code=$param_verification_code'>Verify Email</a><br><br>";
+                $content .= "<a href='http://".$website."/verify.php?code=$param_verification_code'>Verify Email</a><br><br>";
                 $content .= "Thank you!<br>";
                 $content .= "PESO Muntinlupa";
                 $mail->MsgHTML($content);
                 if (!$mail->Send()) {
-                    echo $warning = "Error while sending Email.";
+                    $warning = "Error while sending Email.";
                     // var_dump($mail);
                 } else {
-                    echo $alert = "Please check your email for the verification link.";
+                    $alert = "Please check your email for the verification link.";
                 }
                 // end of phpmailer
                 
                 $alert = "Please check your email for the verification link.";
             } else {
-                echo  $warning = "Something went wrong. Please try again later.";
+                $warning = "Something went wrong. Please try again later.";
             }
         }
         mysqli_stmt_close($stmt);
