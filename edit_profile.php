@@ -224,7 +224,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="form-text">To Request for Change of Name, Email Adress, please email us at
-                jpinquiry@muntinlupa.site</div><br>
+                inquiry@muntinlupajoportal.site</div><br>
 
             <!-- display editable fields -->
             <div class="form-group">
