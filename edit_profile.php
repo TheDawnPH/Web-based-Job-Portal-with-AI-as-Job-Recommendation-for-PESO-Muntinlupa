@@ -42,7 +42,7 @@ $nsrp_form = $biodata_form = $profile_picture = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Prepare SQL statement
     $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, school_name=?, school_year_begin=?, school_year_end=?, technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image) WHERE user_id=?";
-    
+
     if ($stmt = mysqli_prepare($conn, $sql)) {
         // Bind variables to the prepared statement as parameters
         mysqli_stmt_bind_param($stmt, "siiiissssssisiisssss", $param_sex, $param_birth_day, $param_birth_month, $param_birth_year, $param_contact_number, $param_house_number, $param_street, $param_subdivision, $param_barangay, $param_city, $param_province, $param_zip_code, $param_school_name, $param_school_year_begin, $param_school_year_end, $param_technicalschool_name, $param_nsrp_form, $param_biodata_form, $param_profile_picture, $param_user_id);
@@ -76,10 +76,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mkdir($user_upload_dir, 0755, true);
             }
 
-            // Move uploaded files to the user-specific folder
-            move_uploaded_file($_FILES["nsrp_form"]["tmp_name"], $user_upload_dir . "/" . $_FILES["nsrp_form"]["name"]);
-            move_uploaded_file($_FILES["biodata_form"]["tmp_name"], $user_upload_dir . "/" . $_FILES["biodata_form"]["name"]);
-            move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $user_upload_dir . "/" . $_FILES["profile_picture"]["name"]);
+
+            if (!empty($_FILES["nsrp_form"]["name"])) {
+                move_uploaded_file($_FILES["nsrp_form"]["tmp_name"], $user_upload_dir . "/" . $_FILES["nsrp_form"]["name"]);
+            }
+            if (!empty($_FILES["biodata_form"]["name"])) {
+                move_uploaded_file($_FILES["biodata_form"]["tmp_name"], $user_upload_dir . "/" . $_FILES["biodata_form"]["name"]);
+            }
+            if (!empty($_FILES["profile_picture"]["name"])) {
+                move_uploaded_file($_FILES["profile_picture"]["tmp_name"], $user_upload_dir . "/" . $_FILES["profile_picture"]["name"]);
+            }
+
 
             $success = "Profile updated successfully!";
         } else {
@@ -95,8 +102,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $company_documents_sql = "INSERT INTO company_documents (user_id, loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, sketch_map, 2303_bir) VALUES (?, IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL))";
 
     if ($stmt = mysqli_prepare($conn, $company_documents_sql)) {
-        mysqli_stmt_bind_param($stmt, "isssssssssssssss", $param_user_id, $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir);
+        // Bind variables to the prepared statement as parameters
+        mysqli_stmt_bind_param($stmt, "issssssssssssssss", $param_user_id, $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir);
 
+        // Add the missing import statement
         // Set parameters for company_documents table
         $param_user_id = $user_id;
         $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : null;
@@ -116,41 +125,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : null;
         $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : null;
 
-
         // Execute the prepared statement
         if (mysqli_stmt_execute($stmt)) {
             // Move uploaded files to the user-specific folder
             $user_upload_dir = "uploads/" . $user_id;
-            if (!is_dir($user_upload_dir)) {
-                mkdir($user_upload_dir, 0755, true);
+            // Set parameters for company_documents table
+            $param_user_id = $user_id;
+            $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : null;
+            $param_cp = !empty($_FILES["cp"]["name"]) ? $_FILES["cp"]["name"] : null;
+            $param_sec_accredit = !empty($_FILES["sec_accredit"]["name"]) ? $_FILES["sec_accredit"]["name"] : null;
+            $param_cda_license = !empty($_FILES["cda_license"]["name"]) ? $_FILES["cda_license"]["name"] : null;
+            $param_dole_license = !empty($_FILES["dole_license"]["name"]) ? $_FILES["dole_license"]["name"] : null;
+            $param_loc = !empty($_FILES["loc"]["name"]) ? $_FILES["loc"]["name"] : null;
+            $param_mbpermit = !empty($_FILES["mbpermit"]["name"]) ? $_FILES["mbpermit"]["name"] : null;
+            $param_job_vacant = !empty($_FILES["job_vacant"]["name"]) ? $_FILES["job_vacant"]["name"] : null;
+            $param_job_solicitation = !empty($_FILES["job_solicitation"]["name"]) ? $_FILES["job_solicitation"]["name"] : null;
+            $param_phjobnet_reg = !empty($_FILES["phjobnet_reg"]["name"]) ? $_FILES["phjobnet_reg"]["name"] : null;
+            $param_cert_nopendingcase = !empty($_FILES["cert_nopendingcase"]["name"]) ? $_FILES["cert_nopendingcase"]["name"] : null;
+            $param_cert_regSSS = !empty($_FILES["cert_regSSS"]["name"]) ? $_FILES["cert_regSSS"]["name"] : null;
+            $param_cert_regPhHealth = !empty($_FILES["cert_regPhHealth"]["name"]) ? $_FILES["cert_regPhHealth"]["name"] : null;
+            $param_cert_regPGIBG = !empty($_FILES["cert_regPGIBG"]["name"]) ? $_FILES["cert_regPGIBG"]["name"] : null;
+            $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : null;
+            $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : null;
+
+
+            // Execute the prepared statement
+            if (mysqli_stmt_execute($stmt)) {
+                // Move uploaded files to the user-specific folder
+                $user_upload_dir = "uploads/" . $user_id;
+                if (!is_dir($user_upload_dir)) {
+                    mkdir($user_upload_dir, 0755, true);
+                }
+
+                move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
+                move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
+                move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
+                move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
+                move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
+                move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
+                move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
+                move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
+                move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
+                move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
+                move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
+                move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
+                move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
+                move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
+                move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
+                move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
+
+                $success = "Profile updated successfully!";
+            } else {
+                $error = "Error updating profile.";
             }
 
-            move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
-            move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
-            move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
-            move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
-            move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
-            move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
-            move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
-            move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
-            move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
-            move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
-            move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
-            move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
-            move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
-            move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
-            move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
-            move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
-
-            $success = "Profile updated successfully!";
-        } else {
-            $error = "Error updating profile.";
+            // Close statement
+            mysqli_stmt_close($stmt);
         }
-
-        // Close statement
-        mysqli_stmt_close($stmt);
     }
-}   
+}
 
 ?>
 <html>
@@ -164,10 +197,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="icon" type="image/png" href="/img/peso_muntinlupa.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 </head>
 
@@ -176,17 +207,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <h1>Edit Profile</h1>
         <?php if (isset($success)) : ?>
-        <div class="alert alert-success" role="alert">
-            <?php echo $success; ?>
-        </div>
+            <div class="alert alert-success" role="alert">
+                <?php echo $success; ?>
+            </div>
         <?php endif; ?>
         <?php if (isset($error)) : ?>
-        <div class="alert alert-danger" role="alert">
-            <?php echo $error; ?>
-        </div>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $error; ?>
+            </div>
         <?php endif; ?>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"
-            enctype="multipart/form-data">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
             <!-- display user type, First Name, Middle Name, Last Name, Suffix, Email -->
             <div class="form-group">
                 <label for="user_type">User Type</label>
@@ -215,8 +245,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="form-group">
                 <label for="suffix">Suffix</label>
-                <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['suffix']); ?>"
-                    disabled>
+                <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['suffix']); ?>" disabled>
             </div><br>
 
             <div class="form-group">
@@ -251,13 +280,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div><br>
             <div class="form-group">
                 <label for="contact_number">Contact Number</label>
-                <input type="text" name="contact_number" class="form-control" value="<?php echo $contact_number; ?>"
-                    required>
+                <input type="text" name="contact_number" class="form-control" value="<?php echo $contact_number; ?>" required>
             </div><br>
             <div class="form-group">
                 <label for="house_number">House Number</label>
-                <input type="text" name="house_number" class="form-control" value="<?php echo $house_number; ?>"
-                    required>
+                <input type="text" name="house_number" class="form-control" value="<?php echo $house_number; ?>" required>
             </div><br>
             <div class="form-group">
                 <label for="street">Street</label>
@@ -289,8 +316,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div><br>
             <div class="form-group">
                 <label for="school_year_begin">School Year Begin</label>
-                <input type="text" name="school_year_begin" class="form-control"
-                    value="<?php echo $school_year_begin; ?>">
+                <input type="text" name="school_year_begin" class="form-control" value="<?php echo $school_year_begin; ?>">
             </div><br>
             <div class="form-group">
                 <label for="school_year_end">School Year End</label>
@@ -298,20 +324,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div><br>
             <div class="form-group">
                 <label for="technicalschool_name">Technical School Name</label>
-                <input type="text" name="technicalschool_name" class="form-control"
-                    value="<?php echo $technicalschool_name; ?>">
+                <input type="text" name="technicalschool_name" class="form-control" value="<?php echo $technicalschool_name; ?>">
             </div><br>
             <?php if ($user_type == 'applicant') : ?>
-            <div class="form-group">
-                <label for="nsrp_form">NSRP Form (PDF or DOCX only)</label>
-                <div class="form-text">No NSRP Form? <a href="admin/forms/NSRP-Form.pdf" target="_blank">Click here
-                        to obtain one</a>.</div>
-                <input type="file" name="nsrp_form" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="biodata_form">Biodata Form (PDF or DOCX only)</label>
-                <input type="file" name="biodata_form" class="form-control" accept="application/pdf,.docx">
-            </div><br>
+                <div class="form-group">
+                    <label for="nsrp_form">NSRP Form (PDF or DOCX only)</label>
+                    <div class="form-text">No NSRP Form? <a href="admin/forms/NSRP-Form.pdf" target="_blank">Click here
+                            to obtain one</a>.</div>
+                    <input type="file" name="nsrp_form" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="biodata_form">Biodata Form (PDF or DOCX only)</label>
+                    <input type="file" name="biodata_form" class="form-control" accept="application/pdf,.docx">
+                </div><br>
             <?php endif; ?>
 
             <div class="form-group">
@@ -321,70 +346,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <!-- loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, setch_map, 2303_bir document upload as company -->
             <?php if ($user_type == 'company') : ?>
-            <div class="form-group">
-                <label for="loi">Letter of Intent (PDF or DOCX only)</label>
-                <input type="file" name="loi" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="cp">Company Profile (PDF or DOCX only)</label>
-                <input type="file" name="cp" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="sec_accredit">SEC Accreditation (PDF or DOCX only)</label>
-                <input type="file" name="sec_accredit" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="cda_license">CDA License (PDF or DOCX only)</label>
-                <input type="file" name="cda_license" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="dole_license">DOLE License (PDF or DOCX only)</label>
-                <input type="file" name="dole_license" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="loc">Location Map (PDF or DOCX only)</label>
-                <input type="file" name="loc" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="mbpermit">Mayor's Business Permit (PDF or DOCX only)</label>
-                <input type="file" name="mbpermit" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="job_vacant">Job Vacant (PDF or DOCX only)</label>
-                <input type="file" name="job_vacant" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="job_solicitation">Job Solicitation (PDF or DOCX only)</label>
-                <input type="file" name="job_solicitation" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="phjobnet_reg">PhilJobNet Registration (PDF or DOCX only)</label>
-                <input type="file" name="phjobnet_reg" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="cert_nopendingcase">Certificate of No Pending Case (PDF or DOCX only)</label>
-                <input type="file" name="cert_nopendingcase" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="cert_regSSS">Certificate of Registration with SSS (PDF or DOCX only)</label>
-                <input type="file" name="cert_regSSS" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="">Certificate of Registration with PhilHealth (PDF or DOCX only)</label>
-                <input type="file" name="cert_regPhHealth" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="">Certificate of Registration with Pag-IBIG (PDF or DOCX only)</label>
-                <input type="file" name="cert_regPGIBG" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="">Sketch Map (PDF or DOCX only)</label>
-                <input type="file" name="sketch_map" class="form-control" accept="application/pdf,.docx">
-            </div><br>
-            <div class="form-group">
-                <label for="">BIR Form 2303 (PDF or DOCX only)</label>
-                <input type="file" name="2303_bir" class="form-control" accept="application/pdf,.docx">
-            </div><br>
+                <div class="form-group">
+                    <label for="loi">Letter of Intent (PDF or DOCX only)</label>
+                    <input type="file" name="loi" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="cp">Company Profile (PDF or DOCX only)</label>
+                    <input type="file" name="cp" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="sec_accredit">SEC Accreditation (PDF or DOCX only)</label>
+                    <input type="file" name="sec_accredit" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="cda_license">CDA License (PDF or DOCX only)</label>
+                    <input type="file" name="cda_license" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="dole_license">DOLE License (PDF or DOCX only)</label>
+                    <input type="file" name="dole_license" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="loc">Location Map (PDF or DOCX only)</label>
+                    <input type="file" name="loc" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="mbpermit">Mayor's Business Permit (PDF or DOCX only)</label>
+                    <input type="file" name="mbpermit" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="job_vacant">Job Vacant (PDF or DOCX only)</label>
+                    <input type="file" name="job_vacant" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="job_solicitation">Job Solicitation (PDF or DOCX only)</label>
+                    <input type="file" name="job_solicitation" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="phjobnet_reg">PhilJobNet Registration (PDF or DOCX only)</label>
+                    <input type="file" name="phjobnet_reg" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="cert_nopendingcase">Certificate of No Pending Case (PDF or DOCX only)</label>
+                    <input type="file" name="cert_nopendingcase" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="cert_regSSS">Certificate of Registration with SSS (PDF or DOCX only)</label>
+                    <input type="file" name="cert_regSSS" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Certificate of Registration with PhilHealth (PDF or DOCX only)</label>
+                    <input type="file" name="cert_regPhHealth" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Certificate of Registration with Pag-IBIG (PDF or DOCX only)</label>
+                    <input type="file" name="cert_regPGIBG" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="">Sketch Map (PDF or DOCX only)</label>
+                    <input type="file" name="sketch_map" class="form-control" accept="application/pdf,.docx">
+                </div><br>
+                <div class="form-group">
+                    <label for="">BIR Form 2303 (PDF or DOCX only)</label>
+                    <input type="file" name="2303_bir" class="form-control" accept="application/pdf,.docx">
+                </div><br>
             <?php endif; ?>
             <!-- submit button -->
             <div class="form-group">

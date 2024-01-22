@@ -16,7 +16,7 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav" style="text-align:right; font-size: 18px;">
         <li class="nav-item">
-          <a class="nav-link" href="index.php">Home</a>
+          <a class="nav-link" href="/index.php">Home</a>
         </li>
         <li class="nav-item">
           <?php

@@ -61,60 +61,15 @@ $conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_PORT);
 if($conn === false){
     die("ERROR: Could not connect. " . mysqli_connect_error());
 } else {
-    $cscategory = "CREATE TABLE IF NOT EXISTS cscategory (
-        cscategory_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-        cscategory_name VARCHAR(255) NOT NULL
-    )";
-    if(mysqli_query($conn, $cscategory)){
-        //echo "Table cscategory created successfully.";
-    } else {
-        echo "ERROR: Could not able to execute $cscategory. " . mysqli_error($conn);
-    }
-    
-    $twentyfirstCat = "CREATE TABLE IF NOT EXISTS twentyfirstCat (
-        twentyfirstCat_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-        twentyfirstCat_name VARCHAR(255) NOT NULL
-    )";
-    if(mysqli_query($conn, $twentyfirstCat)){
-        //echo "Table twentyfirstCat created successfully.";
-    } else {
-        echo "ERROR: Could not able to execute $twentyfirstCat. " . mysqli_error($conn);
-    }
-
-    $tswo = "CREATE TABLE IF NOT EXISTS tswo (
-        tswo_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-        tswocategory_name VARCHAR(255) NOT NULL
-    )";
-    if(mysqli_query($conn, $tswo)){
-        //echo "Table tswo created successfully.";
-    } else {
-        echo "ERROR: Could not able to execute $tswo. " . mysqli_error($conn);
-    }
-
+    // job industry
     $jinindustry = "CREATE TABLE IF NOT EXISTS jinindustry (
         jinindustry_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-        jinindustry_name VARCHAR(255) NOT NULL,
-        cscategory_id INT NOT NULL,
-        FOREIGN KEY (cscategory_id) REFERENCES cscategory(cscategory_id)
+        jinindustry_name text NOT NULL
     )";
     if(mysqli_query($conn, $jinindustry)){
         //echo "Table jinindustry created successfully.";
     } else {
         echo "ERROR: Could not able to execute $jinindustry. " . mysqli_error($conn);
-    }
-
-    $jocc = "CREATE TABLE IF NOT EXISTS jocc (
-        jocc_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-        jobocc_name VARCHAR(255) NOT NULL,
-        tswo_id INT NOT NULL,
-        twentyfirstCat_id INT NOT NULL,
-        FOREIGN KEY (tswo_id) REFERENCES tswo(tswo_id),
-        FOREIGN KEY (twentyfirstCat_id) REFERENCES twentyfirstCat(twentyfirstCat_id)
-    )";
-    if(mysqli_query($conn, $jocc)){
-        //echo "Table jocc created successfully.";
-    } else {
-        echo "ERROR: Could not able to execute $jocc. " . mysqli_error($conn);
     }
 
     // create user table if not exists
@@ -147,16 +102,12 @@ if($conn === false){
         school_year_begin INT(4),
         school_year_end INT(4),
         technicalschool_name VARCHAR(255),
-        cscategory_id INT(255),
+        jinindustry_id INT(255),
         sex VARCHAR(255),
-        twentyfirstCat_id INT(255),
-        tswo_id INT(255),
         profile_image text,
         company_verified INT(1) DEFAULT 0,
-        FOREIGN KEY (cscategory_id) REFERENCES cscategory(cscategory_id),
-        FOREIGN KEY (twentyfirstCat_id) REFERENCES twentyfirstCat(twentyfirstCat_id),
-        FOREIGN KEY (tswo_id) REFERENCES tswo(tswo_id)
-    )";
+        FOREIGN KEY (jinindustry_id) REFERENCES jinindustry(jinindustry_id))
+        ";
     if(mysqli_query($conn, $user)){
         //echo "Table users created successfully.";
     } else {
@@ -168,17 +119,17 @@ if($conn === false){
         user_id INT NOT NULL,
         job_title VARCHAR(255) NOT NULL,
         job_description text NOT NULL,
+        job_requirements text NOT NULL,
         job_salary VARCHAR(255) NOT NULL,
-        image_name VARCHAR(255) NOT NULL,
+        job_type VARCHAR(255) NOT NULL,
+        image_name text,
         jinindustry_id INT NOT NULL,
-        jocc_id INT NOT NULL,
         shs_qualified INT(1) DEFAULT 0,
         job_posted INT(1) DEFAULT 0,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(user_id),
-        FOREIGN KEY (jinindustry_id) REFERENCES jinindustry(jinindustry_id),
-        FOREIGN KEY (jocc_id) REFERENCES jocc(jocc_id)
-    )";
+        FOREIGN KEY (jinindustry_id) REFERENCES jinindustry(jinindustry_id))
+        ";
     if(mysqli_query($conn, $job_listing)){
         //echo "Table job_listing created successfully.";
     } else {
