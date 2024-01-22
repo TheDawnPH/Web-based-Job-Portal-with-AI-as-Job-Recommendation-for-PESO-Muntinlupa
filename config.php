@@ -14,6 +14,8 @@ function loadEnv($path = __DIR__)
         if (strpos($line, '=') !== false) {
             list($key, $value) = explode('=', $line, 2);
             $_ENV[trim($key)] = trim($value);
+        } else {
+            $_ENV[$line] = null;
         }
     }
 
