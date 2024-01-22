@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $mail = new PHPMailer();
                             $mail->IsSMTP();
                             $mail->Mailer = "smtp";
-                            $mail->SMTPDebug  = 1;
+                            $mail->SMTPDebug  = 0;
                             $mail->SMTPAuth   = TRUE;
                             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                             $mail->Port       = $_ENV['SMTP_PORT'];
@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $mail->MsgHTML($content);
                             if (!$mail->Send()) {
                                 echo $warning = "Error while sending Email.";
-                                var_dump($mail);
+                                // var_dump($mail);
                             } else {
                                 echo $alert = "Please check your email for the verification link.";
                             }

@@ -44,11 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fname = trim($_POST["fname"]);
     }
 
-    if (empty(trim($_POST["mname"]))) {
-        $mname_err = "Please enter middle name.";
-    } else {
         $mname = trim($_POST["mname"]);
-    }
 
     if (empty(trim($_POST["lname"]))) {
         $lname_err = "Please enter last name.";
@@ -109,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail = new PHPMailer();
                 $mail->IsSMTP();
                 $mail->Mailer = "smtp";
-                $mail->SMTPDebug  = 1;
+                $mail->SMTPDebug  = 0;
                 $mail->SMTPAuth   = TRUE;
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port       = $_ENV['SMTP_PORT'];
@@ -122,19 +118,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->Subject = "PESO Muntinlupa - Email Verification";
                 $content = "<b>Hi " . $fname . " " . $lname . ",</b><br><br>";
                 $content .= "Please click the link below to verify your email address.<br><br>";
-                $content .= "<a href='http://".$website."/peso-muntinlupa/verify.php?code=$param_verification_code'>Verify Email</a><br><br>";
+                $content .= "<a href='http://".$website."verify.php?code=$param_verification_code'>Verify Email</a><br><br>";
                 $content .= "Thank you!<br>";
                 $content .= "PESO Muntinlupa";
                 $mail->MsgHTML($content);
                 if (!$mail->Send()) {
                     echo $warning = "Error while sending Email.";
-                    var_dump($mail);
+                    // var_dump($mail);
                 } else {
                     echo $alert = "Please check your email for the verification link.";
                 }
                 // end of phpmailer
                 
-                header("location: login.php");
+                $alert = "Please check your email for the verification link.";
             } else {
                 echo  $warning = "Something went wrong. Please try again later.";
             }
