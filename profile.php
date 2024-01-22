@@ -58,6 +58,7 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" href="/img/peso_muntinlupa.png">
     <link rel="manifest" href="/site.webmanifest">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -121,7 +122,7 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
 
                         // show request company_verification button if user is company to have permission to post job listing
                         if ($user_type === "company") {
-                            echo '<a href="request_company_verification.php" class="btn btn-primary">Request Company Verification</a>';
+                            echo '<br><br><a href="/company/request_company_verification.php" class="btn btn-primary">Request Company Verification</a>';
                         }
                         ?>
                     </div>
