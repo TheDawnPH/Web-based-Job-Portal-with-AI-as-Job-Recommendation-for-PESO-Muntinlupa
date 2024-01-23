@@ -42,7 +42,7 @@ session_start();
         <div class="cover"></div>
     </div>
     <div class="container">
-        <div class="row gx-5">
+        <div class="row">
             <?php if (isset($_SESSION["user_type"]) && $_SESSION["user_type"] === 'applicant') {
                 echo '<div class="col-md-4">';
                 echo '<h1>Available Jobs</h1>';
@@ -70,7 +70,7 @@ session_start();
             <div class="col-md-4">
                 <h1>Facebook Feed</h1>
                 <hr>
-                <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FPESOMuntinlupaOfficial%2F&tabs=timeline&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&appId" width="350" height="500" style="border:none;overflow:hidden;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FMuntinlupaPESO%2F&tabs=timeline&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&appId" width="350" height="500" style="border:none;overflow:hidden;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
             </div>
         </div>
     </div>

@@ -46,7 +46,7 @@ $result = mysqli_query($conn, $sql);
 </head>
 
 <body>
-    <?php include('nav.php'); ?>
+    <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Requests Portal</h1>
         <?php

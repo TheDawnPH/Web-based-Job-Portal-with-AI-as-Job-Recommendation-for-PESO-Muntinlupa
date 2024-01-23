@@ -98,39 +98,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_close($stmt);
     }
 
-    // Insert data into the company_documents table
-    $company_documents_sql = "INSERT INTO company_documents (user_id, loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, sketch_map, 2303_bir) VALUES (?, IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL), IFNULL(?, NULL))";
+    // if company documents exist, update company_documents table
+    if (!empty($_FILES["loi"]["name"]) || !empty($_FILES["cp"]["name"]) || !empty($_FILES["sec_accredit"]["name"]) || !empty($_FILES["cda_license"]["name"]) || !empty($_FILES["dole_license"]["name"]) || !empty($_FILES["loc"]["name"]) || !empty($_FILES["mbpermit"]["name"]) || !empty($_FILES["job_vacant"]["name"]) || !empty($_FILES["job_solicitation"]["name"]) || !empty($_FILES["phjobnet_reg"]["name"]) || !empty($_FILES["cert_nopendingcase"]["name"]) || !empty($_FILES["cert_regSSS"]["name"]) || !empty($_FILES["cert_regPhHealth"]["name"]) || !empty($_FILES["cert_regPGIBG"]["name"]) || !empty($_FILES["sketch_map"]["name"]) || !empty($_FILES["2303_bir"]["name"])) {
+        // Prepare SQL statement
+        $company_documents_sql = "UPDATE company_documents SET loi = IFNULL(?, loi), cp = IFNULL(?, cp), sec_accredit = IFNULL(?, sec_accredit), cda_license = IFNULL(?, cda_license), dole_license = IFNULL(?, dole_license), loc = IFNULL(?, loc), mbpermit = IFNULL(?, mbpermit), job_vacant = IFNULL(?, job_vacant), job_solicitation = IFNULL(?, job_solicitation), phjobnet_reg = IFNULL(?, phjobnet_reg), cert_nopendingcase = IFNULL(?, cert_nopendingcase), cert_regSSS = IFNULL(?, cert_regSSS), cert_regPhHealth = IFNULL(?, cert_regPhHealth), cert_regPGIBG = IFNULL(?, cert_regPGIBG), sketch_map = IFNULL(?, sketch_map), 2303_bir = IFNULL(?, 2303_bir) WHERE user_id = ?";
 
-    if ($stmt = mysqli_prepare($conn, $company_documents_sql)) {
-        // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "issssssssssssssss", $param_user_id, $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir);
+        if ($stmt = mysqli_prepare($conn, $company_documents_sql)) {
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "sssssssssssssssss", $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir, $param_user_id);
 
-        // Add the missing import statement
-        // Set parameters for company_documents table
-        $param_user_id = $user_id;
-        $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : null;
-        $param_cp = !empty($_FILES["cp"]["name"]) ? $_FILES["cp"]["name"] : null;
-        $param_sec_accredit = !empty($_FILES["sec_accredit"]["name"]) ? $_FILES["sec_accredit"]["name"] : null;
-        $param_cda_license = !empty($_FILES["cda_license"]["name"]) ? $_FILES["cda_license"]["name"] : null;
-        $param_dole_license = !empty($_FILES["dole_license"]["name"]) ? $_FILES["dole_license"]["name"] : null;
-        $param_loc = !empty($_FILES["loc"]["name"]) ? $_FILES["loc"]["name"] : null;
-        $param_mbpermit = !empty($_FILES["mbpermit"]["name"]) ? $_FILES["mbpermit"]["name"] : null;
-        $param_job_vacant = !empty($_FILES["job_vacant"]["name"]) ? $_FILES["job_vacant"]["name"] : null;
-        $param_job_solicitation = !empty($_FILES["job_solicitation"]["name"]) ? $_FILES["job_solicitation"]["name"] : null;
-        $param_phjobnet_reg = !empty($_FILES["phjobnet_reg"]["name"]) ? $_FILES["phjobnet_reg"]["name"] : null;
-        $param_cert_nopendingcase = !empty($_FILES["cert_nopendingcase"]["name"]) ? $_FILES["cert_nopendingcase"]["name"] : null;
-        $param_cert_regSSS = !empty($_FILES["cert_regSSS"]["name"]) ? $_FILES["cert_regSSS"]["name"] : null;
-        $param_cert_regPhHealth = !empty($_FILES["cert_regPhHealth"]["name"]) ? $_FILES["cert_regPhHealth"]["name"] : null;
-        $param_cert_regPGIBG = !empty($_FILES["cert_regPGIBG"]["name"]) ? $_FILES["cert_regPGIBG"]["name"] : null;
-        $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : null;
-        $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : null;
-
-        // Execute the prepared statement
-        if (mysqli_stmt_execute($stmt)) {
-            // Move uploaded files to the user-specific folder
-            $user_upload_dir = "uploads/" . $user_id;
-            // Set parameters for company_documents table
-            $param_user_id = $user_id;
+            // Set parameters
             $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : null;
             $param_cp = !empty($_FILES["cp"]["name"]) ? $_FILES["cp"]["name"] : null;
             $param_sec_accredit = !empty($_FILES["sec_accredit"]["name"]) ? $_FILES["sec_accredit"]["name"] : null;
@@ -147,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_cert_regPGIBG = !empty($_FILES["cert_regPGIBG"]["name"]) ? $_FILES["cert_regPGIBG"]["name"] : null;
             $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : null;
             $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : null;
-
+            $param_user_id = $user_id;
 
             // Execute the prepared statement
             if (mysqli_stmt_execute($stmt)) {
@@ -181,6 +158,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Close statement
             mysqli_stmt_close($stmt);
+
+            // Close connection
+            mysqli_close($conn);
+        }
+    } else {
+        // insert data into company_documents table
+        $company_documents_sql = "UPDATE company_documents SET loi = IFNULL(?, loi), cp = IFNULL(?, cp), sec_accredit = IFNULL(?, sec_accredit), cda_license = IFNULL(?, cda_license), dole_license = IFNULL(?, dole_license), loc = IFNULL(?, loc), mbpermit = IFNULL(?, mbpermit), job_vacant = IFNULL(?, job_vacant), job_solicitation = IFNULL(?, job_solicitation), phjobnet_reg = IFNULL(?, phjobnet_reg), cert_nopendingcase = IFNULL(?, cert_nopendingcase), cert_regSSS = IFNULL(?, cert_regSSS), cert_regPhHealth = IFNULL(?, cert_regPhHealth), cert_regPGIBG = IFNULL(?, cert_regPGIBG), sketch_map = IFNULL(?, sketch_map), 2303_bir = IFNULL(?, 2303_bir) WHERE user_id = ?";
+
+        if ($stmt = mysqli_prepare($conn, $company_documents_sql)) {
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "sssssssssssssssss", $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir, $param_user_id);
+
+            // Set parameters
+            $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : null;
+            $param_cp = !empty($_FILES["cp"]["name"]) ? $_FILES["cp"]["name"] : null;
+            $param_sec_accredit = !empty($_FILES["sec_accredit"]["name"]) ? $_FILES["sec_accredit"]["name"] : null;
+            $param_cda_license = !empty($_FILES["cda_license"]["name"]) ? $_FILES["cda_license"]["name"] : null;
+            $param_dole_license = !empty($_FILES["dole_license"]["name"]) ? $_FILES["dole_license"]["name"] : null;
+            $param_loc = !empty($_FILES["loc"]["name"]) ? $_FILES["loc"]["name"] : null;
+            $param_mbpermit = !empty($_FILES["mbpermit"]["name"]) ? $_FILES["mbpermit"]["name"] : null;
+            $param_job_vacant = !empty($_FILES["job_vacant"]["name"]) ? $_FILES["job_vacant"]["name"] : null;
+            $param_job_solicitation = !empty($_FILES["job_solicitation"]["name"]) ? $_FILES["job_solicitation"]["name"] : null;
+            $param_phjobnet_reg = !empty($_FILES["phjobnet_reg"]["name"]) ? $_FILES["phjobnet_reg"]["name"] : null;
+            $param_cert_nopendingcase = !empty($_FILES["cert_nopendingcase"]["name"]) ? $_FILES["cert_nopendingcase"]["name"] : null;
+            $param_cert_regSSS = !empty($_FILES["cert_regSSS"]["name"]) ? $_FILES["cert_regSSS"]["name"] : null;
+            $param_cert_regPhHealth = !empty($_FILES["cert_regPhHealth"]["name"]) ? $_FILES["cert_regPhHealth"]["name"] : null;
+            $param_cert_regPGIBG = !empty($_FILES["cert_regPGIBG"]["name"]) ? $_FILES["cert_regPGIBG"]["name"] : null;
+            $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : null;
+            $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : null;
+            $param_user_id = $user_id;
+
+            // Execute the prepared statement
+            if (mysqli_stmt_execute($stmt)) {
+                // Move uploaded files to the user-specific folder
+                $user_upload_dir = "uploads/" . $user_id;
+                if (!is_dir($user_upload_dir)) {
+                    mkdir($user_upload_dir, 0755, true);
+                }
+
+                move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
+                move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
+                move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
+                move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
+                move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
+                move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
+                move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
+                move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
+                move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
+                move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
+                move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
+                move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
+                move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
+                move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
+                move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
+                move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
+
+                $success = "Profile updated successfully!";
+            } else {
+                $error = "Error updating profile.";
+            }
         }
     }
 }

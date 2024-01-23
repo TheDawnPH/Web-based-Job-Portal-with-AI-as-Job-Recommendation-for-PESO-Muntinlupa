@@ -3,8 +3,8 @@ $login = "<a class='nav-link' href='/login.php'>Login/Register</a>";
 $profile = "<a class='nav-link' href='/profile.php'>Profile</a>";
 $logout = "<a class='nav-link' href='/logout.php'>Logout</a>";
 $applications = "<a class='nav-link' href='/job_applications.php'> Job Applications</a>";
-
 ?>
+
 <nav class="navbar navbar-expand-lg" data-bs-theme="dark" style="background-color: #000080">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
@@ -58,6 +58,24 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
                   echo "<li><a class='dropdown-item' href='/company/request_company_verification.php'>Request Verification</a></li>";
                 }
               ?>
+            </ul>
+          </li>
+        <?php
+          }
+        ?>
+        <?php
+          // Check if the user is logged in and is of type 'admin'
+          if(isset($_SESSION['loggedin']) && $_SESSION['user_type'] === 'admin'){
+        ?>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Admin Tools
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/admin/dashboard.php">Dashboard</a></li>
+              <li><a class="dropdown-item" href="/admin/job_repository.php">Job Listing Repository</a></li>
+              <li><a class="dropdown-item" href="/admin/request_company.php">Verify Company Verification</a></li>
+              <li><a class="dropdown-item" href="/admin/users.php">Users</a></li>
             </ul>
           </li>
         <?php

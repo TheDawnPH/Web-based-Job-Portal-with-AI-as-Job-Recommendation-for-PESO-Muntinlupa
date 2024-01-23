@@ -58,7 +58,7 @@ define('DB_PORT', $_ENV['DB_PORT']);
 $conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_PORT);
 
 // Check connection
-if($conn === false){
+if ($conn === false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
 } else {
     // job industry
@@ -66,7 +66,7 @@ if($conn === false){
         jinindustry_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         jinindustry_name text NOT NULL
     )";
-    if(mysqli_query($conn, $jinindustry)){
+    if (mysqli_query($conn, $jinindustry)) {
         //echo "Table jinindustry created successfully.";
     } else {
         echo "ERROR: Could not able to execute $jinindustry. " . mysqli_error($conn);
@@ -108,7 +108,7 @@ if($conn === false){
         company_verified INT(1) DEFAULT 0,
         FOREIGN KEY (jinindustry_id) REFERENCES jinindustry(jinindustry_id))
         ";
-    if(mysqli_query($conn, $user)){
+    if (mysqli_query($conn, $user)) {
         //echo "Table users created successfully.";
     } else {
         echo "ERROR: Could not able to execute $user. " . mysqli_error($conn);
@@ -130,7 +130,7 @@ if($conn === false){
         FOREIGN KEY (user_id) REFERENCES users(user_id),
         FOREIGN KEY (jinindustry_id) REFERENCES jinindustry(jinindustry_id))
         ";
-    if(mysqli_query($conn, $job_listing)){
+    if (mysqli_query($conn, $job_listing)) {
         //echo "Table job_listing created successfully.";
     } else {
         echo "ERROR: Could not able to execute $job_listing. " . mysqli_error($conn);
@@ -158,7 +158,7 @@ if($conn === false){
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(user_id)
     )";
-    if(mysqli_query($conn, $company_documents)){
+    if (mysqli_query($conn, $company_documents)) {
         //echo "Table company_documents created successfully.";
     } else {
         echo "ERROR: Could not able to execute $company_documents. " . mysqli_error($conn);
@@ -175,6 +175,16 @@ if($conn === false){
     )";
 
 
-
+    // check if admin user is added, if not add admin user
+    $sql = "SELECT * FROM users WHERE user_type = 'admin'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) == 0) {
+        $admin = "INSERT INTO users (sex, user_type, fname, mname, lname, suffix, email, user_password, verification_status, verification_code) VALUES 
+    ('male','admin', 'PESO', 'Super', 'Admin', '', 'admin@muntinlupajobportal.site', '" . password_hash('PESOAdmin!', PASSWORD_DEFAULT) . "', 1, '" . md5('admin@muntinlupajobportal.site' . time()) . "')";
+        if (mysqli_query($conn, $admin)) {
+            //echo "Admin user added successfully.";
+        } else {
+            echo "ERROR: Could not able to execute $admin. " . mysqli_error($conn);
+        }
+    }
 }
-?>

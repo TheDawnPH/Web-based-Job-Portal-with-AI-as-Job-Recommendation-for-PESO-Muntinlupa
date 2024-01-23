@@ -54,11 +54,18 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PESO Job Portal - Profile</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/index.css"> <!-- Assuming you have a CSS file for your custom styles -->
+    <link rel="stylesheet" href="css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="icon" type="image/png" href="/img/peso_muntinlupa.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
+    <script src="https://kit.fontawesome.com/690deb639d.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -97,7 +104,13 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
             <div class="col-md-6">
                 <div class="card">
                     <div class="d-flex justify-content-center align-items-center">
-                        <img src="<?php echo $profile_picture; ?>" style="width:20vw;" class="card-img-top" alt="Profile Picture">
+                        <?php
+                        if ($profile_picture == "uploads/{$user_id}/") {
+                            echo '<img src="img/cat.png" style="width:20vw;" class="card-img-top" alt="Profile Picture">';
+                        } else {
+                            echo '<img src="' . $profile_picture . '" style="width:20vw;" class="card-img-top" alt="Profile Picture">';
+                        }
+                        ?>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Education Information</h5>
@@ -167,7 +180,7 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
                                 $result = mysqli_query($conn, $sql);
                                 $row = mysqli_fetch_assoc($result);
                                 if (isset($row[$documentKey]) && $row[$documentKey] != "") {
-                                    echo '<a href="uploads/' . $user_id . '/' . $row[$documentKey] . '" class="btn btn-primary">View ' . $documentLabel . '</a>';
+                                    echo '<a href="uploads/' . $user_id . '/' . $row[$documentKey] . '" class="btn btn-primary">View ' . $documentLabel . '</a><br><br>';
                                 }
                             }
                             ?>

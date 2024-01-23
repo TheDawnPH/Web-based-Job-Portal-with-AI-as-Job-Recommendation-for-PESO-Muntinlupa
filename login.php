@@ -56,7 +56,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $_COOKIE["suffix"] = $suffix;
                                 $_COOKIE["email"] = $email;
 
-                                header("location: index.php");
+                                // if user type is admin redirect to /admin/dashboard.php
+                                if ($user_type == "admin") {
+                                    header("location: admin/dashboard.php");
+                                } else {
+                                    header("location: index.php");
+                                }
                             } else {
                                 $verification_err = "Your account is not yet verified. Please check your email for the verification link.";
                             }
@@ -91,10 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="icon" type="image/png" href="/img/peso_muntinlupa.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 </head>
 
@@ -116,16 +119,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ?>
                     <div class="mb-4">
                         <label for="email" class="form-label">Email</label>
-                        <input type="text" name="email"
-                            class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" id="email"
-                            aria-describedby="emailHelp" value="<?php echo $email; ?>">
+                        <input type="text" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" id="email" aria-describedby="emailHelp" value="<?php echo $email; ?>">
                         <div class="invalid-feedback"><?php echo $email_err; ?></div>
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" name="password"
-                            class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>"
-                            id="password" aria-describedby="passwordHelp" value="<?php echo $password; ?>">
+                        <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="password" aria-describedby="passwordHelp" value="<?php echo $password; ?>">
                         <div class="invalid-feedback"><?php echo $password_err; ?></div>
                     </div>
                     <div class="mb-4 text-end"><a href="forgot_password.php">Forgot Password?</a></div>
