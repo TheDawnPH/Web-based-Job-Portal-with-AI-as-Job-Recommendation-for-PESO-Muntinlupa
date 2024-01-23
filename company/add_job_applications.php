@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $shs_qualified = $_POST["shs_qualified"];
 
     $job_image = $_FILES["job_image"]["name"];
-    $target_dir = $root . "/img/job_images/";
+    $target_dir = $root . "/uploads/job_images/";
     $target_file = $target_dir . basename($_FILES["job_image"]["name"]);
 
     // Check if image file is a actual image or fake image
