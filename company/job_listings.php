@@ -128,7 +128,7 @@ try {
     <title>Company - Manage Job Listings</title>
     <!-- Include necessary stylesheets or scripts -->
 
-<head>
+
     <title>PESO Muntinlupa - Job Portal</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -158,7 +158,7 @@ try {
             }
         }
     </style>
-</head>
+
 
 </head>
 
