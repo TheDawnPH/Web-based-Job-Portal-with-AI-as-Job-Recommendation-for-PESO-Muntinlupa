@@ -4,6 +4,23 @@ session_start();
 
 require_once "config.php";
 
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+
+if (isset($_GET["job_id"])) {
+    $job_id = $_GET["job_id"];
+    $user_id = $_SESSION["user_id"];
+
+    $sql = "INSERT INTO job_applications (job_id, user_id) VALUES ('$job_id', '$user_id')";
+    if (mysqli_query($conn, $sql)) {
+        $sucess = "Job application sent successfully.";
+    } else {
+        $failed = "Job application failed to send.";
+    }
+}
+
 
 ?>
 <html>
@@ -25,6 +42,19 @@ require_once "config.php";
 <body>
     <?php include "nav.php"; ?>
     <div class="container">
+        <br>
+        <h1>Your Job Applications</h1>
+        <?php if (isset($sucess)) { ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo $sucess; ?>
+            </div>
+        <?php } ?>
+        <?php if (isset($failed)) { ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $failed; ?>
+            </div>
+        <?php } ?>
+        <br>
         <!-- insert pending job application table for the user here --> 
     </div>
 </body>

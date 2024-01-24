@@ -6,6 +6,11 @@ require_once "config.php";
 
 // get job id from url
 $job_id = $_GET['job_id'];
+
+// get job details from jobs listings table
+$sql = "SELECT * FROM job_listings WHERE job_id = '$job_id'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
 ?>
 
 <html>
@@ -27,7 +32,47 @@ $job_id = $_GET['job_id'];
 <body>
     <?php include "nav.php"; ?>
     <div class="container">
-        <!-- insert pending job details here-->
+        <br>
+        <h1><?php echo $row['job_title']; ?></h1><br>
+        <h5>Job Description</h5>
+        <p><?php echo $row['job_description']; ?></p>
+        <h5>Job Requirements</h5>
+        <p><?php echo $row['job_requirements']; ?></p>
+        <h5>Job Salary</h5>
+        <p><?php echo $row['job_salary']; ?></p>
+        <h5>Job Type</h5>
+        <p><?php echo $row['job_type']; ?></p>
+        <h5>Is SHS Qualified</h5>
+        <p><?php 
+        if ($row['shs_qualified'] == 1) {
+            echo "Yes";
+        } else {
+            echo "No";
+        }
+        ?></p>
+        <h5>Job Industry</h5>
+        <p><?php
+        $sql = "SELECT * FROM jinindustry WHERE jinindustry_id = '" . $row['jinindustry_id'] . "'";
+        $result = mysqli_query($conn, $sql);
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo $row['jinindustry_name'];
+        }
+        ?></p>
+        // show image if there is one
+        <?php
+        if ($row['job_image'] != "/company/uploads/" . $row['user_id']) {
+            echo "<img src='img/job_images/$row[job_image]' width='100%'>";
+        }
+        ?>
+        <br><br>
+        // if user logged in and is an applicant, show apply button, else show login button
+        <?php
+        if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") {
+            echo "<a href='job_applications.php?job_id=$job_id' class='btn btn-success'>Apply in this Job</a>";
+        } else {
+            echo "<a href='login.php' class='btn btn-success'>Login to Apply</a>";
+        }
+        ?>
     </div>
 </body>
 </html>

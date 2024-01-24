@@ -19,7 +19,7 @@ session_start();
     <style>
         .cover {
             /* use 1350x300px image */
-            background-image: url('img/test_cover2.png');
+            background-image: url('img/banner.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;

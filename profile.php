@@ -17,11 +17,20 @@ $user_id = mysqli_real_escape_string($conn, $_SESSION["user_id"]);
 if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
     $profile_user_id = $_GET["user_id"];
 } else {
-    $profile_user_id = "";
+    $profile_user_id = $user_id;
+}
+
+//if user in $_GET["user_id"] does not exists, show 404.php
+$sql = "SELECT * FROM users WHERE user_id = '$profile_user_id'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+if (mysqli_num_rows($result) == 0) {
+    header("location: 404.php");
+    exit;
 }
 
 $stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
-$stmt->bind_param("s", $_SESSION["user_id"]);
+$stmt->bind_param("s", $profile_user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();
@@ -45,7 +54,7 @@ $school_name = $row['school_name'];
 $school_year_begin = $row['school_year_begin'];
 $school_year_end = $row['school_year_end'];
 $technicalschool_name = $row['technicalschool_name'];
-$profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
+$profile_picture = "uploads/{$profile_user_id}/{$row['profile_image']}";
 $jinindustry = $row['jinindustry_id'];
 
 // name jinindustry_id
@@ -103,7 +112,7 @@ $row2 = mysqli_fetch_assoc($result2);
                             <li class="list-group-item"><strong>Address:</strong>
                                 <?php echo "{$house_number}, {$street}, {$subdivision}, {$barangay}, {$city}, {$province}, {$zip_code}"; ?>
                             </li>
-                            <li class="list-group-item"><strong>Selected Job Industry:</strong> <?php echo $row2['jinindustry_name']; ?></li>
+                            <li class="list-group-item"><strong>Selected Job Industry:</strong> <?php if(!empty($row2['jinindustry_name'])){echo $row2['jinindustry_name'];} ?></li>
                         </ul>
                     </div>
                 </div>
@@ -113,7 +122,7 @@ $row2 = mysqli_fetch_assoc($result2);
                     <br>
                     <div class="d-flex justify-content-center align-items-center">
                         <?php
-                        if ($profile_picture == "uploads/{$user_id}/") {
+                        if ($profile_picture == "uploads/{$profile_user_id}/") {
                             echo '<img src="img/cat.png" style="width:20vw;" class="card-img-top" alt="Profile Picture">';
                         } else {
                             echo '<img src="' . $profile_picture . '" style="width:20vw;" class="card-img-top" alt="Profile Picture">';
@@ -126,7 +135,7 @@ $row2 = mysqli_fetch_assoc($result2);
                             <?php echo "{$school_name} ({$school_year_begin} - {$school_year_end})"; ?></p>
                         <p class="card-text"><strong>Technical School Name:</strong><br><br></p>
                         <?php
-                        if ($user_id != $profile_user_id) {
+                        if ($user_id == $profile_user_id) {
                             echo '<a href="edit_profile.php" class="btn btn-primary">Edit Profile</a>';
                         }
                         if ($user_type === "company") {
@@ -136,28 +145,28 @@ $row2 = mysqli_fetch_assoc($result2);
                     </div>
                 </div>
             </div>
-            <?php if ($user_type === "applicant") : ?>
+            <?php if ($user_type === "applicant" || $user_type === "admin") : ?>
                 <div class="col-md-6">
                     <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">Applicant Files</h5>
                             <hr>
                             <?php
-                            $sql = "SELECT * FROM applicant_documents WHERE user_id = '$user_id'";
+                            $sql = "SELECT * FROM users WHERE user_id = '$profile_user_id'";
                             $result = mysqli_query($conn, $sql);
                             $row = mysqli_fetch_assoc($result);
                             if ($row['nsrp_form'] != "") {
-                                echo '<a href="uploads/' . $user_id . '/' . $row['nsrp_form'] . '" class="btn btn-primary">View NSRP Form</a>';
+                                echo '<a href="uploads/' . $profile_user_id . '/' . $row['nsrp_form'] . '" class="btn btn-primary">View NSRP Form</a>';
                             }
                             if ($row['biodata_form'] != "") {
-                                echo '<a href="uploads/' . $user_id . '/' . $row['biodata_form'] . '" class="btn btn-primary">View Biodata Form</a>';
+                                echo '<a href="uploads/' . $profile_user_id . '/' . $row['biodata_form'] . '" class="btn btn-primary">View Biodata Form</a>';
                             }
                             ?>
                         </div>
                     </div>
                 </div>
             <?php endif; ?>
-            <?php if ($user_type === "company") : ?>
+            <?php if ($user_type === "company" || $user_type === "admin") : ?>
                 <div class="col-md-6">
                     <div class="card h-100">
                         <div class="card-body">
@@ -184,11 +193,11 @@ $row2 = mysqli_fetch_assoc($result2);
                             );
 
                             foreach ($documents as $documentKey => $documentLabel) {
-                                $sql = "SELECT * FROM company_documents WHERE user_id = '$user_id'";
+                                $sql = "SELECT * FROM company_documents WHERE user_id = '$profile_user_id'";
                                 $result = mysqli_query($conn, $sql);
                                 $row = mysqli_fetch_assoc($result);
                                 if (isset($row[$documentKey]) && $row[$documentKey] != "") {
-                                    echo '<a href="uploads/' . $user_id . '/' . $row[$documentKey] . '" class="btn btn-primary">View ' . $documentLabel . '</a><br><br>';
+                                    echo '<a href="uploads/' . $profile_user_id . '/' . $row[$documentKey] . '" class="btn btn-primary">View ' . $documentLabel . '</a><br><br>';
                                 }
                             }
                             ?>

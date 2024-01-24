@@ -7,13 +7,13 @@ require $root . "/config.php";
 
 // if user is not logged in redirect to login page
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: login.php");
+    header("location: /login.php");
     exit;
 }
 
 // if user is applicant show 404.php
 if ($_SESSION["user_type"] == "applicant") {
-    header("location: 404.php");
+    header("location: /404.php");
     exit;
 }
 
@@ -169,7 +169,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="mb-3">
                             <label for="jinindustry" class="form-label">Job Industry</label>
                             <select class="form-select" aria-label="Default select example" id="jinindustry" name="jinindustry" required>
-                                // select * from jinindustry and use it as option
                                 <?php
                                 $sql = "SELECT * FROM jinindustry";
                                 $result = mysqli_query($conn, $sql);

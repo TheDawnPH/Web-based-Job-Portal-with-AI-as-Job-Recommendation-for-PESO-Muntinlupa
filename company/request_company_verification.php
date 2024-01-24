@@ -9,13 +9,13 @@ $root = $_SERVER['DOCUMENT_ROOT'];
 require $root . "/config.php";
 
 if (!isset($_SESSION["user_type"]) || empty($_SESSION["user_type"])) {
-    header("location: login.php");
+    header("location: /login.php");
     exit;
 }
 
 // if user is applicant show 404.php
 if ($_SESSION["user_type"] == "applicant") {
-    header("location: 404.php");
+    header("location: /404.php");
     exit;
 }
 

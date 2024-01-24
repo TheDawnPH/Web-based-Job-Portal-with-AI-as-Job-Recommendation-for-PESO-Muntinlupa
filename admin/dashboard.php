@@ -11,6 +11,12 @@ if ($_SESSION["user_type"] != "admin") {
     exit;
 }
 
+// if user is not logged in redirect to login page
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: /login.php");
+    exit;
+}
+
 // Cloudflare API key and Zone ID
 $apiKey = $_ENV['CLOUDFLARE_API_KEY'];
 $zoneId = $_ENV['CLOUDFLARE_ZONE_ID'];

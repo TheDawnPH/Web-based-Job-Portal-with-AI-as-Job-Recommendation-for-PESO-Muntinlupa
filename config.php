@@ -173,14 +173,19 @@ if ($conn === false) {
         FOREIGN KEY (user_id) REFERENCES users(user_id),
         FOREIGN KEY (job_id) REFERENCES job_listing(id)
     )";
+    if (mysqli_query($conn, $job_applications)) {
+        //echo "Table job_applications created successfully.";
+    } else {
+        echo "ERROR: Could not able to execute $job_applications. " . mysqli_error($conn);
+    }
 
 
     // check if admin user is added, if not add admin user
     $sql = "SELECT * FROM users WHERE user_type = 'admin'";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) == 0) {
-        $admin = "INSERT INTO users (sex, user_type, fname, mname, lname, suffix, email, user_password, verification_status, verification_code) VALUES 
-    ('male','admin', 'PESO', 'Super', 'Admin', '', 'admin@muntinlupajobportal.site', '" . password_hash('PESOAdmin!', PASSWORD_DEFAULT) . "', 1, '" . md5('admin@muntinlupajobportal.site' . time()) . "')";
+        $admin = "INSERT INTO users (sex, user_type, fname, mname, lname, suffix, email, user_password, verification_status, verification_code, company_verified) VALUES 
+    ('male','admin', 'PESO', 'Super', 'Admin', '', 'admin@muntinlupajobportal.site', '" . password_hash('PESOAdmin!', PASSWORD_DEFAULT) . "', 1, '" . md5('admin@muntinlupajobportal.site' . time()) . "', 1)";
         if (mysqli_query($conn, $admin)) {
             //echo "Admin user added successfully.";
         } else {

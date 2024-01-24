@@ -7,7 +7,13 @@ require $root . "/config.php";
 
 // check if user_type is admin, if not redirect to 404 page
 if ($_SESSION["user_type"] != "admin") {
-    header("location: 404.php");
+    header("location: /404.php");
+    exit;
+}
+
+// if user is not logged in redirect to login page
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: /login.php");
     exit;
 }
 
@@ -38,7 +44,8 @@ $result = mysqli_query($conn, $sql);
     <div class="container">
         <br>
         <h1>Users</h1>
-        <br>
+        <a class="btn btn-primary" role="button" href="/admin/add_users.php">Add User</a>
+        <br><br>
         <div class="table-responsive">
             <?php
             // Check if there are rows returned
@@ -59,7 +66,7 @@ $result = mysqli_query($conn, $sql);
                     echo "<td>" . $row['fname'] . "</td>";
                     echo "<td>" . $row['lname'] . "</td>";
                     echo "<td>" . $row['user_type'] . "</td>";
-                    echo "<td><a class='btn btn-secondary' role='button' href='/profile.php?user_id=" . $row['user_id'] . "'>View Profile</a> <a class='btn btn-danger' role='button' href='/delete_profile.php?user_id=" . $row['user_id'] . "'>Delete Profile</a></td>";
+                    echo "<td><a class='btn btn-secondary' role='button' href='/profile.php?user_id=" . $row['user_id'] . "'>View Profile</a> <a class='btn btn-danger' role='button' href='/admin/delete_user.php?user_id=" . $row['user_id'] . "'>Delete User</a></td>";
                     echo "</tr>";
                 }
                 echo "</table>";
