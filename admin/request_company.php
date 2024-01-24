@@ -10,8 +10,11 @@ if ($_SESSION["user_type"] != "admin") {
     exit;
 }
 
-// Sanitize user_id parameter
-$user_id = mysqli_real_escape_string($conn, $_GET["user_id"]);
+if (isset($_GET['user_id'])) {
+    $user_id = $_GET['user_id'];
+} else {
+    $user_id = "";
+}
 
 // Check if a verification action has been triggered
 if (isset($_GET['verify_user']) && $_GET['verify_user'] == 1) {
@@ -21,7 +24,7 @@ if (isset($_GET['verify_user']) && $_GET['verify_user'] == 1) {
 }
 
 // Retrieve data from the users table where company_verified is 0
-$sql = "SELECT * FROM users WHERE company_verified = 0";
+$sql = "SELECT * FROM users WHERE user_type = 'company' AND company_verified = 0 ORDER BY lname ASC";
 $result = mysqli_query($conn, $sql);
 
 
@@ -38,21 +41,22 @@ $result = mysqli_query($conn, $sql);
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="icon" type="image/png" href="/img/peso_muntinlupa.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 </head>
 
 <body>
     <?php include $root . '/nav.php'; ?>
     <div class="container">
+        <br>
         <h1>Requests Portal</h1>
-        <?php
+        <br>
+        <div class="table-responsive">
+            <?php
             // Check if there are rows returned
-if (mysqli_num_rows($result) > 0) {
-    echo "<table border='1'>
+            if (mysqli_num_rows($result) > 0) {
+                echo "<table class='table table-striped table-bordered border-start'>
             <tr>
                 <th>User ID</th>
                 <th>First Name</th>
@@ -60,24 +64,25 @@ if (mysqli_num_rows($result) > 0) {
                 <th>Action</th>
             </tr>";
 
-    // Loop through the results and display them in the table
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<tr>
+                // Loop through the results and display them in the table
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>
                 <td>{$row['user_id']}</td>
                 <td>{$row['fname']}</td>
                 <td>{$row['lname']}</td>
-                <td><a class='btn btn-primary' role='button' href='?user_id={$row['user_id']}&verify_user=1'>Verify</a> <a class='btn btn-primary' role='button' href='profile.php?user_id={$row['user_id']}'>View Profile</a></td>
+                <td><a class='btn btn-success' role='button' href='?user_id={$row['user_id']}&verify_user=1'>Verify</a> <a class='btn btn-secondary' role='button' href='profile.php?user_id={$row['user_id']}'>View Profile</a></td>
         </tr>";
-}
+                }
 
-echo "</table>";
-} else {
-echo "No records found.";
-}
+                echo "</table>";
+            } else {
+                echo "<div class='alert alert-warning' role='alert'>No requests found.</div>";
+            }
 
-// Close the database connection
-mysqli_close($conn);
-?>
+            // Close the database connection
+            mysqli_close($conn);
+            ?>
+        </div>
     </div>
 </body>
 

@@ -28,22 +28,22 @@ $result = mysqli_query($conn, $sql);
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="icon" type="image/png" href="/img/peso_muntinlupa.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 </head>
 
 <body>
     <?php include $root . '/nav.php'; ?>
     <div class="container">
+        <br>
         <h1>Users</h1>
-        // table of Users
-        <?php
+        <br>
+        <div class="table-responsive">
+            <?php
             // Check if there are rows returned
-if (mysqli_num_rows($result) > 0) {
-    echo "<table border='1'>
+            if (mysqli_num_rows($result) > 0) {
+                echo "<table class='table table-striped table-bordered border-start'>
             <tr>
                 <th>User ID</th>
                 <th>First Name</th>
@@ -52,24 +52,25 @@ if (mysqli_num_rows($result) > 0) {
                 <th>Action</th>
             </tr>";
 
-    // Loop through each row returned by the query
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<tr>";
-        echo "<td>" . $row['user_id'] . "</td>";
-        echo "<td>" . $row['fname'] . "</td>";
-        echo "<td>" . $row['lname'] . "</td>";
-        echo "<td>" . $row['user_type'] . "</td>";
-        echo "<td><a href='/profile.php?user_id=" . $row['user_id'] . "'>View</a> <a href='/delete_profile.php?user_id=" . $row['user_id'] . "'>Delete Profile</a></td>";
-        echo "</tr>";
-    }
-    echo "</table>";
-} else {
-    echo "No users found.";
-}
+                // Loop through each row returned by the query
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                    echo "<td>" . $row['user_id'] . "</td>";
+                    echo "<td>" . $row['fname'] . "</td>";
+                    echo "<td>" . $row['lname'] . "</td>";
+                    echo "<td>" . $row['user_type'] . "</td>";
+                    echo "<td><a class='btn btn-secondary' role='button' href='/profile.php?user_id=" . $row['user_id'] . "'>View Profile</a> <a class='btn btn-danger' role='button' href='/delete_profile.php?user_id=" . $row['user_id'] . "'>Delete Profile</a></td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "<div class='alert alert-danger' role='alert'>No users found.</div>";
+            }
 
-// Close the database connection
-mysqli_close($conn);
-?>
+            // Close the database connection
+            mysqli_close($conn);
+            ?>
+        </div>
     </div>
 </body>
 

@@ -70,11 +70,11 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
 
 <body>
     <?php include "nav.php"; ?>
-    <div class="container mt-5">
+    <div class="container mt-3">
         <h1 class="mb-4">User Profile</h1>
-        <div class="row gx-5">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
             <div class="col-md-6">
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">Personal Information</h5>
                         <ul class="list-group list-group-flush">
@@ -102,7 +102,8 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card">
+                <div class="card h-100">
+                    <br>
                     <div class="d-flex justify-content-center align-items-center">
                         <?php
                         if ($profile_picture == "uploads/{$user_id}/") {
@@ -130,7 +131,7 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
             </div>
             <?php if ($user_type === "applicant") : ?>
                 <div class="col-md-6">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">Applicant Files</h5>
                             <hr>
@@ -151,7 +152,7 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
             <?php endif; ?>
             <?php if ($user_type === "company") : ?>
                 <div class="col-md-6">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title">Company Documents</h5>
                             <hr>
@@ -190,8 +191,5 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
             <?php endif; ?>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
-
 </html>
