@@ -46,6 +46,12 @@ $school_year_begin = $row['school_year_begin'];
 $school_year_end = $row['school_year_end'];
 $technicalschool_name = $row['technicalschool_name'];
 $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
+$jinindustry = $row['jinindustry_id'];
+
+// name jinindustry_id
+$sql2 = "SELECT * FROM jinindustry WHERE jinindustry_id = '$jinindustry'";
+$result2 = mysqli_query($conn, $sql2);
+$row2 = mysqli_fetch_assoc($result2);
 
 ?>
 
@@ -97,6 +103,7 @@ $profile_picture = "uploads/{$user_id}/{$row['profile_image']}";
                             <li class="list-group-item"><strong>Address:</strong>
                                 <?php echo "{$house_number}, {$street}, {$subdivision}, {$barangay}, {$city}, {$province}, {$zip_code}"; ?>
                             </li>
+                            <li class="list-group-item"><strong>Selected Job Industry:</strong> <?php echo $row2['jinindustry_name']; ?></li>
                         </ul>
                     </div>
                 </div>

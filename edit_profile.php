@@ -36,16 +36,17 @@ $school_year_begin = $row["school_year_begin"];
 $school_year_end = $row["school_year_end"];
 $technicalschool_name = $row["technicalschool_name"];
 $nsrp_form = $biodata_form = $profile_picture = "";
+$jinindustry = $row["jinindustry_id"];
 
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Prepare SQL statement
-    $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, school_name=?, school_year_begin=?, school_year_end=?, technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image) WHERE user_id=?";
+    $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, school_name=?, school_year_begin=?, school_year_end=?, technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image), jinindustry_id = IFNULL(?, jinindustry_id) WHERE user_id=?";
 
     if ($stmt = mysqli_prepare($conn, $sql)) {
         // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "siiiissssssisiisssss", $param_sex, $param_birth_day, $param_birth_month, $param_birth_year, $param_contact_number, $param_house_number, $param_street, $param_subdivision, $param_barangay, $param_city, $param_province, $param_zip_code, $param_school_name, $param_school_year_begin, $param_school_year_end, $param_technicalschool_name, $param_nsrp_form, $param_biodata_form, $param_profile_picture, $param_user_id);
+        mysqli_stmt_bind_param($stmt, "siiiissssssisiissssss", $param_sex, $param_birth_day, $param_birth_month, $param_birth_year, $param_contact_number, $param_house_number, $param_street, $param_subdivision, $param_barangay, $param_city, $param_province, $param_zip_code, $param_school_name, $param_school_year_begin, $param_school_year_end, $param_technicalschool_name, $param_nsrp_form, $param_biodata_form, $param_profile_picture, $param_jinindustry_id, $param_user_id);
 
         // Set parameters
         $param_sex = $_POST["gender"];
@@ -68,6 +69,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $param_biodata_form = !empty($_FILES["biodata_form"]["name"]) ? $_FILES["biodata_form"]["name"] : NULL;
         $param_profile_picture = !empty($_FILES["profile_picture"]["name"]) ? $_FILES["profile_picture"]["name"] : NULL;
         $param_user_id = $user_id;
+        $param_jinindustry_id = $_POST["jinindustry"];
+
+
         // Execute the prepared statement
         if (mysqli_stmt_execute($stmt)) {
             // Create a directory for the user if it doesn't exist
@@ -134,22 +138,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     mkdir($user_upload_dir, 0755, true);
                 }
 
+                if (!empty($_FILES["loi"]["name"])) {
                 move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
+                }
+                if (!empty($_FILES["cp"]["name"])) {
                 move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
+                }
+                if (!empty($_FILES["sec_accredit"]["name"])) {
                 move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
+                }
+                if (!empty($_FILES["cda_license"]["name"])) {
                 move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
+                }
+                if (!empty($_FILES["dole_license"]["name"])) {
                 move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
+                }
+                if (!empty($_FILES["loc"]["name"])) {
                 move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
+                }
+                if (!empty($_FILES["mbpermit"]["name"])) {
                 move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
+                }
+                if (!empty($_FILES["job_vacant"]["name"])) {
                 move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
+                }
+                if (!empty($_FILES["job_solicitation"]["name"])) {
                 move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
+                }
+                if (!empty($_FILES["phjobnet_reg"]["name"])) {
                 move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
+                }
+                if (!empty($_FILES["cert_nopendingcase"]["name"])) {
                 move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
+                }
+                if (!empty($_FILES["cert_regSSS"]["name"])) {
                 move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
+                }
+                if (!empty($_FILES["cert_regPhHealth"]["name"])) {
                 move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
+                }
+                if (!empty($_FILES["cert_regPGIBG"]["name"])) {
                 move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
+                }
+                if (!empty($_FILES["sketch_map"]["name"])) {
                 move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
+                }
+                if (!empty($_FILES["2303_bir"]["name"])) {
                 move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
+                }
 
                 $success = "Profile updated successfully!";
             } else {
@@ -197,22 +233,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     mkdir($user_upload_dir, 0755, true);
                 }
 
-                move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
-                move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
-                move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
-                move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
-                move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
-                move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
-                move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
-                move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
-                move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
-                move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
-                move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
-                move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
-                move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
-                move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
-                move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
-                move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
+                if (!empty($_FILES["loi"]["name"])) {
+                    move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
+                    }
+                    if (!empty($_FILES["cp"]["name"])) {
+                    move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
+                    }
+                    if (!empty($_FILES["sec_accredit"]["name"])) {
+                    move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
+                    }
+                    if (!empty($_FILES["cda_license"]["name"])) {
+                    move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
+                    }
+                    if (!empty($_FILES["dole_license"]["name"])) {
+                    move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
+                    }
+                    if (!empty($_FILES["loc"]["name"])) {
+                    move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
+                    }
+                    if (!empty($_FILES["mbpermit"]["name"])) {
+                    move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
+                    }
+                    if (!empty($_FILES["job_vacant"]["name"])) {
+                    move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
+                    }
+                    if (!empty($_FILES["job_solicitation"]["name"])) {
+                    move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
+                    }
+                    if (!empty($_FILES["phjobnet_reg"]["name"])) {
+                    move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_nopendingcase"]["name"])) {
+                    move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_regSSS"]["name"])) {
+                    move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_regPhHealth"]["name"])) {
+                    move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_regPGIBG"]["name"])) {
+                    move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
+                    }
+                    if (!empty($_FILES["sketch_map"]["name"])) {
+                    move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
+                    }
+                    if (!empty($_FILES["2303_bir"]["name"])) {
+                    move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
+                    }
 
                 $success = "Profile updated successfully!";
             } else {
@@ -362,6 +430,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label for="technicalschool_name">Technical School Name</label>
                 <input type="text" name="technicalschool_name" class="form-control" value="<?php echo $technicalschool_name; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="jinindustry">Select Jon Industry</label>
+                <div class="form-text">Select a Job Industry you want to apply on</div>
+                <select class="form-select" aria-label="Default select example" id="jinindustry" name="jinindustry" required>
+                    <?php
+                    $sql = "SELECT * FROM jinindustry";
+                    $result = mysqli_query($conn, $sql);
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $selected = ($industry == $row['jinindustry_id']) ? 'selected' : '';
+                        echo "<option value='" . $row['jinindustry_id'] . "' " . $selected . ">" . $row['jinindustry_name'] . "</option>";
+                    }
+                    ?>
+                </select>
             </div><br>
             <?php if ($user_type == 'applicant') : ?>
                 <div class="form-group">

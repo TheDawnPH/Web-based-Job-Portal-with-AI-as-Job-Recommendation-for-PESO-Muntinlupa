@@ -43,7 +43,7 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
         </li>
         <?php
         // Check if the user is logged in and is of type 'company'
-        if (isset($_SESSION['loggedin']) && $_SESSION['user_type'] === 'company') {
+        if (isset($_SESSION['loggedin']) && $_SESSION['user_type'] === 'company' || isset($_SESSION['loggedin']) && $_SESSION['user_type'] === 'admin') {
         ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

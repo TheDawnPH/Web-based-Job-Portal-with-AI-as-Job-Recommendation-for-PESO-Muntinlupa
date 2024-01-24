@@ -187,4 +187,74 @@ if ($conn === false) {
             echo "ERROR: Could not able to execute $admin. " . mysqli_error($conn);
         }
     }
+
+    $sql2 = "SELECT * FROM jinindustry";
+    $result2 = mysqli_query($conn, $sql2);
+    if (mysqli_num_rows($result2) == 0) {
+        $jinsql = "INSERT INTO jinindustry (jinindustry_name) VALUES 
+    ('Accounting'),
+    ('Admin'),
+    ('Agriculture'),
+    ('Architecture'),
+    ('Arts'),
+    ('Aviation'),
+    ('Banking'),
+    ('Beauty'),
+    ('Business'),
+    ('Construction'),
+    ('Customer Service'),
+    ('Design'),
+    ('Education'),
+    ('Engineering'),
+    ('Finance'),
+    ('Food Service'),
+    ('Healthcare'),
+    ('Hospitality'),
+    ('Human Resources'),
+    ('Information Technology'),
+    ('Insurance'),
+    ('Legal'),
+    ('Logistics'),
+    ('Maintenance'),
+    ('Management'),
+    ('Manufacturing'),
+    ('Marketing'),
+    ('Media'),
+    ('Medical'),
+    ('Mining'),
+    ('Nursing'),
+    ('Oil and Gas'),
+    ('Operations'),
+    ('Pharmaceutical'),
+    ('Property'),
+    ('Public Relations'),
+    ('Purchase'),
+    ('Quality Assurance'),
+    ('Real Estate'),
+    ('Research'),
+    ('Restaurant'),
+    ('Retail'),
+    ('Sales'),
+    ('Science'),
+    ('Security'),
+    ('Shipping'),
+    ('Skilled Labor'),
+    ('Social Work'),
+    ('Sports'),
+    ('Strategy'),
+    ('Supply Chain'),
+    ('Telecommunications'),
+    ('Tourism'),
+    ('Trades'),
+    ('Transportation'),
+    ('Travel'),
+    ('Utilities'),
+    ('Warehousing')
+    ";
+        if (mysqli_query($conn, $jinsql)) {
+            //echo "Job Industry added successfully.";
+        } else {
+            echo "ERROR: Could not able to execute $jinsql. " . mysqli_error($conn);
+        }
+    }
 }

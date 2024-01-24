@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // prepare an insert statement
-    $sql = "INSERT INTO job_listings (job_title, job_description, job_requirements, job_salary, job_type, job_image, job_industry, shs_qualified, company_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO job_listings (job_title, job_description, job_requirements, job_salary, job_type, job_image, jinindustry_id, shs_qualified, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     if ($stmt = mysqli_prepare($conn, $sql)) {
         // bind variables to the prepared statement as parameters
@@ -169,72 +169,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="mb-3">
                             <label for="jinindustry" class="form-label">Job Industry</label>
                             <select class="form-select" aria-label="Default select example" id="jinindustry" name="jinindustry" required>
-                                <option value="Accounting">Accounting</option>
-                                <option value="Admin">Admin</option>
-                                <option value="Agriculture">Agriculture</option>
-                                <option value="Architecture">Architecture</option>
-                                <option value="Arts">Arts</option>
-                                <option value="Aviation">Aviation</option>
-                                <option value="Banking">Banking</option>
-                                <option value="Beauty">Beauty</option>
-                                <option value="Business">Business</option>
-                                <option value="Construction">Construction</option>
-                                <option value="Customer Service">Customer Service</option>
-                                <option value="Design">Design</option>
-                                <option value="Education">Education</option>
-                                <option value="Engineering">Engineering</option>
-                                <option value="Finance">Finance</option>
-                                <option value="Food Service">Food Service</option>
-                                <option value="Healthcare">Healthcare</option>
-                                <option value="Hospitality">Hospitality</option>
-                                <option value="Human Resources">Human Resources</option>
-                                <option value="Information Technology">Information Technology</option>
-                                <option value="Insurance">Insurance</option>
-                                <option value="Legal">Legal</option>
-                                <option value="Logistics">Logistics</option>
-                                <option value="Maintenance">Maintenance</option>
-                                <option value="Management">Management</option>
-                                <option value="Manufacturing">Manufacturing</option>
-                                <option value="Marketing">Marketing</option>
-                                <option value="Media">Media</option>
-                                <option value="Medical">Medical</option>
-                                <option value="Mining">Mining</option>
-                                <option value="Nursing">Nursing</option>
-                                <option value="Oil and Gas">Oil and Gas</option>
-                                <option value="Operations">Operations</option>
-                                <option value="Pharmaceutical">Pharmaceutical</option>
-                                <option value="Property">Property</option>
-                                <option value="Public Relations">Public Relations</option>
-                                <option value="Purchase">Purchase</option>
-                                <option value="Quality Assurance">Quality Assurance</option>
-                                <option value="Real Estate">Real Estate</option>
-                                <option value="Research">Research</option>
-                                <option value="Restaurant">Restaurant</option>
-                                <option value="Retail">Retail</option>
-                                <option value="Sales">Sales</option>
-                                <option value="Science">Science</option>
-                                <option value="Security">Security</option>
-                                <option value="Shipping">Shipping</option>
-                                <option value="Skilled Labor">Skilled Labor</option>
-                                <option value="Social Work">Social Work</option>
-                                <option value="Sports">Sports</option>
-                                <option value="Strategy">Strategy</option>
-                                <option value="Supply Chain">Supply Chain</option>
-                                <option value="Telecommunications">Telecommunications</option>
-                                <option value="Tourism">Tourism</option>
-                                <option value="Trades">Trades</option>
-                                <option value="Transportation">Transportation</option>
-                                <option value="Travel">Travel</option>
-                                <option value="Utilities">Utilities</option>
-                                <option value="Warehousing">Warehousing</option>
+                                // select * from jinindustry and use it as option
+                                <?php
+                                $sql = "SELECT * FROM jinindustry";
+                                $result = mysqli_query($conn, $sql);
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo "<option value='" . $row["id"] . "'>" . $row["jinindustry_name"] . "</option>";
+                                }
+                                ?>
                             </select>
                         </div>
                         <div class="mb-3">
-                            // checkbox if shs are qualified in this Job
                             <input type="checkbox" id="shs_qualified" name="shs_qualified" value="1">
                             <label for="shs_qualified" class="form-label">SHS Applicants can apply?</label>
                         </div>
-                        // upload for job listing image
                         <div class="mb-3">
                             <label for="job_image" class="form-label">Job Image</label>
                             <input class="form-control" type="file" id="job_image" name="job_image">
@@ -246,5 +194,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </body>
-
 </html>
