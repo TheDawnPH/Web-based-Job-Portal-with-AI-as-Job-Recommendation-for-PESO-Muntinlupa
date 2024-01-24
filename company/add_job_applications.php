@@ -34,56 +34,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $job_type = $_POST["job_type"];
     $jinindustry = $_POST["jinindustry"];
     $shs_qualified = $_POST["shs_qualified"];
-
-    $job_image = $_FILES["job_image"]["name"];
-    $target_dir = $root . "/uploads/job_images/";
-    $target_file = $target_dir . basename($_FILES["job_image"]["name"]);
-
-    // Check if image file is a actual image or fake image
-    $check = getimagesize($_FILES["job_image"]["tmp_name"]);
-    if ($check !== false) {
-        $uploadOk = 1;
-    } else {
-        $uploadOk = 0;
-    }
-
-    // Check if file already exists
-    if (file_exists($target_file)) {
-        $uploadOk = 0;
-    }
-
-    // Allow certain file formats
-    if (
-        $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-    ) {
-        $uploadOk = 0;
-    }
-
-    // Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
-        $job_image = "default.png";
-    } else {
-        if (move_uploaded_file($_FILES["job_image"]["tmp_name"], $target_file)) {
-            // echo "The file " . htmlspecialchars(basename($_FILES["job_image"]["name"])) . " has been uploaded.";
-        } else {
-            $job_image = "default.png";
-        }
-    }
+    $job_image = !empty($_FILES["job_image"]["name"]) ? $_FILES["job_image"]["name"] : NULL;
+    $user_id = $_SESSION["user_id"];
 
     // prepare an insert statement
-    $sql = "INSERT INTO job_listings (job_title, job_description, job_requirements, job_salary, job_type, job_image, jinindustry_id, shs_qualified, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO job_listing (job_title, job_description, job_requirements, job_salary, job_type, image_name, jinindustry_id, shs_qualified, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     if ($stmt = mysqli_prepare($conn, $sql)) {
         // bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "ssssssssi", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $_SESSION["id"]);
+        mysqli_stmt_bind_param($stmt, "sssssssss", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $user_id);
 
         // attempt to execute the prepared statement
         if (mysqli_stmt_execute($stmt)) {
+            $upload_dir = "uploads/" . mysqli_insert_id($conn) . "/";
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0755, true);
+            }
+
+            if (!empty($_FILES["job_image"]["name"])) {
+                move_uploaded_file($_FILES["job_image"]["tmp_name"], $upload_dir . "/" . $_FILES["job_image"]["name"]);
+            }
+            
             // redirect to login page
-            header("location: add_job_listing.php?success=1");
+            header("location: add_job_applications.php?success=1");
         } else {
             // redirect to login page
-            header("location: add_job_listing.php?error=1");
+            header("location: add_job_applications.php?error=1");
         }
     }
 
@@ -173,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $sql = "SELECT * FROM jinindustry";
                                 $result = mysqli_query($conn, $sql);
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row["id"] . "'>" . $row["jinindustry_name"] . "</option>";
+                                    echo "<option value='" . $row["jinindustry_id"] . "'>" . $row["jinindustry_name"] . "</option>";
                                 }
                                 ?>
                             </select>
@@ -184,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="mb-3">
                             <label for="job_image" class="form-label">Job Image</label>
-                            <input class="form-control" type="file" id="job_image" name="job_image">
+                            <input class="form-control" type="file" id="job_image" name="job_image" accept="image/png">
                         </div>
                         <button type="submit" class="btn btn-primary">Add Job Listing</button>
                     </form>

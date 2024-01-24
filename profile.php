@@ -10,7 +10,6 @@ if (!isset($_SESSION["user_type"]) || empty($_SESSION["user_type"])) {
 }
 
 // get user type and user id
-$user_type = $_SESSION["user_type"];
 $user_id = mysqli_real_escape_string($conn, $_SESSION["user_id"]);
 
 
@@ -56,6 +55,7 @@ $school_year_end = $row['school_year_end'];
 $technicalschool_name = $row['technicalschool_name'];
 $profile_picture = "uploads/{$profile_user_id}/{$row['profile_image']}";
 $jinindustry = $row['jinindustry_id'];
+$user_type = $row['user_type'];
 
 // name jinindustry_id
 $sql2 = "SELECT * FROM jinindustry WHERE jinindustry_id = '$jinindustry'";
@@ -87,13 +87,13 @@ $row2 = mysqli_fetch_assoc($result2);
     <?php include "nav.php"; ?>
     <div class="container mt-3">
         <h1 class="mb-4">User Profile</h1>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="row row-cols-1 row-cols-md-3 g-2">
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">Personal Information</h5>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>User Type:</strong> <?php echo ($user_type === "applicant") ? "Applicant" : "Company"; ?></li>
+                            <li class="list-group-item"><strong>User Type:</strong> <?php echo ($user_type == 'applicant') ? "Applicant" : (($user_type == 'company') ? "Company" : "Admin"); ?></li>
                             <li class="list-group-item"><strong>Name:</strong> <?php echo "{$row['fname']} {$row['mname']} {$row['lname']} {$row['suffix']}"; ?></li>
                             <li class="list-group-item"><strong>Email:</strong> <?php echo $row['email']; ?></li>
                             <li class="list-group-item"><strong>Gender:</strong> <?php echo ($gender == 'male') ? 'Male' : 'Female'; ?></li>

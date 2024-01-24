@@ -436,11 +436,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-text">Select a Job Industry you want to apply on</div>
                 <select class="form-select" aria-label="Default select example" id="jinindustry" name="jinindustry" required>
                     <?php
-                    $sql = "SELECT * FROM jinindustry";
-                    $result = mysqli_query($conn, $sql);
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $selected = ($industry == $row['jinindustry_id']) ? 'selected' : '';
-                        echo "<option value='" . $row['jinindustry_id'] . "' " . $selected . ">" . $row['jinindustry_name'] . "</option>";
+                    $sql3 = "SELECT * FROM jinindustry";
+                    $result3 = mysqli_query($conn, $sql3);
+                    while ($row3 = mysqli_fetch_assoc($result3)) {
+                        $selected = ($jinindustry == $row3['jinindustry_id']) ? 'selected' : '';
+                        echo "<option value='" . $row3['jinindustry_id'] . "' " . $selected . ">" . $row3['jinindustry_name'] . "</option>";
                     }
                     ?>
                 </select>
