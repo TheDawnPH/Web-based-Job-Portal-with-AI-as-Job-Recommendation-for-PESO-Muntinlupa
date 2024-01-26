@@ -51,7 +51,6 @@ include 'config.php';
                 <div class="col-md-4">
                     <h1>Available Jobs</h1>
                     <hr>
-                    // show available jobs for applicants based on jinindustry_id
                     <?php
                     // Assuming $conn is your database connection
                     $sql = "SELECT * FROM job_listing WHERE jinindustry_id =" . $_SESSION['jinindustry_id'];
