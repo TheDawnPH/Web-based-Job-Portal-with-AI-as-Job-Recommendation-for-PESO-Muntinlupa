@@ -2,6 +2,10 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 $root = $_SERVER['DOCUMENT_ROOT'];
@@ -20,9 +24,13 @@ if ($_SESSION["user_type"] == "applicant") {
 }
 
 // get fname and lname from user id
-$sql = "SELECT * FROM users WHERE user_id = '$_SESSION[user_id]'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
+$stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
+$stmt->bind_param("i", $_SESSION["user_id"]);
+
+$stmt->execute();
+
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
 
 // smtp email to peso admin, use phpmailer
 require $root .'/PHPMailer/src/Exception.php';
@@ -44,7 +52,7 @@ $mail->AddAddress($_ENV['SMTP_EMAIL'], "PESO Admin");
 $mail->SetFrom($_ENV['SMTP_USER'], $row['fname'] . " " . $row['lname']);
 $mail->Subject = "PESO Muntinlupa - Email Verification";
 // set content of email that redirect admin to verify company
-$content = "Hello! There is a request to verification of company. Please click the link below to verify the company.<br><br><a href='http://{$website}/admin/verify_company.php?user_id={$_SESSION['user_id']}'>Verify Company</a><br><br>Thank you!";
+$content = "Hello! There is a request to verification of company. Please click the link below to verify the company.<br><br><a href='https://{$website}/admin/verify_company.php?user_id={$_SESSION['user_id']}'>Verify Company</a><br><br>Thank you!";
 $mail->MsgHTML($content);
 if (!$mail->Send()) {
     // echo $warning = "Error while sending Email.";

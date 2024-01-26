@@ -2,7 +2,16 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
+
+// Generate a CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     header("location: index.php");
@@ -32,6 +41,11 @@ function isEmailExists($conn, $email)
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        echo "CSRF Token is invalid, This page is doomed.";
+        die();
+    }
+
     if (empty(trim($_POST["user_type"]))) {
         $user_type_err = "Please select registration type.";
     } else {
@@ -44,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fname = trim($_POST["fname"]);
     }
 
-        $mname = trim($_POST["mname"]);
+    $mname = trim($_POST["mname"]);
 
     if (empty(trim($_POST["lname"]))) {
         $lname_err = "Please enter last name.";
@@ -53,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $suffix = trim($_POST["suffix"]);
-    
+
 
     if (empty(trim($_POST["email"]))) {
         $email_err = "Please enter email.";
@@ -80,6 +94,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email_err = "Email already exists.";
     }
 
+    function generateVerificationCode()
+    {
+        return bin2hex(random_bytes(16)); // Generates a random 32-character string
+    }
+
     if (empty($user_type_err) && empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
         $sql = "INSERT INTO users (user_type, fname, mname, lname, suffix, email, user_password, verification_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -93,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_suffix = $suffix;
             $param_email = $email;
             $param_password = password_hash($password, PASSWORD_DEFAULT);
-            $param_verification_code = md5($email . time());
+            $param_verification_code = generateVerificationCode();
 
             if (mysqli_stmt_execute($stmt)) {
                 // phpmailer
@@ -118,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->Subject = "PESO Muntinlupa - Email Verification";
                 $content = "<b>Hi " . $fname . " " . $lname . ",</b><br><br>";
                 $content .= "Please click the link below to verify your email address.<br><br>";
-                $content .= "<a href='http://".$website."/verify.php?code=$param_verification_code'>Verify Email</a><br><br>";
+                $content .= "<a href='https://" . $website . "/verify.php?code=$param_verification_code'>Verify Email</a><br><br>";
                 $content .= "Thank you!<br>";
                 $content .= "PESO Muntinlupa";
                 $mail->MsgHTML($content);
@@ -129,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $alert = "Please check your email for the verification link.";
                 }
                 // end of phpmailer
-                
+
                 $alert = "Please check your email for the verification link.";
             } else {
                 $warning = "Something went wrong. Please try again later.";
@@ -153,10 +172,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="icon" type="image/png" href="/img/peso_muntinlupa.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
 </head>
 
@@ -226,24 +243,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" id="password"
-                            aria-describedby="passwordHelp">
+                        <input type="password" name="password" class="form-control" id="password" aria-describedby="passwordHelp">
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Confirm Password</label>
-                        <input type="password" name="confirm_password" class="form-control" id="confirm_password"
-                            aria-describedby="confirm_passwordHelp">
+                        <input type="password" name="confirm_password" class="form-control" id="confirm_password" aria-describedby="confirm_passwordHelp">
                     </div>
                     <div class="mb-4">
-                        <div class="form-text">By Registering yourself in this website, you agree on <a
-                                href="https://privacy.gov.ph/data-privacy-act/" target="_blank">Privacy Notice from
+                        <div class="form-text">By Registering yourself in this website, you agree on <a href="https://privacy.gov.ph/data-privacy-act/" target="_blank">Privacy Notice from
                                 Republic Act 10173 or Data Privacy Act of 2012</a>.</div>
                     </div>
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                     <input type="submit" class="btn btn-primary" value="Register">
                 </form>
             </div>
         </div>
-
     </div>
 </body>
 

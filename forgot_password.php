@@ -2,6 +2,10 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
@@ -39,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($stmt = mysqli_prepare($conn, $sql)) {
                         mysqli_stmt_bind_param($stmt, "ss", $param_verification_code, $param_email);
 
-                        $param_verification_code = md5($email . time());
+                        $param_verification_code = bin2hex(random_bytes(32));
                         $param_email = $email;
 
                         if (mysqli_stmt_execute($stmt)) {

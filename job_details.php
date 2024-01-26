@@ -1,19 +1,35 @@
 <?php
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 require_once "config.php";
 
 // Get job id from URL
 $job_id = $_GET['job_id'];
 
-// Get job details from jobs listings table
-$sql = "SELECT * FROM job_listing WHERE id = '$job_id'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
+// Prepare and bind
+$stmt = $conn->prepare("SELECT * FROM job_listing WHERE id = ?");
+$stmt->bind_param("i", $job_id);
 
-// Get fname and lname from users table
-$sql2 = "SELECT * FROM users WHERE user_id = '$row[user_id]'";
-$result2 = mysqli_query($conn, $sql2);
-$row2 = mysqli_fetch_assoc($result2);
+// Execute the statement
+$stmt->execute();
+
+// Get the result
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+// Prepare and bind
+$stmt2 = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
+$stmt2->bind_param("i", $row['user_id']);
+
+// Execute the statement
+$stmt2->execute();
+
+// Get the result
+$result2 = $stmt2->get_result();
+$row2 = $result2->fetch_assoc();
 $name = $row2['fname'] . " " . $row2['lname'];
 ?>
 

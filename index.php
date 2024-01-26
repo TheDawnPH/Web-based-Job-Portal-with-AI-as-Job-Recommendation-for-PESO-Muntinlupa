@@ -53,7 +53,9 @@ include 'config.php';
                     <hr>
                     <?php
                     // Assuming $conn is your database connection
-                    $sql = "SELECT * FROM job_listing WHERE jinindustry_id =" . $_SESSION['jinindustry_id'];
+                    // get cookies jininudstry_id as $session
+                    $session = $_COOKIE['jinindustry_id'];
+                    $sql = "SELECT * FROM job_listing WHERE jinindustry_id = $session";
                     $result = mysqli_query($conn, $sql);
 
                     // Check if there are any rows in the result set
@@ -78,7 +80,6 @@ include 'config.php';
 
                     // Close the result set and database connection
                     mysqli_free_result($result);
-                    mysqli_close($conn);
                     ?>
                     <br>
                 </div>';

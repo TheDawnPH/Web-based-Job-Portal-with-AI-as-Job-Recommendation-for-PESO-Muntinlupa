@@ -1,4 +1,8 @@
 <?php
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 $root = $_SERVER['DOCUMENT_ROOT'];
@@ -16,7 +20,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-if(isset($_GET["delete"]) && $_GET["delete"] == "success") {
+if (isset($_GET["delete"]) && $_GET["delete"] == "success") {
     $deletebox = "1";
 } else {
     $deletebox = "0";
@@ -81,10 +85,10 @@ $result = mysqli_stmt_get_result($stmt);
                         $row2 = mysqli_fetch_array($result2);
 
                         echo "<tr>";
-                        echo "<td>" . $row["job_title"] . "</td>";
-                        echo "<td>" . $row2["jinindustry_name"] . "</td>";
-                        echo "<td>" . $row["job_type"] . "</td>";
-                        echo "<td><a class='btn btn-primary' href='/job_details.php?job_id=" . $row["id"] . "'>View</a> <a class='btn btn-warning' href='add_job_applications.php?id=" . $row["id"] . "'>Edit</a> <a class='btn btn-danger' href='delete_job_listing.php?id=" . $row["id"] . "'>Delete</a></td>";
+                        echo "<td>" . htmlspecialchars($row["job_title"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row2["jinindustry_name"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["job_type"]) . "</td>";
+                        echo "<td><a class='btn btn-primary' href='/job_details.php?job_id=" . htmlspecialchars($row["id"]) . "'>View</a> <a class='btn btn-warning' href='add_job_applications.php?id=" . htmlspecialchars($row["id"]) . "'>Edit</a> <a class='btn btn-danger' href='delete_job_listing.php?id=" . htmlspecialchars($row["id"]) . "'>Delete</a></td>";
                         echo "</tr>";
                     }
                     ?>

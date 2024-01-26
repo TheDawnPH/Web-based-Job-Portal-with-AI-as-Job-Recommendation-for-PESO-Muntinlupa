@@ -5,6 +5,10 @@ $root = $_SERVER['DOCUMENT_ROOT'];
 
 require $root . "/config.php";
 
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 // if user is not logged in redirect to login page
@@ -53,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fname = trim($_POST["fname"]);
     }
 
-        $mname = trim($_POST["mname"]);
+    $mname = trim($_POST["mname"]);
 
     if (empty(trim($_POST["lname"]))) {
         $lname_err = "Please enter last name.";
@@ -62,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $suffix = trim($_POST["suffix"]);
-    
 
     if (empty(trim($_POST["email"]))) {
         $email_err = "Please enter email.";
@@ -74,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email_err = "Email already exists.";
     }
 
-    if (empty($user_type_err) && empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
+    if (empty($user_type_err) && empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($email_err)) {
         $sql = "INSERT INTO users (user_type, fname, mname, lname, suffix, email, verification_code, company_verified, verification_status, user_password) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
@@ -87,15 +90,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_suffix = $suffix;
             $param_email = $email;
             $param_verification_status = 1;
-            $param_password = password_hash(md5($email . time()), PASSWORD_DEFAULT);
-            $param_verification_code = md5($email . time());
-            if ($user_type == "company") {
-                $param_company_verified = 0;
-            } elseif ($user_type == "applicant") {
-                $param_company_verified = 0;
-            } else {
-                $param_company_verified = 1;
-            }
+            $param_password = password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT);
+            $param_verification_code = bin2hex(random_bytes(16));
+            $param_company_verified = ($user_type == "company") ? 0 : 1;
 
             if (mysqli_stmt_execute($stmt)) {
                 // phpmailer
@@ -120,24 +117,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->Subject = "PESO Muntinlupa Admin - Provision of Account";
                 $content = "<b>Hi " . $fname . " " . $lname . ",</b><br><br>";
                 $content .= "An PESO Admin has been provided you an account,<br>Please click the link below to set your password.<br><br>";
-                $content .= "<a href='http://".$website."/password_reset_success.php?code=$param_verification_code'>Set Password</a><br><br>";
+                $content .= "<a href='https://".$_ENV['WEBSITE_URL']."/password_reset_success.php?code=$param_verification_code'>Set Password</a><br><br>";
                 $content .= "Thank you!<br>";
                 $content .= "PESO Muntinlupa";
                 $mail->MsgHTML($content);
+
                 if (!$mail->Send()) {
                     $alert = "Error while sending Email.";
-                    // var_dump($mail);
                 } else {
                     $success = "Please check your email for the verification link.";
                 }
                 // end of phpmailer
-                
-                $success = "Please check your email for the verification link.";
+
             } else {
                 $alert = "Something went wrong. Please try again later.";
             }
+            mysqli_stmt_close($stmt);
         }
-        mysqli_stmt_close($stmt);
     }
     mysqli_close($conn);
 }
@@ -203,9 +199,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="text" name="email" class="form-control" id="email" aria-describedby="emailHelp">
             </div>
             <div class="mb-4">
-                <div class="form-text">Thier Account Verification will be sent to their email, once clicked it will prompt them to set their password.</div>
+                <div class="form-text">Their Account Verification will be sent to their email, once clicked it will prompt them to set their password.</div>
             </div>
             <button type="submit" class="btn btn-primary">Add User</button>
+        </form>
     </div>
 </body>
 

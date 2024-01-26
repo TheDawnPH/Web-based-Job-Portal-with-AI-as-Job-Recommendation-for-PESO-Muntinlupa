@@ -1,6 +1,10 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 require_once "config.php";
@@ -14,19 +18,35 @@ if (isset($_GET["job_id"])) {
     $job_id = $_GET["job_id"];
     $user_id = $_SESSION["user_id"];
 
-    // get company user id frm jobs table
-    $sql = "SELECT * FROM job_listing WHERE id = '$job_id'";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
+    // Prepare and bind
+    $stmt = $conn->prepare("SELECT * FROM job_listing WHERE id = ?");
+    $stmt->bind_param("i", $job_id);
+
+    // Execute the statement
+    $stmt->execute();
+
+    // Get the result
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
     $job_id_user = $row["user_id"];
 
-    // get company user email
-    $sql4 = "SELECT * FROM users WHERE user_id = '$job_id_user'";
-    $result4 = mysqli_query($conn, $sql4);
-    $row4 = mysqli_fetch_assoc($result4);
+    // Prepare and bind
+    $stmt2 = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
+    $stmt2->bind_param("i", $job_id_user);
 
-    $sql = "INSERT INTO job_applications (job_id, user_id) VALUES ('$job_id', '$user_id')";
-    if (mysqli_query($conn, $sql)) {
+    // Execute the statement
+    $stmt2->execute();
+
+    // Get the result
+    $result2 = $stmt2->get_result();
+    $row2 = $result2->fetch_assoc();
+
+    // Prepare and bind
+    $stmt3 = $conn->prepare("INSERT INTO job_applications (job_id, user_id) VALUES (?, ?)");
+    $stmt3->bind_param("ii", $job_id, $user_id);
+
+    // Execute the statement
+    if ($stmt3->execute()) {
         // smtp email to company user email
         require 'PHPMailer/src/Exception.php';
         require 'PHPMailer/src/PHPMailer.php';
@@ -43,15 +63,15 @@ if (isset($_GET["job_id"])) {
         $mail->Username   = $_ENV['SMTP_USER']; // email address
         $mail->Password   = $_ENV['SMTP_PASS']; // password
         $mail->IsHTML(true);
-        $mail->AddAddress($row4['email'], $row4['fname'] . " " . $row4['lname']);
+        $mail->AddAddress($row2['email'], $row2['fname'] . " " . $row2['lname']);
         $mail->SetFrom($_ENV['SMTP_USER'], "PESO Muntinlupa - Job Application System");
         $mail->Subject = "New Job Application - PESO Muntinlupa";
         // set content of email that a job application has been sent and click the link to view the job application
-        $content = "<b>Dear " . $row4['fname'] . " " . $row4['lname'] . ",</b><br><br>";
+        $content = "<b>Dear " . $row2['fname'] . " " . $row2['lname'] . ",</b><br><br>";
         $content .= "A new job application has been sent to you. Please click the link below to view the job application.<br><br>";
-        $content .= "<a href='http://{$_ENV['WEBSITE_URL']}/company/job_applicants.php'>View Job Applications</a><br><br>";
+        $content .= "<a href='https://{$_ENV['WEBSITE_URL']}/company/job_applicants.php'>View Job Applications</a><br><br>";
         $content .= "This is the applicant information:<br><br>";
-        $content .= "<a href='http://{$_ENV['WEBSITE_URL']}/profile.php?user_id=" . $user_id . "'>View Profile</a><br><br>";
+        $content .= "<a href='https://{$_ENV['WEBSITE_URL']}/profile.php?user_id=" . $user_id . "'>View Profile</a><br><br>";
         $content .= "Thank you,<br>";
         $content .= "PESO Muntinlupa";
         $mail->MsgHTML($content);

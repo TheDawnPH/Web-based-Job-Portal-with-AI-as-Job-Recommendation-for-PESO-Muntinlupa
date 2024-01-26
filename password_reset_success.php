@@ -1,10 +1,20 @@
 <?php
 
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 require_once "config.php";
 
 $code = $_GET["code"];
+
+// Validate the input
+if (!preg_match("/^[a-zA-Z0-9]*$/", $code)) {
+    header("location: 404.php");
+    exit;
+}
 
 // check if $code is same as verification_code in database, if not redirect to 404 page
 $sql = "SELECT * FROM users WHERE verification_code = ?";
@@ -60,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($stmt = mysqli_prepare($conn, $sql)) {
                     mysqli_stmt_bind_param($stmt, "ss", $param_new_code, $param_code);
 
-                    $param_new_code = md5($code . time());
+                    $param_new_code = bin2hex(random_bytes(16));
                     $param_code = $code;
 
                     if (mysqli_stmt_execute($stmt)) {

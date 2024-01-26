@@ -1,6 +1,11 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 $root = $_SERVER['DOCUMENT_ROOT'];
 
@@ -18,21 +23,27 @@ if (!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     exit;
 }
 
-if (isset($_GET['user_id'])) {
-    $user_id = $_GET['user_id'];
-} else {
-    $user_id = "";
-}
+// get user_id from url and clean it
+$user_id = filter_input(INPUT_GET, 'user_id', FILTER_SANITIZE_NUMBER_INT);
 
 // Check if a verification action has been triggered
-if (isset($_GET['verify_user']) && $_GET['verify_user'] == 1) {
+if (isset($_GET['verify_user']) && $_GET['verify_user'] == 1 && !empty($user_id)) {
     // Update the user's company_verified status
-    $updateSql = "UPDATE users SET company_verified = 1 WHERE user_id = '$user_id'";
-    mysqli_query($conn, $updateSql);
+    $updateSql = "UPDATE users SET company_verified = 1 WHERE user_id = ?";
+    $stmt = mysqli_prepare($conn, $updateSql);
+    mysqli_stmt_bind_param($stmt, "i", $user_id);
+    if (!mysqli_stmt_execute($stmt)) {
+        die("Error executing query: " . mysqli_error($conn));
+    }
 
     // Retrieve the user's email address
-    $sql = "SELECT * FROM users WHERE user_id = '$user_id'";
-    $result = mysqli_query($conn, $sql);
+    $sql = "SELECT * FROM users WHERE user_id = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $user_id);
+    if (!mysqli_stmt_execute($stmt)) {
+        die("Error executing query: " . mysqli_error($conn));
+    }
+    $result = mysqli_stmt_get_result($stmt);
     $row = mysqli_fetch_assoc($result);
 
     // smtp email to employer, use phpmailer

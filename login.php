@@ -1,4 +1,8 @@
 <?php
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
@@ -27,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if (empty($email_err) && empty($password_err)) {
-        $sql = "SELECT user_id, user_type, fname, mname, lname, suffix, email, user_password, verification_status, company_verified FROM users WHERE email = ?";
+        $sql = "SELECT user_id, user_type, fname, mname, lname, suffix, email, user_password, verification_status, company_verified, jinindustry_id FROM users WHERE email = ?";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $param_email);
@@ -38,24 +42,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_store_result($stmt);
 
                 if (mysqli_stmt_num_rows($stmt) == 1) {
-                    mysqli_stmt_bind_result($stmt, $user_id, $user_type, $fname, $mname, $lname, $suffix, $email, $hashed_password, $verification_status, $company_verified);
+                    mysqli_stmt_bind_result($stmt, $user_id, $user_type, $fname, $mname, $lname, $suffix, $email, $hashed_password, $verification_status, $company_verified, $jinindustry_id);
 
                     if (mysqli_stmt_fetch($stmt)) {
                         if (password_verify($password, $hashed_password)) {
                             if ($verification_status == 1) {
-                                session_start();
+                                session_regenerate_id(true);
 
                                 // set session variables
                                 $_SESSION["loggedin"] = true;
                                 $_SESSION["user_id"] = $user_id;
                                 $_SESSION["user_type"] = $user_type;
                                 $_SESSION["company_verified"] = $company_verified;
-                                // use cookies on fname, lname, suffix, email
-                                $_COOKIE["fname"] = $fname;
-                                $_COOKIE["lname"] = $lname;
-                                $_COOKIE["suffix"] = $suffix;
-                                $_COOKIE["email"] = $email;
-                                $_COOKIE["jinindiustry_id"] = $jinindustry_id;
+
+                                // set cookies
+                                setcookie("fname", $fname, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
+                                setcookie("lname", $lname, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
+                                setcookie("email", $email, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
+                                setcookie("jinindustry_id", $jinindustry_id, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
 
                                 // if user type is admin redirect to /admin/dashboard.php
                                 if ($user_type == "admin") {

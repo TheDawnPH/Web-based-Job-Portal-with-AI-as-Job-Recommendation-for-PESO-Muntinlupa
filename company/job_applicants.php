@@ -1,4 +1,8 @@
 <?php
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 $root = $_SERVER['DOCUMENT_ROOT'];
@@ -73,10 +77,10 @@ $result = mysqli_stmt_get_result($stmt);
                             $result3 = mysqli_stmt_get_result($stmt);
                             $row3 = mysqli_fetch_assoc($result3);
                             echo "<tr>";
-                            echo "<td>" . $row["job_title"] . "</td>";
+                            echo "<td>" . htmlspecialchars($row["job_title"]) . "</td>";
                             // make name a link
-                            echo "<td><a target='_blank' href='/profile.php?user_id=" . $row3["user_id"] . "'>" . $row3["fname"] . " " . $row3["lname"] . "</a></td>";
-                            echo "<td><a href='accept_applicant.php?job_listing_id=" . $row["id"] . "&user_id=" . $row3["user_id"] . "' class='btn btn-success'>Accept</a> <a href='deny_applicant.php?job_listing_id=" . $row["id"] . "&user_id=" . $row3["user_id"] . "' class='btn btn-danger'>Deny</a></td>";
+                            echo "<td><a target='_blank' href='/profile.php?user_id=" . htmlspecialchars($row3["user_id"]) . "'>" . htmlspecialchars($row3["fname"]) . " " . htmlspecialchars($row3["lname"]) . "</a></td>";
+                            echo "<td><a href='accept_applicant.php?job_listing_id=" . htmlspecialchars($row["id"]) . "&user_id=" . htmlspecialchars($row3["user_id"]) . "' class='btn btn-success'>Accept</a> <a href='deny_applicant.php?job_listing_id=" . htmlspecialchars($row["id"]) . "&user_id=" . htmlspecialchars($row3["user_id"]) . "' class='btn btn-danger'>Deny</a></td>";
                             echo "</tr>";
                         }
                     }

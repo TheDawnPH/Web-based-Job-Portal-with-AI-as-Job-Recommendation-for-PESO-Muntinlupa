@@ -1,5 +1,9 @@
 <?php
 
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 require_once "config.php";
@@ -10,8 +14,7 @@ if (!isset($_SESSION["user_type"]) || empty($_SESSION["user_type"])) {
 }
 
 // get user type and user id
-$user_id = mysqli_real_escape_string($conn, $_SESSION["user_id"]);
-
+$user_id = $_SESSION["user_id"];
 
 if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
     $profile_user_id = $_GET["user_id"];
@@ -20,19 +23,16 @@ if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
 }
 
 //if user in $_GET["user_id"] does not exists, show 404.php
-$sql = "SELECT * FROM users WHERE user_id = '$profile_user_id'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-if (mysqli_num_rows($result) == 0) {
-    header("location: 404.php");
-    exit;
-}
-
 $stmt = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
 $stmt->bind_param("s", $profile_user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();
+if ($result->num_rows == 0) {
+    header("location: 404.php");
+    exit;
+}
+
 $stmt->close();
 
 
@@ -58,9 +58,13 @@ $jinindustry = $row['jinindustry_id'];
 $user_type = $row['user_type'];
 
 // name jinindustry_id
-$sql2 = "SELECT * FROM jinindustry WHERE jinindustry_id = '$jinindustry'";
-$result2 = mysqli_query($conn, $sql2);
-$row2 = mysqli_fetch_assoc($result2);
+$stmt2 = $conn->prepare("SELECT * FROM jinindustry WHERE jinindustry_id = ?");
+$stmt2->bind_param("s", $jinindustry);
+$stmt2->execute();
+$result2 = $stmt2->get_result();
+$row2 = $result2->fetch_assoc();
+
+$stmt2->close();
 
 ?>
 

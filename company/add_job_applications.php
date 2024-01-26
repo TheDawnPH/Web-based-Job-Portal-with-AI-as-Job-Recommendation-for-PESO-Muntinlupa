@@ -1,4 +1,8 @@
 <?php
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 $root = $_SERVER['DOCUMENT_ROOT'];

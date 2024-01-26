@@ -1,5 +1,11 @@
 <?php
+
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
+
 $root = $_SERVER['DOCUMENT_ROOT'];
 
 require $root . "/config.php";
@@ -19,6 +25,11 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 // get all job listings
 $sql = "SELECT * FROM job_listing";
 $result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die("Error executing query: " . mysqli_error($conn));
+}
+
 $row = mysqli_fetch_assoc($result);
 
 ?>
@@ -58,18 +69,23 @@ $row = mysqli_fetch_assoc($result);
                     <?php
                     if (mysqli_num_rows($result) > 0) {
                         do {
-                            $sql2 = "SELECT * FROM jinindustry WHERE jinindustry_id = " . $row["jinindustry_id"];
-                            $result2 = mysqli_query($conn, $sql2);
+                            $sql2 = "SELECT * FROM jinindustry WHERE jinindustry_id = ?";
+                            $stmt = mysqli_prepare($conn, $sql2);
+                            mysqli_stmt_bind_param($stmt, "i", $row["jinindustry_id"]);
+                            if (!mysqli_stmt_execute($stmt)) {
+                                die("Error executing query: " . mysqli_error($conn));
+                            }
+                            $result2 = mysqli_stmt_get_result($stmt);
                             $row2 = mysqli_fetch_assoc($result2);
                     ?>
                             <tr>
-                                <td><?php echo $row["job_title"]; ?></td>
-                                <td><?php echo $row2["jinindustry_name"]; ?></td>
-                                <td><?php echo $row["job_type"]; ?></td>
+                                <td><?php echo htmlspecialchars($row["job_title"]); ?></td>
+                                <td><?php echo htmlspecialchars($row2["jinindustry_name"]); ?></td>
+                                <td><?php echo htmlspecialchars($row["job_type"]); ?></td>
                                 <td>
-                                    <a href="/job_details.php?job_id=<?php echo $row["id"]; ?>" class="btn btn-primary">View</a>
-                                    <a href="/company/add_job_applications.php?id=<?php echo $row["id"]; ?>" class="btn btn-warning">Edit</a>
-                                    <a href="/company/delete_job_listing.php?id=<?php echo $row["id"]; ?>" class="btn btn-danger">Delete</a>
+                                    <a href="/job_details.php?job_id=<?php echo htmlspecialchars($row["id"]); ?>" class="btn btn-primary">View</a>
+                                    <a href="/company/add_job_applications.php?id=<?php echo htmlspecialchars($row["id"]); ?>" class="btn btn-warning">Edit</a>
+                                    <a href="/company/delete_job_listing.php?id=<?php echo htmlspecialchars($row["id"]); ?>" class="btn btn-danger">Delete</a>
                                 </td>
                             </tr>
                     <?php

@@ -1,8 +1,13 @@
 <?php
+
 $root = $_SERVER['DOCUMENT_ROOT'];
 
 require $root . "/config.php";
 
+// Start secure session
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.use_only_cookies', 1);
 session_start();
 
 // check if user_type is admin, if not redirect to 404 page
@@ -77,8 +82,14 @@ $totalAcceptedApplication = 0;
 $totalRejectedApplication = 0;
 
 // get total applicants
-$sql = "SELECT COUNT(*) AS total FROM users WHERE user_type = 'applicant'";
-$result = mysqli_query($conn, $sql);
+$sql = "SELECT COUNT(*) AS total FROM users WHERE user_type = ?";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "s", $user_type);
+$user_type = 'applicant';
+if (!mysqli_stmt_execute($stmt)) {
+    die("Error executing query: " . mysqli_error($conn));
+}
+$result = mysqli_stmt_get_result($stmt);
 $row = mysqli_fetch_assoc($result);
 
 if ($row) {
