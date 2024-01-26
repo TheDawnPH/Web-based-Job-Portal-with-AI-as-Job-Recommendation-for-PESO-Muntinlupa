@@ -40,11 +40,11 @@ $name = $row2['fname'] . " " . $row2['lname'];
         <div class="row row-cols-1 row-cols-md-3 g-2">
             <div class="col-md-6">
                 <div class="card h-100">
-                    <?php if (!empty($row['image_name'])) : ?>
-                        <img src='/company/uploads/<?php echo $row['id']; ?>/<?php echo $row['image_name']; ?>' class="card-img-bottom" alt='Company Image'>
-                    <?php endif; ?>
                     <div class="card-body">
                         <h1 class="card-title"><?php echo $row['job_title']; ?></h1>
+                        <?php if (!empty($row['image_name'])) : ?>
+                            <img src='/company/uploads/<?php echo $row['id']; ?>/<?php echo $row['image_name']; ?>' class="card-img-bottom" alt='Company Image'>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@ $name = $row2['fname'] . " " . $row2['lname'];
                         <h5 class="card-subtitle mb-2 text-muted">Job Requirements</h5>
                         <p class="card-text"><?php echo $row['job_requirements']; ?></p>
                         <h5 class="card-subtitle mb-2 text-muted">Job Salary</h5>
-                        <p class="card-text"><?php echo $row['job_salary']; ?></p>
+                        <p class="card-text"><?php echo "₱" . $row['job_salary']; ?></p>
                         <h5 class="card-subtitle mb-2 text-muted">Job Type</h5>
                         <p class="card-text"><?php echo $row['job_type']; ?></p>
                         <h5 class="card-subtitle mb-2 text-muted">Is SHS Qualified</h5>
@@ -75,8 +75,10 @@ $name = $row2['fname'] . " " . $row2['lname'];
                     <div class="card-footer text-muted">
                         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>
                             <a href='job_applications.php?job_id=<?php echo $job_id; ?>' class='btn btn-success'>Apply in this Job</a>
+                        <?php elseif (isset($_SESSION['user_id']) && ($_SESSION['user_type'] == "company" || $_SESSION['user_type'] == "admin")) : ?>
+                            <a href='login.php' class='btn btn-success disabled'>Apply in this Job</a>
                         <?php else : ?>
-                            <a href='login.php' class='btn btn-success'>Login to Apply</a>
+                            <a href='login.php' class='btn btn-success'>Apply in this Job</a>
                         <?php endif; ?>
                     </div>
                 </div>

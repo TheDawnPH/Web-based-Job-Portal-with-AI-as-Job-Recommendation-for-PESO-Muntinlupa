@@ -140,11 +140,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     mysqli_close($conn);
 }
 
-
-
-                
-
-
 ?>
 
 <html>
@@ -168,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container">
         <a href="login.php" class="btn btn-secondary">Back to Login</a><br><br>
-        <div class="row">
+        <div class="row g-0">
             <div class="col-md">
                 <img src="img/peso_muntinlupa.png" alt="PESO Logo" class="img-fluid">
             </div>

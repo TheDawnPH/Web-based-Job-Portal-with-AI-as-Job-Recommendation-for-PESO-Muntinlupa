@@ -72,9 +72,96 @@ $totalVerifiedCompany = 0;
 $totalNOTVerifiedCompany = 0;
 $totalJobPostings = 0;
 $totalApplication = 0;
+$totalPendingApplication = 0;
 $totalAcceptedApplication = 0;
 $totalRejectedApplication = 0;
 
+// get total applicants
+$sql = "SELECT COUNT(*) AS total FROM users WHERE user_type = 'applicant'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+
+if ($row) {
+    $totalApplicants = $row['total'];
+}
+
+// get total company
+$sql = "SELECT COUNT(*) AS total FROM users WHERE user_type = 'company'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+
+if ($row) {
+    $totalCompany = $row['total'];
+}
+
+// get total verified company
+$sql = "SELECT COUNT(*) AS total FROM users WHERE user_type = 'company' AND company_verified = 1";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+
+if ($row) {
+    $totalVerifiedCompany = $row['total'];
+}
+
+// get total not verified company
+$sql = "SELECT COUNT(*) AS total FROM users WHERE user_type = 'company' AND company_verified = 0";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+
+if ($row) {
+    $totalNOTVerifiedCompany = $row['total'];
+}
+
+// get total job postings
+$sql = "SELECT COUNT(*) AS total FROM job_listing";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+
+if ($row) {
+    $totalJobPostings = $row['total'];
+}
+
+// get total application
+$sql = "SELECT COUNT(*) AS total FROM job_applications";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+
+if ($row) {
+    $totalApplication = $row['total'];
+}
+
+// get total pending application
+$sql = "SELECT COUNT(*) AS total FROM job_applications WHERE application_status = '0'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+
+if ($row) {
+    $totalPendingApplication = $row['total'];
+}
+
+// get total accepted application
+$sql = "SELECT COUNT(*) AS total FROM job_applications WHERE application_status = '1'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+
+if ($row) {
+    $totalAcceptedApplication = $row['total'];
+    if ($totalApplication > 0) {
+        $totalAcceptedApplication = $totalAcceptedApplication / $totalApplication * 100;
+    }
+}
+
+// get total rejected application
+$sql = "SELECT COUNT(*) AS total FROM job_applications WHERE application_status = '2'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+
+if ($row) {
+    $totalRejectedApplication = $row['total'];
+    if ($totalApplication > 0) {
+        $totalRejectedApplication = $totalRejectedApplication / $totalApplication * 100;
+    }
+}
 
 
 ?>
@@ -82,7 +169,7 @@ $totalRejectedApplication = 0;
 <html>
 
 <head>
-    <title>Admin - Requests Portal</title>
+    <title>Admin - Dashboard</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -113,7 +200,8 @@ $totalRejectedApplication = 0;
                 ['Total Verified Company Users', $totalVerifiedCompany, 'Total number of verified company users.'],
                 ['Total Not Verified Company Users', $totalNOTVerifiedCompany, 'Total number of not verified company users.'],
                 ['Total Job Posting', $totalJobPostings, 'Total number of job postings in the system.'],
-                ['Total Pending Applications', $totalApplication, 'Total number of pending applications in the system.'],
+                ['Total Application', $totalApplication, 'Total number of applications in the system.'],
+                ['Total Pending Applications', $totalPendingApplication, 'Total number of pending applications in the system.'],
                 ['% of Accepted Application', $totalAcceptedApplication, 'Total percentage of accepted applicants.'],
                 ['% of Rejected Application', $totalRejectedApplication, 'Total percentage of rejected applicants.']
             ];

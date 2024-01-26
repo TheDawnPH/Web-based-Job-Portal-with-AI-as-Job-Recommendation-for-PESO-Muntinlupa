@@ -15,22 +15,22 @@ if (isset($_GET["job_id"])) {
     $user_id = $_SESSION["user_id"];
 
     // get company user id frm jobs table
-    $sql = "SELECT * FROM jobs WHERE id = '$job_id'";
+    $sql = "SELECT * FROM job_listing WHERE id = '$job_id'";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $job_id_user = $row["user_id"];
 
     // get company user email
-    $sql4 = "SELECT * FROM users WHERE id = '$job_id_user'";
+    $sql4 = "SELECT * FROM users WHERE user_id = '$job_id_user'";
     $result4 = mysqli_query($conn, $sql4);
     $row4 = mysqli_fetch_assoc($result4);
 
     $sql = "INSERT INTO job_applications (job_id, user_id) VALUES ('$job_id', '$user_id')";
     if (mysqli_query($conn, $sql)) {
         // smtp email to company user email
-        require $root . '/PHPMailer/src/Exception.php';
-        require $root . '/PHPMailer/src/PHPMailer.php';
-        require $root . '/PHPMailer/src/SMTP.php';
+        require 'PHPMailer/src/Exception.php';
+        require 'PHPMailer/src/PHPMailer.php';
+        require 'PHPMailer/src/SMTP.php';
 
         $mail = new PHPMailer();
         $mail->IsSMTP();
@@ -49,9 +49,9 @@ if (isset($_GET["job_id"])) {
         // set content of email that a job application has been sent and click the link to view the job application
         $content = "<b>Dear " . $row4['fname'] . " " . $row4['lname'] . ",</b><br><br>";
         $content .= "A new job application has been sent to you. Please click the link below to view the job application.<br><br>";
-        $content .= "<a href='http://{$_ENV['website']}/job_application.php'>View Job Applications</a><br><br>";
+        $content .= "<a href='http://{$_ENV['WEBSITE_URL']}/company/job_applicants.php'>View Job Applications</a><br><br>";
         $content .= "This is the applicant information:<br><br>";
-        $content .= "<a href='http://{$_ENV['website']}/profile.php?user_id=" . $user_id . "'>View Profile</a><br><br>";
+        $content .= "<a href='http://{$_ENV['WEBSITE_URL']}/profile.php?user_id=" . $user_id . "'>View Profile</a><br><br>";
         $content .= "Thank you,<br>";
         $content .= "PESO Muntinlupa";
         $mail->MsgHTML($content);
@@ -59,7 +59,7 @@ if (isset($_GET["job_id"])) {
             // echo $warning = "Error while sending Email.";
             // var_dump($mail);
         } else {
-            echo $alert = "Job application sent successfully.";
+            $alert = "Job application sent successfully.";
         }
         // end of phpmailer
     } else {
@@ -117,15 +117,15 @@ if (isset($_GET["job_id"])) {
                     $result = mysqli_query($conn, $sql);
                     while ($row = mysqli_fetch_assoc($result)) {
                         $job_id = $row["job_id"];
-                        $sql2 = "SELECT * FROM jobs WHERE id = '$job_id'";
+                        $sql2 = "SELECT * FROM job_listing WHERE id = '$job_id'";
                         $result2 = mysqli_query($conn, $sql2);
                         $row2 = mysqli_fetch_assoc($result2);
-                        $company_id = $row2["company_id"];
+                        $company_id = $row2["user_id"];
                     ?>
                         <tr>
-                            <td><?php echo $row2["title"]; ?></td>
-                            <td><?php echo $row["date_applied"]; ?></td>
-                            <td><?php echo $row["status"]; ?></td>
+                            <td><?php echo $row2["job_title"]; ?></td>
+                            <td><?php echo $row["created_at"]; ?></td>
+                            <td><?php echo ($row["application_status"] === '0') ? 'Pending' : 'Approved'  ?></td>
                         </tr>
                     <?php } ?>
                 </tbody>

@@ -138,7 +138,7 @@ $row2 = mysqli_fetch_assoc($result2);
                         if ($user_id == $profile_user_id) {
                             echo '<a href="edit_profile.php" class="btn btn-primary">Edit Profile</a>';
                         }
-                        if ($user_type === "company") {
+                        if ($_SESSION['user_type'] === "company" && $user_id === $profile_user_id) {
                             echo '<br><br><a href="/company/request_company_verification.php" class="btn btn-primary">Request Company Verification</a>';
                         }
                         ?>
@@ -156,10 +156,10 @@ $row2 = mysqli_fetch_assoc($result2);
                             $result = mysqli_query($conn, $sql);
                             $row = mysqli_fetch_assoc($result);
                             if ($row['nsrp_form'] != "") {
-                                echo '<a href="uploads/' . $profile_user_id . '/' . $row['nsrp_form'] . '" class="btn btn-primary">View NSRP Form</a>';
+                                echo '<a target="_blank" href="uploads/' . $profile_user_id . '/' . $row['nsrp_form'] . '" class="btn btn-primary">View NSRP Form</a>&nbsp;';
                             }
                             if ($row['biodata_form'] != "") {
-                                echo '<a href="uploads/' . $profile_user_id . '/' . $row['biodata_form'] . '" class="btn btn-primary">View Biodata Form</a>';
+                                echo '<a target="_blank" href="uploads/' . $profile_user_id . '/' . $row['biodata_form'] . '" class="btn btn-primary">View Biodata Form</a>';
                             }
                             ?>
                         </div>
@@ -197,7 +197,7 @@ $row2 = mysqli_fetch_assoc($result2);
                                 $result = mysqli_query($conn, $sql);
                                 $row = mysqli_fetch_assoc($result);
                                 if (isset($row[$documentKey]) && $row[$documentKey] != "") {
-                                    echo '<a href="uploads/' . $profile_user_id . '/' . $row[$documentKey] . '" class="btn btn-primary">View ' . $documentLabel . '</a><br><br>';
+                                    echo '<a target="_blank" href="uploads/' . $profile_user_id . '/' . $row[$documentKey] . '" class="btn btn-primary fluid">View ' . $documentLabel . '</a><hr>';
                                 }
                             }
                             ?>

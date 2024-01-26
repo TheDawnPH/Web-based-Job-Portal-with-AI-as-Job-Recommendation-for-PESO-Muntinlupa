@@ -81,7 +81,7 @@ if ($conn === false) {
         lname VARCHAR(255) NOT NULL,
         suffix VARCHAR(255),
         email VARCHAR(255) NOT NULL,
-        user_password VARCHAR(255) NOT NULL,
+        user_password text NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         verification_status INT(1) DEFAULT 0,
         verification_code VARCHAR(255) NOT NULL,

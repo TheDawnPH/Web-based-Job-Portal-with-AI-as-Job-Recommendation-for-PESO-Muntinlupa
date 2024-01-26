@@ -19,6 +19,9 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
           <a class="nav-link" href="/index.php">Home</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="/jobs.php">Jobs</a>
+        </li>
+        <li class="nav-item">
           <?php
           if (isset($_SESSION['loggedin'])) {
             echo $logout;

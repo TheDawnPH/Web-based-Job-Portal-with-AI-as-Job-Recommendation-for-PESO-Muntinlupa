@@ -46,7 +46,7 @@ include 'config.php';
         <div class="cover"></div>
     </div>
     <div class="container">
-        <div class="row">
+        <div class="row row-cols-1 row-cols-md-2 g-3">
             <?php if (isset($_SESSION["user_type"]) && $_SESSION["user_type"] === 'applicant') { ?>
                 <div class="col-md-4">
                     <h1>Available Jobs</h1>
@@ -77,6 +77,7 @@ include 'config.php';
                         echo '<h2>' . $row['job_title'] . '</h2>';
                         // show job industry from $row2
                         echo '<p>Job Industry: ' . $row2['jinindustry_name'] . '</p>';
+                        echo '<p>Job Salary: ₱' . $row['job_salary'] . '</p>';
                         echo '<a href="job_details.php?job_id=' . $row['id'] . '" class="btn btn-primary">View Job</a>';
                         echo '</div><hr>';
                     }
@@ -88,10 +89,9 @@ include 'config.php';
                 mysqli_free_result($result);
                 mysqli_close($conn);
                 ?>
-                <br>
-            </div>
+            </div><br>
             <?php if (!isset($_SESSION["user_type"])) { ?>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <h1>Login or Register</h1>
                     <hr>
                     <div class="d-grid gap-2">
@@ -101,7 +101,7 @@ include 'config.php';
                 </div>
             <?php
             } ?>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <h1>Facebook Feed</h1>
                 <hr>
                 <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FMuntinlupaPESO%2F&tabs=timeline&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&appId" width="350" height="500" style="border:none;overflow:hidden;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>

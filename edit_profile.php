@@ -36,17 +36,18 @@ $school_year_begin = $row["school_year_begin"];
 $school_year_end = $row["school_year_end"];
 $technicalschool_name = $row["technicalschool_name"];
 $nsrp_form = $biodata_form = $profile_picture = "";
+$loi = $cp = $sec_accredit = $cda_license = $dole_license = $loc = $mbpermit = $job_vacant = $job_solicitation = $phjobnet_reg = $cert_nopendingcase = $cert_regSSS = $cert_regPhHealth = $cert_regPGIBG = $sketch_map = $bir_2303 = "";
 $jinindustry = $row["jinindustry_id"];
 
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Prepare SQL statement
-    $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, school_name=?, school_year_begin=?, school_year_end=?, technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image), jinindustry_id = IFNULL(?, jinindustry_id) WHERE user_id=?";
+    $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, school_name=?, school_year_begin=IFNULL(?, school_year_begin) , school_year_end= IFNULL(?, school_year_end), technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image), jinindustry_id = IFNULL(?, jinindustry_id) WHERE user_id=?";
 
     if ($stmt = mysqli_prepare($conn, $sql)) {
         // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "siiiissssssisiissssss", $param_sex, $param_birth_day, $param_birth_month, $param_birth_year, $param_contact_number, $param_house_number, $param_street, $param_subdivision, $param_barangay, $param_city, $param_province, $param_zip_code, $param_school_name, $param_school_year_begin, $param_school_year_end, $param_technicalschool_name, $param_nsrp_form, $param_biodata_form, $param_profile_picture, $param_jinindustry_id, $param_user_id);
+        mysqli_stmt_bind_param($stmt, "sssssssssssssssssssss", $param_sex, $param_birth_day, $param_birth_month, $param_birth_year, $param_contact_number, $param_house_number, $param_street, $param_subdivision, $param_barangay, $param_city, $param_province, $param_zip_code, $param_school_name, $param_school_year_begin, $param_school_year_end, $param_technicalschool_name, $param_nsrp_form, $param_biodata_form, $param_profile_picture, $param_jinindustry_id, $param_user_id);
 
         // Set parameters
         $param_sex = $_POST["gender"];
@@ -62,8 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $param_province = $_POST["province"];
         $param_zip_code = $_POST["zip_code"];
         $param_school_name = $_POST["school_name"];
-        $school_year_begin = !empty($row['school_year_begin']) ? $row['school_year_begin'] : null;
-        $school_year_end = !empty($row['school_year_end']) ? $row['school_year_end'] : null;
+        $param_school_year_begin = !empty($_POST["school_year_begin"]) ? $_POST["school_year_begin"] : null;
+        $param_school_year_end = !empty($_POST["school_year_end"]) ? $_POST["school_year_end"] : null;
         $param_technicalschool_name = $_POST["technicalschool_name"];
         $param_nsrp_form = !empty($_FILES["nsrp_form"]["name"]) ? $_FILES["nsrp_form"]["name"] : NULL;
         $param_biodata_form = !empty($_FILES["biodata_form"]["name"]) ? $_FILES["biodata_form"]["name"] : NULL;
@@ -97,14 +98,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error =  "Error updating profile.";
         }
 
-
-        // Close statement
-        mysqli_stmt_close($stmt);
     }
 
+    // check if company documents exist in company_documents table
+    $company_documents_sql = "SELECT * FROM company_documents WHERE user_id = '$user_id'";
+    $company_documents_result = mysqli_query($conn, $company_documents_sql);
+    $company_documents_row = mysqli_fetch_assoc($company_documents_result);
+
     // if company documents exist, update company_documents table
-    if (!empty($_FILES["loi"]["name"]) || !empty($_FILES["cp"]["name"]) || !empty($_FILES["sec_accredit"]["name"]) || !empty($_FILES["cda_license"]["name"]) || !empty($_FILES["dole_license"]["name"]) || !empty($_FILES["loc"]["name"]) || !empty($_FILES["mbpermit"]["name"]) || !empty($_FILES["job_vacant"]["name"]) || !empty($_FILES["job_solicitation"]["name"]) || !empty($_FILES["phjobnet_reg"]["name"]) || !empty($_FILES["cert_nopendingcase"]["name"]) || !empty($_FILES["cert_regSSS"]["name"]) || !empty($_FILES["cert_regPhHealth"]["name"]) || !empty($_FILES["cert_regPGIBG"]["name"]) || !empty($_FILES["sketch_map"]["name"]) || !empty($_FILES["2303_bir"]["name"])) {
-        // Prepare SQL statement
+    if ($company_documents_row > 0) {
+    // Prepare SQL statement
         $company_documents_sql = "UPDATE company_documents SET loi = IFNULL(?, loi), cp = IFNULL(?, cp), sec_accredit = IFNULL(?, sec_accredit), cda_license = IFNULL(?, cda_license), dole_license = IFNULL(?, dole_license), loc = IFNULL(?, loc), mbpermit = IFNULL(?, mbpermit), job_vacant = IFNULL(?, job_vacant), job_solicitation = IFNULL(?, job_solicitation), phjobnet_reg = IFNULL(?, phjobnet_reg), cert_nopendingcase = IFNULL(?, cert_nopendingcase), cert_regSSS = IFNULL(?, cert_regSSS), cert_regPhHealth = IFNULL(?, cert_regPhHealth), cert_regPGIBG = IFNULL(?, cert_regPGIBG), sketch_map = IFNULL(?, sketch_map), 2303_bir = IFNULL(?, 2303_bir) WHERE user_id = ?";
 
         if ($stmt = mysqli_prepare($conn, $company_documents_sql)) {
@@ -200,9 +203,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         // insert data into company_documents table
-        $company_documents_sql = "UPDATE company_documents SET loi = IFNULL(?, loi), cp = IFNULL(?, cp), sec_accredit = IFNULL(?, sec_accredit), cda_license = IFNULL(?, cda_license), dole_license = IFNULL(?, dole_license), loc = IFNULL(?, loc), mbpermit = IFNULL(?, mbpermit), job_vacant = IFNULL(?, job_vacant), job_solicitation = IFNULL(?, job_solicitation), phjobnet_reg = IFNULL(?, phjobnet_reg), cert_nopendingcase = IFNULL(?, cert_nopendingcase), cert_regSSS = IFNULL(?, cert_regSSS), cert_regPhHealth = IFNULL(?, cert_regPhHealth), cert_regPGIBG = IFNULL(?, cert_regPGIBG), sketch_map = IFNULL(?, sketch_map), 2303_bir = IFNULL(?, 2303_bir) WHERE user_id = ?";
-
-        if ($stmt = mysqli_prepare($conn, $company_documents_sql)) {
+        $company_documents_sql2 = "INSERT INTO company_documents (loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, sketch_map, 2303_bir, user_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        if ($stmt = mysqli_prepare($conn, $company_documents_sql2)) {
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "sssssssssssssssss", $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir, $param_user_id);
 
@@ -372,48 +374,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div><br>
             <div class="form-group">
                 <label for="birth_day">Birth Day</label>
-                <input type="text" name="birth_day" class="form-control" value="<?php echo $birth_day; ?>" required>
+                <input type="number" name="birth_day" class="form-control" value="<?php echo $birth_day; ?>" min="1" max="31" placeholder="DD" required>
             </div><br>
             <div class="form-group">
                 <label for="birth_month">Birth Month</label>
                 <div class="form-text">Please use numbers for month (e.g. 1 for January, 2 for February, etc.)</div>
-                <input type="text" name="birth_month" class="form-control" value="<?php echo $birth_month; ?>" required>
+                <input type="number" name="birth_month" class="form-control" value="<?php echo $birth_month; ?>" min="1" max="12" placeholder="MM" required>
             </div><br>
             <div class="form-group">
                 <label for="birth_year">Birth Year</label>
-                <input type="text" name="birth_year" class="form-control" value="<?php echo $birth_year; ?>" required>
+                <input type="number" name="birth_year" class="form-control" value="<?php echo $birth_year; ?>" maxlength="4" min="0" max="9999" step="1" placeholder="YYYY" pattern="[0-9]{4}" required>
             </div><br>
             <div class="form-group">
                 <label for="contact_number">Contact Number</label>
-                <input type="text" name="contact_number" class="form-control" value="<?php echo $contact_number; ?>" required>
+                <input type="text" name="contact_number" class="form-control" value="<?php echo $contact_number; ?>" placeholder="09xxxxxxxxx" required>
             </div><br>
             <div class="form-group">
                 <label for="house_number">House Number</label>
-                <input type="text" name="house_number" class="form-control" value="<?php echo $house_number; ?>" required>
+                <input type="number" name="house_number" class="form-control" value="<?php echo $house_number; ?>" placeholder="60" required>
             </div><br>
             <div class="form-group">
                 <label for="street">Street</label>
-                <input type="text" name="street" class="form-control" value="<?php echo $street; ?>" required>
+                <input type="text" name="street" class="form-control" value="<?php echo $street; ?>" placeholder="Juan Street" required>
             </div><br>
             <div class="form-group">
                 <label for="subdivision">Subdivision/Suburb</label>
-                <input type="text" name="subdivision" class="form-control" value="<?php echo $subdivision; ?>" required>
+                <input type="text" name="subdivision" class="form-control" value="<?php echo $subdivision; ?>" placeholder="San Jose Village" required>
             </div><br>
             <div class="form-group">
                 <label for="barangay">Barangay</label>
-                <input type="text" name="barangay" class="form-control" value="<?php echo $barangay; ?>" required>
+                <input type="text" name="barangay" class="form-control" value="<?php echo $barangay; ?>" placeholder="Alabang" required>
             </div><br>
             <div class="form-group">
                 <label for="city">City</label>
-                <input type="text" name="city" class="form-control" value="<?php echo $city; ?>" required>
+                <input type="text" name="city" class="form-control" value="<?php echo $city; ?>" placeholder="Muntinlupa City" required>
             </div><br>
             <div class="form-group">
                 <label for="province">Province</label>
-                <input type="text" name="province" class="form-control" value="<?php echo $province; ?>" required>
+                <input type="text" name="province" class="form-control" value="<?php echo $province; ?>" placeholder="Metro Manila" required>
             </div><br>
             <div class="form-group">
                 <label for="zip_code">Zip Code</label>
-                <input type="text" name="zip_code" class="form-control" value="<?php echo $zip_code; ?>" required>
+                <input type="text" name="zip_code" class="form-control" value="<?php echo $zip_code; ?>" placeholder="1780" required>
             </div><br>
             <div class="form-group">
                 <label for="school_name">Last Finsihed School Name</label>
@@ -421,18 +423,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div><br>
             <div class="form-group">
                 <label for="school_year_begin">School Year Begin</label>
-                <input type="text" name="school_year_begin" class="form-control" value="<?php echo $school_year_begin; ?>">
+                <input type="text" name="school_year_begin" class="form-control" value="<?php echo $school_year_begin; ?>" maxlength="4" min="0" max="9999" step="1" placeholder="YYYY" pattern="[0-9]{4}">
             </div><br>
             <div class="form-group">
                 <label for="school_year_end">School Year End</label>
-                <input type="text" name="school_year_end" class="form-control" value="<?php echo $school_year_end; ?>">
+                <input type="text" name="school_year_end" class="form-control" value="<?php echo $school_year_end; ?>" maxlength="4" min="0" max="9999" step="1" placeholder="YYYY" pattern="[0-9]{4}">
             </div><br>
             <div class="form-group">
                 <label for="technicalschool_name">Technical School Name</label>
                 <input type="text" name="technicalschool_name" class="form-control" value="<?php echo $technicalschool_name; ?>">
             </div><br>
             <div class="form-group">
-                <label for="jinindustry">Select Jon Industry</label>
+                <label for="jinindustry">Select Job Industry</label>
                 <div class="form-text">Select a Job Industry you want to apply on</div>
                 <select class="form-select" aria-label="Default select example" id="jinindustry" name="jinindustry" required>
                     <?php
@@ -459,8 +461,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php endif; ?>
 
             <div class="form-group">
-                <label for="profile_picture">Profile Picture (PNG format only)</label>
-                <input type="file" name="profile_picture" class="form-control" accept="image/png">
+                <label for="profile_picture">Profile Picture (PNG, JPG, or JPEG Format)</label>
+                <input type="file" name="profile_picture" class="form-control" accept="image/png, image/jpeg, image/jpg">
             </div><br>
 
             <!-- loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, setch_map, 2303_bir document upload as company -->
