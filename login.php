@@ -55,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $_COOKIE["lname"] = $lname;
                                 $_COOKIE["suffix"] = $suffix;
                                 $_COOKIE["email"] = $email;
+                                $_COOKIE["jinindiustry_id"] = $jinindustry_id;
 
                                 // if user type is admin redirect to /admin/dashboard.php
                                 if ($user_type == "admin") {

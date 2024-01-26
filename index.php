@@ -51,7 +51,36 @@ include 'config.php';
                 <div class="col-md-4">
                     <h1>Available Jobs</h1>
                     <hr>
-                    <!-- insert php code here that sorts job applications based on ai -->
+                    // show available jobs for applicants based on jinindustry_id
+                    <?php
+                    // Assuming $conn is your database connection
+                    $sql = "SELECT * FROM job_listing WHERE jinindustry_id =" . $_SESSION['jinindustry_id'];
+                    $result = mysqli_query($conn, $sql);
+
+                    // Check if there are any rows in the result set
+                    if (mysqli_num_rows($result) > 0) {
+                        // Loop through the rows and display job information with job industry
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $sql2 = "SELECT * FROM jinindustry WHERE jinindustry_id =" . $row['jinindustry_id'];
+                            $result2 = mysqli_query($conn, $sql2);
+                            $row2 = mysqli_fetch_assoc($result2);
+
+                            echo '<div>';
+                            echo '<h2>' . $row['job_title'] . '</h2>';
+                            // show job industry from $row2
+                            echo '<p>Job Industry: ' . $row2['jinindustry_name'] . '</p>';
+                            echo '<p>Job Salary: ₱' . $row['job_salary'] . '</p>';
+                            echo '<a href="job_details.php?job_id=' . $row['id'] . '" class="btn btn-primary">View Job</a>';
+                            echo '</div><hr>';
+                        }
+                    } else {
+                        echo '<p>No job listings found.</p>';
+                    }
+
+                    // Close the result set and database connection
+                    mysqli_free_result($result);
+                    mysqli_close($conn);
+                    ?>
                     <br>
                 </div>';
             <?php
