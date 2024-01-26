@@ -56,7 +56,7 @@ $result = mysqli_stmt_get_result($stmt);
                 Job listing deleted successfully!
             </div>
         <?php } ?>
-        <a href="/add_job_listings.php" class="btn btn-primary">Add Job Listing</a><br>
+        <a href="/company/add_job_applications.php" class="btn btn-primary">Add Job Listing</a><br>
         <br>
         <div class="table-responsive">
             <!-- display all job listing from session user_id and add actions such as view, edit and delete -->
