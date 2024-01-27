@@ -144,7 +144,7 @@ if (isset($_GET["job_id"])) {
                     ?>
                         <tr>
                             <td><?php echo $row2["job_title"]; ?></td>
-                            <td><?php echo $row["created_at"]; ?></td>
+                            <td><?php echo date("h:i:s A F j, Y", strtotime($row["created_at"])); ?></td>
                             <td><?php echo ($row["application_status"] === '0') ? 'Pending' : 'Approved'  ?></td>
                         </tr>
                     <?php } ?>
