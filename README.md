@@ -31,4 +31,4 @@ CLOUDFLARE_ZONE_ID = # insert zone id
 - Save it and start your webserver
 
 ### WIP
-yes, wip
+no, This is Finished and deployed. Ready for Survey!
