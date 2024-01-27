@@ -53,7 +53,7 @@ include 'config.php';
                     <hr>
                     <?php
                     // Assuming $conn is your database connection
-                    // get cookies jininudstry_id as $session
+                    // get session jininudstry_id as $session
                     $session = $_SESSION['jinindustry_id'];
                     $sql = "SELECT * FROM job_listing WHERE jinindustry_id = $session";
                     $result = mysqli_query($conn, $sql);
