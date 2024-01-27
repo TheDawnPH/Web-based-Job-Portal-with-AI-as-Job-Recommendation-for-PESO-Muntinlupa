@@ -42,12 +42,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($code)) {
                 $_SESSION["user_id"] = $row['user_id'];
                 $_SESSION["user_type"] = $row['user_type'];
                 $_SESSION["company_verified"] = $row['company_verified'];
+                $_SESSION['jinindustry_id'] = $row['jinindustry_id'];
 
-                setcookie("fname", $fname, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
-                setcookie("lname", $lname, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
-                setcookie("email", $email, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
-                setcookie("jinindustry_id", $jinindustry_id, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
-
+                setcookie("fname", $row['fname'], time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
+                setcookie("lname", $row['lname'], time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
+                setcookie("email", $row['email'], time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
 
                 mysqli_stmt_close($stmtUser);
             } else {

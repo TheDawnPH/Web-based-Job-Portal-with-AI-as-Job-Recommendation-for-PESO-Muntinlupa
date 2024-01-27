@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_stmt_execute($stmt)) {
         if ($submit_job_id != $job_id) {
             // Update: create upload directory if not exists and move uploaded file
-            $upload_dir = "uploads/" . $job_id . "/";
+            $upload_dir = "uploads/" . $submit_job_id . "/";
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
@@ -104,8 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("location: add_job_applications.php?update=1");
         } else {
             // Insert: create upload directory if not exists and move uploaded file
-            $new_job_id = mysqli_insert_id($conn);
-            $upload_dir = "uploads/" . $new_job_id . "/";
+            $upload_dir = "uploads/" . $submit_job_id . "/";
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }

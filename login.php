@@ -54,13 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $_SESSION["user_id"] = $user_id;
                                 $_SESSION["user_type"] = $user_type;
                                 $_SESSION["company_verified"] = $company_verified;
+                                $_SESSION['jinindustry_id'] = $jinindustry_id;
 
                                 // set cookies
                                 setcookie("fname", $fname, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
                                 setcookie("lname", $lname, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
                                 setcookie("email", $email, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
-                                setcookie("jinindustry_id", $jinindustry_id, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
-
+                                
                                 // if user type is admin redirect to /admin/dashboard.php
                                 if ($user_type == "admin") {
                                     header("location: admin/dashboard.php");

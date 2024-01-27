@@ -54,7 +54,7 @@ include 'config.php';
                     <?php
                     // Assuming $conn is your database connection
                     // get cookies jininudstry_id as $session
-                    $session = $_COOKIE['jinindustry_id'];
+                    $session = $_SESSION['jinindustry_id'];
                     $sql = "SELECT * FROM job_listing WHERE jinindustry_id = $session";
                     $result = mysqli_query($conn, $sql);
 
