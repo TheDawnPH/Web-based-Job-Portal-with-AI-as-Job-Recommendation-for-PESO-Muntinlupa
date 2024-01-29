@@ -176,6 +176,11 @@ function cosineSimilarity($vector1, $vector2)
                 mysqli_close($conn);
                 ?>
             </div><br>
+            <div class="col-md-4">
+                <h1>Facebook Feed</h1>
+                <hr>
+                <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FMuntinlupaPESO%2F&tabs=timeline&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&appId" width="350" height="500" style="border:none;overflow:hidden;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+            </div><br>
             <?php if (!isset($_SESSION["user_type"])) { ?>
                 <div class="col-md-3">
                     <h1>Login or Register</h1>
@@ -187,11 +192,6 @@ function cosineSimilarity($vector1, $vector2)
                 </div>
             <?php
             } ?>
-            <div class="col-md-2">
-                <h1>Facebook Feed</h1>
-                <hr>
-                <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FMuntinlupaPESO%2F&tabs=timeline&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&appId" width="350" height="500" style="border:none;overflow:hidden;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-            </div>
         </div>
     </div>
 </body>

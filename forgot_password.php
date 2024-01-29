@@ -135,10 +135,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo '<div class="alert alert-danger">' . $email_err . '</div>';
                 }
                 ?>
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="post">
                     <div class="mb-4">
                         <label for="email" class="form-label">Email</label>
-                        <input type="text" name="email" class="form-control" id="email" aria-describedby="emailHelp">
+                        <input type="text" name="email" class="form-control" id="email" aria-describedby="emailHelp"s>
                         <div id="emailHelp" class="form-text">Please insert your registered email here</div>
                     </div>
                     <button type="submit" class="btn btn-success">Recover Password</button>
