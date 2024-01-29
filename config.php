@@ -115,7 +115,7 @@ if ($conn === false) {
     }
 
     $job_listing = "CREATE TABLE IF NOT EXISTS job_listing (
-        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,s
         user_id INT NOT NULL,
         job_title VARCHAR(255) NOT NULL,
         job_description text NOT NULL,
@@ -125,7 +125,6 @@ if ($conn === false) {
         image_name text,
         jinindustry_id INT NOT NULL,
         shs_qualified INT(1) DEFAULT 0,
-        job_posted INT(1) DEFAULT 0,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(user_id),
         FOREIGN KEY (jinindustry_id) REFERENCES jinindustry(jinindustry_id))
