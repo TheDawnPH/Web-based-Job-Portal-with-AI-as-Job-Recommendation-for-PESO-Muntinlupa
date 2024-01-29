@@ -3,6 +3,28 @@ session_start();
 
 include 'config.php';
 
+// Function to calculate cosine similarity
+function cosineSimilarity($vector1, $vector2)
+{
+    $dotProduct = 0;
+    $magnitude1 = 0;
+    $magnitude2 = 0;
+
+    foreach ($vector1 as $key => $value) {
+        $dotProduct += $value * $vector2[$key];
+        $magnitude1 += $value * $value;
+        $magnitude2 += $vector2[$key] * $vector2[$key];
+    }
+
+    $magnitude1 = sqrt($magnitude1);
+    $magnitude2 = sqrt($magnitude2);
+
+    if ($magnitude1 == 0 || $magnitude2 == 0) {
+        return 0;
+    } else {
+        return $dotProduct / ($magnitude1 * $magnitude2);
+    }
+}
 
 ?>
 
@@ -47,41 +69,60 @@ include 'config.php';
     </div>
     <div class="container">
         <div class="row row-cols-1 row-cols-md-2 g-3">
-            <?php if (isset($_SESSION["user_type"]) && $_SESSION["user_type"] === 'applicant') { ?>
+            <?php
+            if (isset($_SESSION["user_type"]) && $_SESSION["user_type"] === 'applicant') {
+                // Get the user's preferred skills
+                $user_skill_sql = "SELECT * FROM users WHERE user_id =" . $_SESSION['user_id'];
+                $user_skill_result = mysqli_query($conn, $user_skill_sql);
+                $row = mysqli_fetch_assoc($user_skill_result);
+                $user_skills = $row['jinindustry_id'];
+
+                // retrieve all job_listings and set it as array values for job_title, job_description and $jinindustry_id
+                $job_sql = "SELECT id, job_title, job_description, jinindustry_id FROM job_listing";
+                $job_result = mysqli_query($conn, $job_sql);
+                $jobs = [];
+                while ($row = mysqli_fetch_assoc($job_result)) {
+                    $jobs[] = $row;
+                }
+
+                // Calculate cosine similarity between user's skills and job descriptions
+                $user_skills_vector = explode(' ', $user_skills);
+
+                $recommended_jobs = [];
+
+                foreach ($jobs as $job) {
+                    $job_skills_vector = explode(' ', $job['jinindustry_id']);
+                    $similarity = cosineSimilarity($user_skills_vector, $job_skills_vector);
+
+                    // You can adjust the threshold based on your requirements
+                    if ($similarity > 0.5) {
+                        $recommended_jobs[] = array(
+                            'job_id' => $job['id'],
+                            'job_title' => $job['job_title']
+                        );
+                    }
+                }
+
+                // Display the recommended jobs
+            ?>
                 <div class="col-md-4">
-                    <h1>Available Jobs</h1>
+                    <h1>Recommended Jobs</h1>
                     <hr>
                     <?php
-                    // Assuming $conn is your database connection
-                    // get session jininudstry_id as $session
-                    $session = $_SESSION['jinindustry_id'];
-                    $sql = "SELECT * FROM job_listing WHERE jinindustry_id = $session";
-                    $result = mysqli_query($conn, $sql);
+                    foreach ($recommended_jobs as $job) :
+                        $job_list_sql = mysqli_query($conn, "SELECT * FROM job_listing WHERE id =" . $job['job_id']);
+                        $job_list = mysqli_fetch_assoc($job_list_sql);
 
-                    // Check if there are any rows in the result set
-                    if (mysqli_num_rows($result) > 0) {
-                        // Loop through the rows and display job information with job industry
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $sql2 = "SELECT * FROM jinindustry WHERE jinindustry_id =" . $row['jinindustry_id'];
-                            $result2 = mysqli_query($conn, $sql2);
-                            $row2 = mysqli_fetch_assoc($result2);
-
-                            echo '<div>';
-                            echo '<h2>' . $row['job_title'] . '</h2>';
-                            // show job industry from $row2
-                            echo '<p>Job Industry: ' . $row2['jinindustry_name'] . '</p>';
-                            echo '<p>Job Salary: ₱' . $row['job_salary'] . '</p>';
-                            echo '<a href="job_details.php?job_id=' . $row['id'] . '" class="btn btn-primary">View Job</a>';
-                            echo '</div><hr>';
-                        }
-                    } else {
-                        echo '<p>No job listings found.</p>';
-                    }
-
-                    // Close the result set and database connection
-                    mysqli_free_result($result);
+                        $jinindustry_name = mysqli_query($conn, "SELECT * FROM jinindustry WHERE jinindustry_id =" . $job_list['jinindustry_id']);
+                        $jinindustry = mysqli_fetch_assoc($jinindustry_name);
                     ?>
-                    <br>
+                        <div>
+                            <h2><?php echo $job['job_title']; ?></h2>
+                            <p>Job Industry: <?php echo $jinindustry['jinindustry_name']; ?></p>
+                            <p>Job Salary: ₱<?php echo $job_list['job_salary']; ?></p>
+                            <a href="job_details.php?job_id=<?php echo $job['job_id']; ?>" class="btn btn-primary">View Job</a>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             <?php
             }
