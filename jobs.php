@@ -144,7 +144,7 @@ include 'config.php';
                                     <p class="card-text">
                                         <strong>Job Type:</strong> <?php echo $row['job_type']; ?><br>
                                         <strong>Job Industry:</strong> <?php echo $row2['jinindustry_name']; ?><br>
-                                        <strong>Job Salary:</strong> ₱<?php echo $row['job_salary']; ?><br>
+                                        <strong>Job Salary:</strong> ₱<?php echo number_format($row['job_salary'], 2); ?><br>
                                         <strong>Date Posted:</strong> <?php echo date('F d, Y', strtotime($row['created_at'])); ?>
                                     </p>
                                     <div class="btn-group" role="group">

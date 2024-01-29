@@ -115,7 +115,7 @@ if ($conn === false) {
     }
 
     $job_listing = "CREATE TABLE IF NOT EXISTS job_listing (
-        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,s
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         user_id INT NOT NULL,
         job_title VARCHAR(255) NOT NULL,
         job_description text NOT NULL,

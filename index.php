@@ -134,7 +134,7 @@ function cosineSimilarity($vector1, $vector2)
                         <div>
                             <h2><?php echo $job['job_title']; ?></h2>
                             <p>Job Industry: <?php echo $jinindustry['jinindustry_name']; ?></p>
-                            <p>Job Salary: ₱<?php echo $job_list['job_salary']; ?></p>
+                            <p>Job Salary: ₱<?php echo number_format($job_list['job_salary']); ?></p>
                             <a href="job_details.php?job_id=<?php echo $job['job_id']; ?>" class="btn btn-primary">View Job</a>
                             <hr>
                         </div>
@@ -163,7 +163,7 @@ function cosineSimilarity($vector1, $vector2)
                         echo '<h2>' . $row['job_title'] . '</h2>';
                         // show job industry from $row2
                         echo '<p>Job Industry: ' . $row2['jinindustry_name'] . '</p>';
-                        echo '<p>Job Salary: ₱' . $row['job_salary'] . '</p>';
+                        echo '<p>Job Salary: ₱' . number_format($row['job_salary']) . '</p>';
                         echo '<a href="job_details.php?job_id=' . $row['id'] . '" class="btn btn-primary">View Job</a>';
                         echo '</div><hr>';
                     }
