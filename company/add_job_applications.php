@@ -66,73 +66,73 @@ if (mysqli_num_rows($result2) == 1) {
 // process form data when submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if (!empty($_FILES["image_name"]["name"])) {
-        $image_name = $_FILES["image_name"]["name"];
+    if (!empty($_FILES["job_image"]["name"])) {
+        $image_name = $_FILES["job_image"]["name"];
         $image_name_ext = pathinfo($image_name, PATHINFO_EXTENSION);
         if ($image_name_ext != "png" && $image_name_ext != "jpg" && $image_name_ext != "jpeg") {
-            $error = "NSRP form must be a PDF or DOCX file.";
+            $error = "Image must be a png, jpg, or jpeg file.";
         }
-    }
-
-    $job_title = $_POST["job_title"];
-    $job_description = $_POST["job_description"];
-    $job_requirements = $_POST["job_requirements"];
-    $job_salary = $_POST["job_salary"];
-    $job_type = $_POST["job_type"];
-    $jinindustry = $_POST["jinindustry"];
-    $shs_qualified = !empty($_POST["shs_qualified"]) ? $_POST["shs_qualified"] : 0;
-    $job_image = !empty($_FILES["job_image"]["name"]) ? $_FILES["job_image"]["name"] : NULL;
-    $user_id = $_SESSION["user_id"];
-    $submit_job_id = $_POST["submit_id"];
-
-    // prepare update statement if submitted with job_id
-    if ($submit_job_id != $job_id) {
-        $sql = "UPDATE job_listing SET job_title = ?, job_description = ?, job_requirements = ?, job_salary = ?, job_type = ?, image_name = IFNULL(?, image_name), jinindustry_id = ?, shs_qualified = ? WHERE id = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ssssssssi", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $submit_job_id);
     } else {
-        // prepare an insert statement
-        $sql = "INSERT INTO job_listing (job_title, job_description, job_requirements, job_salary, job_type, image_name, jinindustry_id, shs_qualified, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "sssssssss", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $user_id);
-    }
+        $job_title = $_POST["job_title"];
+        $job_description = $_POST["job_description"];
+        $job_requirements = $_POST["job_requirements"];
+        $job_salary = $_POST["job_salary"];
+        $job_type = $_POST["job_type"];
+        $jinindustry = $_POST["jinindustry"];
+        $shs_qualified = !empty($_POST["shs_qualified"]) ? $_POST["shs_qualified"] : 0;
+        $job_image = !empty($_FILES["job_image"]["name"]) ? $_FILES["job_image"]["name"] : NULL;
+        $user_id = $_SESSION["user_id"];
+        $submit_job_id = $_POST["submit_id"];
 
-    // attempt to execute the prepared statement
-    if (mysqli_stmt_execute($stmt)) {
+        // prepare update statement if submitted with job_id
         if ($submit_job_id != $job_id) {
-            // Update: create upload directory if not exists and move uploaded file
-            $upload_dir = "uploads/" . $submit_job_id . "/";
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-
-            if (!empty($_FILES["job_image"]["name"])) {
-                move_uploaded_file($_FILES["job_image"]["tmp_name"], $upload_dir . "/" . $_FILES["job_image"]["name"]);
-            }
-            header("location: add_job_applications.php?update=1");
+            $sql = "UPDATE job_listing SET job_title = ?, job_description = ?, job_requirements = ?, job_salary = ?, job_type = ?, image_name = IFNULL(?, image_name), jinindustry_id = ?, shs_qualified = ? WHERE id = ?";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "ssssssssi", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $submit_job_id);
         } else {
-            // Insert: create upload directory if not exists and move uploaded file
-            $get_job_id = mysqli_insert_id($conn);
-            $upload_dir = "uploads/" . $get_job_id . "/";
-            if (!is_dir($upload_dir)) {
-                mkdir($upload_dir, 0755, true);
-            }
-
-            if (!empty($_FILES["job_image"]["name"])) {
-                move_uploaded_file($_FILES["job_image"]["tmp_name"], $upload_dir . "/" . $_FILES["job_image"]["name"]);
-            }
-            header("location: add_job_applications.php?success=1");
+            // prepare an insert statement
+            $sql = "INSERT INTO job_listing (job_title, job_description, job_requirements, job_salary, job_type, image_name, jinindustry_id, shs_qualified, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "sssssssss", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $user_id);
         }
-    } else {
-        // redirect to page with error message
-        header("location: add_job_applications.php?error=1");
+
+        // attempt to execute the prepared statement
+        if (mysqli_stmt_execute($stmt)) {
+            if ($submit_job_id != $job_id) {
+                // Update: create upload directory if not exists and move uploaded file
+                $upload_dir = "uploads/" . $submit_job_id . "/";
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+
+                if (!empty($_FILES["job_image"]["name"])) {
+                    move_uploaded_file($_FILES["job_image"]["tmp_name"], $upload_dir . "/" . $_FILES["job_image"]["name"]);
+                }
+                header("location: add_job_applications.php?update=1");
+            } else {
+                // Insert: create upload directory if not exists and move uploaded file
+                $get_job_id = mysqli_insert_id($conn);
+                $upload_dir = "uploads/" . $get_job_id . "/";
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+
+                if (!empty($_FILES["job_image"]["name"])) {
+                    move_uploaded_file($_FILES["job_image"]["tmp_name"], $upload_dir . "/" . $_FILES["job_image"]["name"]);
+                }
+                header("location: add_job_applications.php?success=1");
+            }
+        } else {
+            // redirect to page with error message
+            header("location: add_job_applications.php?error=1");
+        }
+
+        // close statement
+        mysqli_stmt_close($stmt);
+
+        // close connection
+        mysqli_close($conn);
     }
-
-    // close statement
-    mysqli_stmt_close($stmt);
-
-    // close connection
-    mysqli_close($conn);
 }
 ?>
 
@@ -158,35 +158,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row">
             <div class="col-md-12">
                 <br>
-                <?php
-                if (isset($errortitle)) {
-                    echo "<div class='alert alert-danger' role='alert'>
+                <?php if ($_SESSION["company_verified"] == 1) { ?>
+                    <?php
+                    if (isset($errortitle)) {
+                        echo "<div class='alert alert-danger' role='alert'>
                     <h4 class='alert-heading'>$errortitle</h4>
                     <p>$errordesc</p>
                     $verifylink
                     </div>";
-                }
-                ?>
-                <?php if (isset($_GET["success"])) {
-                    echo "<div class='alert alert-success' role='alert'>
+                    }
+                    ?>
+                    <?php if (isset($error)) {
+                        echo "<div class='alert alert-danger' role='alert'>
+                    <h4 class='alert-sheading'>Error!</h4>
+                    <p>$error</p>
+                    </div>";
+                    } ?>
+                    <?php if (isset($_GET["success"])) {
+                        echo "<div class='alert alert-success' role='alert'>
                     <h4 class='alert-heading'>Success!</h4>
                     <p>Job Listing has been added successfully.</p>
                     </div>";
-                } ?>
-                <?php if (isset($_GET["update"])) {
-                    echo "<div class='alert alert-success' role='alert'>
+                    } ?>
+                    <?php if (isset($_GET["update"])) {
+                        echo "<div class='alert alert-success' role='alert'>
                     <h4 class='alert-heading'>Success!</h4>
                     <p>Job Listing has been updated successfully.</p>
                     </div>";
-                } ?>
-                <?php if (isset($_GET["error"])) {
-                    echo "<div class='alert alert-danger' role='alert'>
+                    } ?>
+                    <?php if (isset($_GET["error"])) {
+                        echo "<div class='alert alert-danger' role='alert'>
                     <h4 class='alert-heading'>Error!</h4>
                     <p>Something went wrong. Please try again.</p>
                     </div>";
-                } ?>
-
-                <?php if ($_SESSION["company_verified"] == 1) { ?>
+                    } ?>
                     <h1>Add Job Listing</h1>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
                         <div class="mb-3">
