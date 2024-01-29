@@ -105,7 +105,7 @@ function cosineSimilarity($vector1, $vector2)
                     $similarity = cosineSimilarity($user_skills_vector, $job_skills_vector);
 
                     // You can adjust the threshold based on your requirements
-                    if ($similarity > 0.5) {
+                    if ($similarity > 0.8) {
                         $recommended_jobs[] = array(
                             'job_id' => $job['id'],
                             'job_title' => $job['job_title']
