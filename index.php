@@ -76,6 +76,9 @@ function cosineSimilarity($vector1, $vector2)
                 $user_skill_result = mysqli_query($conn, $user_skill_sql);
                 $row = mysqli_fetch_assoc($user_skill_result);
                 $user_skills = $row['jinindustry_id'];
+                if (empty($user_skills)) {
+                    $user_skills = '0';
+                }
 
                 // retrieve all job_listings and set it as array values for job_title, job_description and $jinindustry_id
                 $job_sql = "SELECT id, job_title, job_description, jinindustry_id FROM job_listing";
@@ -108,6 +111,11 @@ function cosineSimilarity($vector1, $vector2)
                 <div class="col-md-4">
                     <h1>Recommended Jobs</h1>
                     <hr>
+                    <?php if ($user_skills === '0') { ?>
+                        <div class="alert alert-warning fade show" role="alert">
+                            <strong>Warning!</strong><br>You have not set your preferred skills yet. Please update your profile to get recommended jobs.
+                        </div>
+                    <?php } ?>
                     <?php
                     foreach ($recommended_jobs as $job) :
                         $job_list_sql = mysqli_query($conn, "SELECT * FROM job_listing WHERE id =" . $job['job_id']);
@@ -121,6 +129,7 @@ function cosineSimilarity($vector1, $vector2)
                             <p>Job Industry: <?php echo $jinindustry['jinindustry_name']; ?></p>
                             <p>Job Salary: ₱<?php echo $job_list['job_salary']; ?></p>
                             <a href="job_details.php?job_id=<?php echo $job['job_id']; ?>" class="btn btn-primary">View Job</a>
+                            <hr>
                         </div>
                     <?php endforeach; ?>
                 </div>
