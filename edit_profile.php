@@ -445,7 +445,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php echo $error; ?>
             </div>
         <?php endif; ?>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+        <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="post" enctype="multipart/form-data">
             <!-- display user type, First Name, Middle Name, Last Name, Suffix, Email -->
             <div class="form-group">
                 <label for="user_type">User Type</label>

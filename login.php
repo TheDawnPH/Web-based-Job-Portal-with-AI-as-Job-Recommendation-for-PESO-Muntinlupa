@@ -116,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-md">
                 <br>
                 <h1>Login</h1>
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="post">
                     <?php
                     if (!empty($verification_err)) {
                         echo '<div class="alert alert-danger">' . $verification_err . '</div>';
@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="password" aria-describedby="passwordHelp" value="<?php echo $password; ?>">
+                        <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="password" aria-describedby="passwordHelp">
                         <div class="invalid-feedback"><?php echo $password_err; ?></div>
                     </div>
                     <div class="mb-4 text-end"><a href="forgot_password.php">Forgot Password?</a></div>

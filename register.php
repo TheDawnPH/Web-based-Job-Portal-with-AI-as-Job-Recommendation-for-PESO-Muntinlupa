@@ -187,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-md">
                 <br>
                 <h1>Register</h1>
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"], ENT_QUOTES, 'utf-8'); ?>" method="post">
+                <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="post">
                     <?php
                     if (!empty($alert)) {
                         echo '<div class="alert alert-success">' . $alert . '</div>';

@@ -193,7 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>";
                     } ?>
                     <h1>Add Job Listing</h1>
-                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
+                    <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="POST" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="job_title" class="form-label">Job Title</label>
                             <input type="text" class="form-control" id="job_title" name="job_title" value="<?php echo $job_title ?>" placeholder="Sample Title" required>

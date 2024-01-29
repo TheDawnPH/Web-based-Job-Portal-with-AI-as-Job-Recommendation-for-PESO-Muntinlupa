@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php echo $failed; ?>
             </div>
         <?php } ?>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . '?code=' . $code, ENT_QUOTES, 'utf-8'); ?>" method="post">
+        <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"] . '?code=' . $code, ENT_QUOTES, 'utf-8'), ENT_QUOTES); ?>" method="post">
             <div class="mb-4">
                 <label for="password" class="form-label">New Password</label>
                 <input type="password" name="password" class="form-control" id="password" aria-describedby="passwordHelp">
