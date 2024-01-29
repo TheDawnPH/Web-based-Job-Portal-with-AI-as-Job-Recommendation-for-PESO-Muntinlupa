@@ -82,7 +82,7 @@ include 'config.php';
                     mysqli_free_result($result);
                     ?>
                     <br>
-                </div>';
+                </div>
             <?php
             }
             ?>
