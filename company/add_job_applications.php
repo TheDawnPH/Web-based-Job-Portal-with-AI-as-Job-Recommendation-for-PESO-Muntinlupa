@@ -104,7 +104,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("location: add_job_applications.php?update=1");
         } else {
             // Insert: create upload directory if not exists and move uploaded file
-            $upload_dir = "uploads/" . $submit_job_id . "/";
+            $get_job_id = mysqli_insert_id($conn);
+            $upload_dir = "uploads/" . $get_job_id . "/";
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
