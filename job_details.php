@@ -31,6 +31,14 @@ $stmt2->execute();
 $result2 = $stmt2->get_result();
 $row2 = $result2->fetch_assoc();
 $name = $row2['fname'] . " " . $row2['lname'];
+
+// function to next line when next line in database
+function nl2br2($string)
+{
+    $string = str_replace(array("\r\n", "\r", "\n"), "<br />", $string);
+    return $string;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -69,9 +77,9 @@ $name = $row2['fname'] . " " . $row2['lname'];
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-subtitle mb-2 text-muted">Job Description</h5>
-                        <p class="card-text"><?php echo $row['job_description']; ?></p>
+                        <p class="card-text"><?php echo nl2br($row['job_description']); ?></p>
                         <h5 class="card-subtitle mb-2 text-muted">Job Requirements</h5>
-                        <p class="card-text"><?php echo $row['job_requirements']; ?></p>
+                        <p class="card-text"><?php echo nl2br($row['job_requirements']); ?></p>
                         <h5 class="card-subtitle mb-2 text-muted">Job Salary</h5>
                         <p class="card-text"><?php echo "₱" . $row['job_salary']; ?></p>
                         <h5 class="card-subtitle mb-2 text-muted">Job Type</h5>

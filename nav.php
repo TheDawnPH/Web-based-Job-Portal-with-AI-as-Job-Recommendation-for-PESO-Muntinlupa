@@ -8,7 +8,8 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
 <nav class="navbar navbar-expand-lg no-print" data-bs-theme="dark" style="background-color: #000080">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
-      <img src="/img/peso_muntinlupa.png" alt="PESO Muntinlupa Logo" width="30" class="d-inline-block align-text-center">&nbsp;&nbsp;Muntinlupa Job Portal
+      <img src="/img/peso_muntinlupa.png" alt="PESO Muntinlupa Logo" width="30" class="d-inline-block align-text-top">
+      Muntinlupa Job Portal
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>

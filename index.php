@@ -60,6 +60,13 @@ function cosineSimilarity($vector1, $vector2)
             }
         }
     </style>
+    <style>
+        @media screen and (max-width: 500px) {
+            .desktop {
+                display: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body>

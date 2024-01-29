@@ -66,6 +66,14 @@ if (mysqli_num_rows($result2) == 1) {
 // process form data when submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    if (!empty($_FILES["image_name"]["name"])) {
+        $image_name = $_FILES["image_name"]["name"];
+        $image_name_ext = pathinfo($image_name, PATHINFO_EXTENSION);
+        if ($image_name_ext != "png" && $image_name_ext != "jpg" && $image_name_ext != "jpeg") {
+            $error = "NSRP form must be a PDF or DOCX file.";
+        }
+    }
+
     $job_title = $_POST["job_title"];
     $job_description = $_POST["job_description"];
     $job_requirements = $_POST["job_requirements"];
@@ -79,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // prepare update statement if submitted with job_id
     if ($submit_job_id != $job_id) {
-        $sql = "UPDATE job_listing SET job_title = ?, job_description = ?, job_requirements = ?, job_salary = ?, job_type = ?, image_name = ?, jinindustry_id = ?, shs_qualified = ? WHERE id = ?";
+        $sql = "UPDATE job_listing SET job_title = ?, job_description = ?, job_requirements = ?, job_salary = ?, job_type = ?, image_name = IFNULL(?, image_name), jinindustry_id = ?, shs_qualified = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "ssssssssi", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $submit_job_id);
     } else {
@@ -132,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <title>PESO Job Portal - Add/Update Job Listing</title>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
