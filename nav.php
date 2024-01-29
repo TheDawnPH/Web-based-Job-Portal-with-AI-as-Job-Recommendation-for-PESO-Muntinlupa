@@ -5,7 +5,7 @@ $logout = "<a class='nav-link' href='/logout.php'>Logout</a>";
 $applications = "<a class='nav-link' href='/job_applications.php'> Job Applications</a>";
 ?>
 
-<nav class="navbar navbar-expand-lg" data-bs-theme="dark" style="background-color: #000080">
+<nav class="navbar navbar-expand-lg no-print" data-bs-theme="dark" style="background-color: #000080">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
       <img src="/img/peso_muntinlupa.png" alt="PESO Muntinlupa Logo" width="30" class="d-inline-block align-text-center">&nbsp;&nbsp;Muntinlupa Job Portal
@@ -77,6 +77,7 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="/admin/dashboard.php">Dashboard</a></li>
               <li><a class="dropdown-item" href="/admin/job_repository.php">Job Listing Repository</a></li>
+              <li><a class="dropdown-item" href="/admin/job_applications_reports.php">Job Application Reports</a></li>
               <li><a class="dropdown-item" href="/admin/request_company.php">Verify Company Verification</a></li>
               <li><a class="dropdown-item" href="/admin/users.php">Users</a></li>
             </ul>

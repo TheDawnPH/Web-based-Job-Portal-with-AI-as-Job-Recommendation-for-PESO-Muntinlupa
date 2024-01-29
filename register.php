@@ -223,31 +223,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="mb-4">
                         <label for="fname" class="form-label">First Name</label>
-                        <input type="text" name="fname" class="form-control" id="fname" aria-describedby="fnameHelp">
+                        <input type="text" name="fname" class="form-control" id="fname" aria-describedby="fnameHelp" required>
                     </div>
                     <div class="mb-4">
                         <label for="mname" class="form-label">Middle Name</label>
                         <input type="text" name="mname" class="form-control" id="mname" aria-describedby="mnameHelp">
+                        <div class="form-text">Leave blank if not applicable.</div>
                     </div>
                     <div class="mb-4">
                         <label for="lname" class="form-label">Last Name</label>
-                        <input type="text" name="lname" class="form-control" id="lname" aria-describedby="lnameHelp">
+                        <input type="text" name="lname" class="form-control" id="lname" aria-describedby="lnameHelp" required>
                     </div>
                     <div class="mb-4">
                         <label for="suffix" class="form-label">Suffix</label>
                         <input type="text" name="suffix" class="form-control" id="suffix" aria-describedby="suffixHelp">
+                        <div class="form-text">Leave blank if not applicable.</div>
                     </div>
                     <div class="mb-4">
                         <label for="email" class="form-label">Email</label>
-                        <input type="text" name="email" class="form-control" id="email" aria-describedby="emailHelp">
+                        <input type="text" name="email" class="form-control" id="email" aria-describedby="emailHelp" required>
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" id="password" aria-describedby="passwordHelp">
+                        <input type="password" name="password" class="form-control" id="password" aria-describedby="passwordHelp" required>
                     </div>
                     <div class="mb-4">
                         <label for="password" class="form-label">Confirm Password</label>
-                        <input type="password" name="confirm_password" class="form-control" id="confirm_password" aria-describedby="confirm_passwordHelp">
+                        <input type="password" name="confirm_password" class="form-control" id="confirm_password" aria-describedby="confirm_passwordHelp" required>
                     </div>
                     <div class="mb-4">
                         <div class="form-text">By Registering yourself in this website, you agree on <a href="https://privacy.gov.ph/data-privacy-act/" target="_blank">Privacy Notice from

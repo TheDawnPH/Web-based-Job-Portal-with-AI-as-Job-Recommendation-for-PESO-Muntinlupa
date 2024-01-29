@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 setcookie("fname", $fname, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
                                 setcookie("lname", $lname, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
                                 setcookie("email", $email, time() + 3600, "/", "", isset($_SERVER["HTTPS"]), true);
-                                
+
                                 // if user type is admin redirect to /admin/dashboard.php
                                 if ($user_type == "admin") {
                                     header("location: admin/dashboard.php");
