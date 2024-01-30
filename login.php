@@ -14,8 +14,13 @@ require_once "config.php";
 
 $email = $password = "";
 $email_err = $password_err = "";
+$login_attempts = 0; // Initialize login attempts counter
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check if the login attempts session variable is set
+    if (isset($_SESSION['login_attempts'])) {
+        $login_attempts = $_SESSION['login_attempts'];
+    }
 
     if (empty(trim($_POST["email"]))) {
         $email_err = "Please enter email.";
@@ -28,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $password = trim($_POST["password"]);
     }
-
 
     if (empty($email_err) && empty($password_err)) {
         $sql = "SELECT user_id, user_type, fname, mname, lname, suffix, email, user_password, verification_status, company_verified, jinindustry_id FROM users WHERE email = ?";
@@ -48,6 +52,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if (password_verify($password, $hashed_password)) {
                             if ($verification_status == 1) {
                                 session_regenerate_id(true);
+
+                                // Reset login attempts upon successful login
+                                $login_attempts = 0;
+                                unset($_SESSION['login_attempts']);
 
                                 // set session variables
                                 $_SESSION["loggedin"] = true;
@@ -72,10 +80,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             }
                         } else {
                             $password_err = "The password you entered is incorrect.";
+                            // Increment login attempts
+                            $login_attempts++;
                         }
                     }
                 } else {
                     $email_err = "No account found with that email.";
+                    $login_attempts++;
                 }
             } else {
                 echo "Oops! Something went wrong. Please try again later.";
@@ -83,12 +94,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         mysqli_stmt_close($stmt);
+
+        // Check if login attempts exceed the limit
+        if ($login_attempts >= 3) {
+            // Redirect to forgot_password.php
+            header("location: forgot_password.php");
+            exit;
+        }
+
+        // Update login attempts in session
+        $_SESSION['login_attempts'] = $login_attempts;
     }
 
     mysqli_close($conn);
 }
-
 ?>
+
 
 <html>
 

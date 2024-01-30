@@ -163,7 +163,7 @@ if ($conn === false) {
         echo "ERROR: Could not able to execute $company_documents. " . mysqli_error($conn);
     }
 
-    $job_applications = " CREATE TABLE IF NOT EXISTS job_applications (
+    $job_applications = "CREATE TABLE IF NOT EXISTS job_applications (
         app_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         user_id INT NOT NULL,
         job_id INT NOT NULL,

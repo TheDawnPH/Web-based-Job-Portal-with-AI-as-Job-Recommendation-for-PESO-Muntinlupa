@@ -63,6 +63,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
                         <th>Applicant Email</th>
                         <th>Application Date</th>
                         <th>Application Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,6 +81,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
                         echo "<td>" . $userdetails['email'] . "</td>";
                         echo "<td>" . date("h:i:s A F j, Y", strtotime($row["created_at"])) . "</td>";
                         echo "<td>" . ($row['application_status'] == '1' ? 'Approved' : ($row['application_status'] == '2' ? 'Denied' : 'Pending')) . "</td>";
+                        echo "<td><a href='/profile.php?user_id=" . $userdetails['user_id'] . "' class='btn btn-primary'>View User</a></td>";
                         echo "</tr>";
                     }
                     ?>
