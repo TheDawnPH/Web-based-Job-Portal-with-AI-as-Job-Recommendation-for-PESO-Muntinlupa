@@ -106,7 +106,6 @@ $result = mysqli_query($conn, $sql);
 <body>
     <?php include $root . '/nav.php'; ?>
     <div class="container">
-        <br>
         <h1>Requests Portal</h1>
         <br>
         <div class="table-responsive">

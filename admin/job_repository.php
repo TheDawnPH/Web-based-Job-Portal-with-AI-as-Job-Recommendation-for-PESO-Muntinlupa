@@ -52,7 +52,6 @@ $row = mysqli_fetch_assoc($result);
 <body>
     <?php include $root . '/nav.php'; ?>
     <div class="container">
-        <br>
         <h1>All Job Listings</h1>
         <div class="table-responsive">
             <!-- display all job listing from session user_id and add actions such as view, edit and delete -->

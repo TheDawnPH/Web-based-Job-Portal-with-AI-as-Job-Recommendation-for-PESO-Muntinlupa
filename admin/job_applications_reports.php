@@ -49,7 +49,6 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 <body>
     <?php include $root . '/nav.php'; ?>
     <div class="container">
-        <br>
         <h1>Job Applications Reports</h1>
         <div class="table-responsive">
         <input type="button" onclick="printTable()" value="Print Everything" class="no-print btn btn-primary" />

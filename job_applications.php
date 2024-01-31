@@ -108,7 +108,6 @@ if (isset($_GET["job_id"])) {
 <body>
     <?php include "nav.php"; ?>
     <div class="container">
-        <br>
         <h1>Your Job Applications</h1>
         <?php if (isset($sucess)) { ?>
             <div class="alert alert-success" role="alert">

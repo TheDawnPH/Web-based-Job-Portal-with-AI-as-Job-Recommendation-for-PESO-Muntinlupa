@@ -159,7 +159,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <?php include $root . '/nav.php'; ?>
     <div class="container">
-        <br>
         <h1>Add Users</h1>
         <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="post">
             <?php

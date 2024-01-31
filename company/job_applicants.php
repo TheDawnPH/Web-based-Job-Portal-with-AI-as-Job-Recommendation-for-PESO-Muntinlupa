@@ -47,7 +47,6 @@ $result = mysqli_stmt_get_result($stmt);
 <body>
     <?php include $root . '/nav.php'; ?>
     <div class="container">
-        <br>
         <!--- php code where show the title of job listing created by user_id and show the table with applicants name and action to accept or deny in the Job -->
         <h1>Job Applicants</h1>
         <br><br>

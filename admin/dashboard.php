@@ -197,7 +197,6 @@ if ($row) {
     <?php include $root . '/nav.php'; ?>
 
     <div class="container">
-        <br>
         <div class="page-header">
             <h1>Admin Dashboard</h1>
         </div>

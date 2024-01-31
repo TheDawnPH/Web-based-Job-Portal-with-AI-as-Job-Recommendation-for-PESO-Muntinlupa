@@ -106,7 +106,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="container">
-        <br>
         <h1>Password Reset</h1>
         <hr>
         <?php if (!empty($success)) { ?>

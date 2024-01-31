@@ -157,7 +157,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <br>
                 <?php if ($_SESSION["company_verified"] == 1) { ?>
                     <?php
                     if (isset($errortitle)) {

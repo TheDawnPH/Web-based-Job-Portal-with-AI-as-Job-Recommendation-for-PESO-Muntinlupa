@@ -51,7 +51,6 @@ if (!$result) {
 <body>
     <?php include $root . '/nav.php'; ?>
     <div class="container">
-        <br>
         <h1>Users</h1>
         <a class="btn btn-primary" role="button" href="/admin/add_users.php">Add User</a>
         <br><br>

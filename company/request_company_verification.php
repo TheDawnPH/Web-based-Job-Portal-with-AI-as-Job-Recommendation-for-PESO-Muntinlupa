@@ -83,7 +83,6 @@ if (!$mail->Send()) {
 <body>
     <?php include $root . '/nav.php'; ?>
     <div class="container">
-        <br>
         <div class="alert alert-success" role="alert">
             <h4 class="alert-heading">Request Company Verification</h4>
             <p>Thank you for registering as a company. Please wait for the PESO to verify your company.</p>
