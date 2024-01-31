@@ -8,17 +8,18 @@ session_start();
 $root = $_SERVER['DOCUMENT_ROOT'];
 require $root . "/config.php";
 
+// if user is not logged in redirect to login page
+if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    header("location: /login.php");
+    exit;
+}
+
 // check if user_type is not company or admin, if not redirect to 404 page
 if ($_SESSION["user_type"] != "company" && $_SESSION["user_type"] != "admin") {
     header("location: /404.php");
     exit;
 }
 
-// if user is not logged in redirect to login page
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: /login.php");
-    exit;
-}
 
 // show all job listing that is created by the session user_id
 $sql = "SELECT * FROM job_listing WHERE user_id = ? ORDER BY created_at DESC";

@@ -3,26 +3,34 @@ session_start();
 
 include 'config.php';
 
-function calculateCosineSimilarity($vector1, $vector2)
+// function for getting job acceptance rate
+function getJobAcceptanceRate($job_id)
 {
-    $dotProduct = 0;
-    $magnitude1 = 0;
-    $magnitude2 = 0;
+    global $conn;
 
-    foreach ($vector1 as $key => $value) {
-        $dotProduct += $value * $vector2[$key];
-        $magnitude1 += $value * $value;
-        $magnitude2 += $vector2[$key] * $vector2[$key];
+    $sql = "SELECT * FROM job_applications WHERE job_id = " . $job_id;
+    $result = mysqli_query($conn, $sql);
+    $job_applications = [];
+    $job_applications_count = 0;
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        $job_applications[] = $row;
+        $job_applications_count++;
     }
 
-    $magnitude1 = sqrt($magnitude1);
-    $magnitude2 = sqrt($magnitude2);
+    $job_accepted_count = 0;
 
-    if ($magnitude1 * $magnitude2 == 0) {
-        return 0; // To avoid division by zero
+    foreach ($job_applications as $job_application) {
+        if ($job_application['application_status'] == '1') {
+            $job_accepted_count++;
+        }
     }
 
-    return $dotProduct / ($magnitude1 * $magnitude2);
+    if ($job_applications_count == 0) {
+        return 0;
+    } else {
+        return round(($job_accepted_count / $job_applications_count) * 100);
+    }
 }
 
 ?>
@@ -92,8 +100,59 @@ function calculateCosineSimilarity($vector1, $vector2)
                     $jobs[] = $row;
                 }
 
+                // retrieve all job applications
+                $job_applications_sql = "SELECT * FROM job_applications";
+                $job_applications_result = mysqli_query($conn, $job_applications_sql);
+                $job_applications_count = mysqli_num_rows($job_applications_result);
+                $job_applications = [];
+
+                while ($row = mysqli_fetch_assoc($job_applications_result)) {
+                    $job_applications[] = $row;
+                }
+
                 $recommended_jobs = [];
 
+                // implement job recommendation algorithm based on accepted job applications
+                foreach ($jobs as $job) {
+                    $job_industry = $job['jinindustry_id'];
+
+                    foreach ($job_applications as $job_application) {
+                        if ($job['id'] == $job_application['job_id']) {
+                            if (getJobAcceptanceRate($job['id']) >= 60) {
+                                // Check if the user and job have the same industry
+                                if ($user_preferred_industry == $job_industry) {
+                                    $recommended_jobs[] = array(
+                                        'job_id' => $job['id'],
+                                        'job_title' => $job['job_title']
+                                    );
+                                }
+                            } else {
+                                // Check if the user and job have the same industry
+                                if ($user_preferred_industry == $job_industry) {
+                                    $recommended_jobs[] = array(
+                                        'job_id' => $job['id'],
+                                        'job_title' => $job['job_title']
+                                    );
+                                }
+                            }
+                        } 
+                    
+                    }
+
+                    if (empty($job_applications)) {
+                        // Check if the user and job have the same industry
+                        if ($user_preferred_industry == $job_industry) {
+                            $recommended_jobs[] = array(
+                                'job_id' => $job['id'],
+                                'job_title' => $job['job_title']
+                            );
+                        }
+                    }
+                }
+                
+                
+                
+                /*
                 foreach ($jobs as $job) {
                     $job_industry = $job['jinindustry_id'];
 
@@ -104,7 +163,7 @@ function calculateCosineSimilarity($vector1, $vector2)
                             'job_title' => $job['job_title']
                         );
                     }
-                }
+                }*/
 
                 // Display the recommended jobs
             ?>
