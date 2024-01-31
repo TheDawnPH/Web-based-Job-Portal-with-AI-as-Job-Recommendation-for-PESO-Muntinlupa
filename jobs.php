@@ -111,9 +111,29 @@ include 'config.php';
                                 (type === '' || type === jobType) &&
                                 (industry === '' || industry === jobIndustry)
                             ) {
-                                if (salary === '10000' && jobSalary < 10000) {
+                                if (salary === '') {
                                     found = true;
-                                } else if (salary === '' || (jobSalary >= salary && jobSalary < (parseInt(salary, 10) + 10000))) {
+                                } else if (salary === '10000' && jobSalary < 10000) {
+                                    found = true;
+                                } else if (salary === '20000' && jobSalary >= 11000 && jobSalary <= 20000) {
+                                    found = true;
+                                } else if (salary === '30000' && jobSalary >= 21000 && jobSalary <= 30000) {
+                                    found = true;
+                                } else if (salary === '40000' && jobSalary >= 31000 && jobSalary <= 40000) {
+                                    found = true;
+                                } else if (salary === '50000' && jobSalary >= 41000 && jobSalary <= 50000) {
+                                    found = true;
+                                } else if (salary === '60000' && jobSalary >= 51000 && jobSalary <= 60000) {
+                                    found = true;
+                                } else if (salary === '70000' && jobSalary >= 61000 && jobSalary <= 70000) {
+                                    found = true;
+                                } else if (salary === '80000' && jobSalary >= 71000 && jobSalary <= 80000) {
+                                    found = true;
+                                } else if (salary === '90000' && jobSalary >= 81000 && jobSalary <= 90000) {
+                                    found = true;
+                                } else if (salary === '100000' && jobSalary >= 91000 && jobSalary <= 100000) {
+                                    found = true;
+                                } else if (salary === '100000' && jobSalary > 100000) {
                                     found = true;
                                 }
                             }
@@ -144,7 +164,7 @@ include 'config.php';
                                     <p class="card-text">
                                         <strong>Job Type:</strong> <?php echo $row['job_type']; ?><br>
                                         <strong>Job Industry:</strong> <?php echo $row2['jinindustry_name']; ?><br>
-                                        <strong>Job Salary:</strong> ₱<?php echo number_format($row['job_salary'], 2); ?><br>
+                                        <strong>Job Salary:</strong> ₱<?php echo number_format($row['job_salary']); ?><br>
                                         <strong>Date Posted:</strong> <?php echo date('F d, Y', strtotime($row['created_at'])); ?>
                                     </p>
                                     <div class="btn-group" role="group">
