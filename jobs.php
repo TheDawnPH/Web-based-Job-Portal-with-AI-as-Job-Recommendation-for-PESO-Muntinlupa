@@ -78,108 +78,92 @@ include 'config.php';
 
                 <!-- JavaScript code for search and filter -->
                 <script>
-                    var searchInput = document.getElementById('searchInput');
-                    var filterType = document.getElementById('filterType');
-                    var filterIndustry = document.getElementById('filterIndustry');
-                    var salaryRange = document.getElementById('salaryRange');
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var searchInput = document.getElementById('searchInput');
+                        var filterType = document.getElementById('filterType');
+                        var filterIndustry = document.getElementById('filterIndustry');
+                        var salaryRange = document.getElementById('salaryRange');
 
-                    searchInput.addEventListener('input', applyFilters);
-                    filterType.addEventListener('change', applyFilters);
-                    filterIndustry.addEventListener('change', applyFilters);
-                    salaryRange.addEventListener('change', applyFilters);
+                        // Add event listeners
+                        searchInput.addEventListener('input', applyFilters);
+                        filterType.addEventListener('change', applyFilters);
+                        filterIndustry.addEventListener('change', applyFilters);
+                        salaryRange.addEventListener('change', applyFilters);
 
-                    function applyFilters() {
-                        var searchQuery = searchInput.value;
-                        var selectedType = filterType.value;
-                        var selectedIndustry = filterIndustry.value;
-                        var selectedSalary = salaryRange.value;
-                        searchAndFilterJobs(searchQuery, selectedType, selectedIndustry, selectedSalary);
-                    }
+                        // Initial load
+                        applyFilters();
 
-                    function searchAndFilterJobs(query, type, industry, salary) {
-                        var cards = document.querySelectorAll('.card');
+                        function applyFilters() {
+                            var searchQuery = searchInput.value.toLowerCase();
+                            var selectedType = filterType.value;
+                            var selectedIndustry = filterIndustry.value;
+                            var selectedSalary = salaryRange.value;
 
-                        cards.forEach(function(card) {
-                            var found = false;
-                            var title = card.getAttribute('data-title').toLowerCase();
-                            var jobType = card.getAttribute('data-type');
-                            var jobIndustry = card.getAttribute('data-industry');
-                            var jobSalary = parseInt(card.getAttribute('data-salary'), 10);
+                            // Fetch the rows from the table
+                            var rows = document.querySelectorAll('.job-row');
 
-                            if (
-                                (title.indexOf(query.toLowerCase()) > -1) &&
-                                (type === '' || type === jobType) &&
-                                (industry === '' || industry === jobIndustry)
-                            ) {
-                                if (salary === '') {
-                                    found = true;
-                                } else if (salary === '10000' && jobSalary < 10000) {
-                                    found = true;
-                                } else if (salary === '20000' && jobSalary >= 11000 && jobSalary <= 20000) {
-                                    found = true;
-                                } else if (salary === '30000' && jobSalary >= 21000 && jobSalary <= 30000) {
-                                    found = true;
-                                } else if (salary === '40000' && jobSalary >= 31000 && jobSalary <= 40000) {
-                                    found = true;
-                                } else if (salary === '50000' && jobSalary >= 41000 && jobSalary <= 50000) {
-                                    found = true;
-                                } else if (salary === '60000' && jobSalary >= 51000 && jobSalary <= 60000) {
-                                    found = true;
-                                } else if (salary === '70000' && jobSalary >= 61000 && jobSalary <= 70000) {
-                                    found = true;
-                                } else if (salary === '80000' && jobSalary >= 71000 && jobSalary <= 80000) {
-                                    found = true;
-                                } else if (salary === '90000' && jobSalary >= 81000 && jobSalary <= 90000) {
-                                    found = true;
-                                } else if (salary === '100000' && jobSalary >= 91000 && jobSalary <= 100000) {
-                                    found = true;
-                                } else if (salary === '100000' && jobSalary > 100000) {
-                                    found = true;
+                            rows.forEach(function(row) {
+                                var title = row.dataset.title.toLowerCase();
+                                var jobType = row.dataset.type;
+                                var jobIndustry = row.dataset.industry;
+                                var jobSalary = parseInt(row.dataset.salary, 10);
+
+                                var titleMatch = title.includes(searchQuery);
+                                var typeMatch = selectedType === '' || selectedType === jobType;
+                                var industryMatch = selectedIndustry === '' || selectedIndustry === jobIndustry;
+                                var salaryMatch = selectedSalary === '' ||
+                                    (selectedSalary === '100001' && jobSalary > 100000) ||
+                                    (jobSalary >= (parseInt(selectedSalary, 10) - 10000) && jobSalary <= parseInt(selectedSalary, 10));
+
+                                if (titleMatch && typeMatch && industryMatch && salaryMatch) {
+                                    row.style.display = '';
+                                } else {
+                                    row.style.display = 'none';
                                 }
-                            }
-
-                            if (found) {
-                                card.style.display = '';
-                            } else {
-                                card.style.display = 'none';
-                            }
-                        });
-                    }
+                            });
+                        }
+                    });
                 </script>
+
             </div>
             <div class="col-md-7">
-                <div class="card-deck">
-                    <?php
-                    $sql = "SELECT * FROM job_listing ORDER BY created_at DESC";
-                    $result = mysqli_query($conn, $sql);
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $sql2 = "SELECT jinindustry_name FROM jinindustry WHERE jinindustry_id = " . $row['jinindustry_id'];
-                            $result2 = mysqli_query($conn, $sql2);
-                            $row2 = mysqli_fetch_assoc($result2);
-                    ?>
-                            <div class="card" data-title="<?php echo htmlspecialchars($row['job_title']); ?>" data-type="<?php echo htmlspecialchars($row['job_type']); ?>" data-industry="<?php echo htmlspecialchars($row2['jinindustry_name']); ?>" data-salary="<?php echo htmlspecialchars($row['job_salary']); ?>" data-date="<?php echo date('F d, Y', strtotime($row['created_at'])); ?>">
-                                <div class="card-body">
-                                    <h5 class="card-title"><?php echo $row['job_title']; ?></h5>
-                                    <p class="card-text">
-                                        <strong>Job Type:</strong> <?php echo $row['job_type']; ?><br>
-                                        <strong>Job Industry:</strong> <?php echo $row2['jinindustry_name']; ?><br>
-                                        <strong>Job Salary:</strong> ₱<?php echo number_format($row['job_salary']); ?><br>
-                                        <strong>Date Posted:</strong> <?php echo date('F d, Y', strtotime($row['created_at'])); ?>
-                                    </p>
-                                    <div class="btn-group" role="group">
-                                        <a href="job_details.php?job_id=<?php echo $row['id']; ?>" class="btn btn-secondary">View</a>&nbsp;
-                                        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>
-                                            <a href="job_applications.php?job_id=<?php echo $row['id']; ?>" class="btn btn-primary">Apply</a>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div><br>
-                    <?php
+                <table class="table">
+                    <tbody>
+                        <?php
+                        $sql = "SELECT * FROM job_listing ORDER BY created_at DESC";
+                        $result = mysqli_query($conn, $sql);
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $sql2 = "SELECT jinindustry_name FROM jinindustry WHERE jinindustry_id = " . $row['jinindustry_id'];
+                                $result2 = mysqli_query($conn, $sql2);
+                                $row2 = mysqli_fetch_assoc($result2);
+                        ?>
+                                <tr class="job-row" data-title="<?php echo htmlspecialchars($row['job_title']); ?>" data-type="<?php echo htmlspecialchars($row['job_type']); ?>" data-industry="<?php echo htmlspecialchars($row2['jinindustry_name']); ?>" data-salary="<?php echo htmlspecialchars($row['job_salary']); ?>" data-date="<?php echo date('F d, Y', strtotime($row['created_at'])); ?>">
+                                    <td>
+                                        <h5><?php echo $row['job_title']; ?></h5>
+                                        <p>
+                                            <strong>Job Type:</strong> <?php echo $row['job_type']; ?><br>
+                                            <strong>Job Industry:</strong> <?php echo $row2['jinindustry_name']; ?><br>
+                                            <strong>Job Salary:</strong> ₱<?php echo number_format($row['job_salary']); ?><br>
+                                            <strong>Date Posted:</strong> <?php echo date('F d, Y', strtotime($row['created_at'])); ?>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="job_details.php?job_id=<?php echo $row['id']; ?>" class="btn btn-secondary">View</a>&nbsp;
+                                            <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>
+                                                <a href="job_applications.php?job_id=<?php echo $row['id']; ?>" class="btn btn-primary">Apply</a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                        <?php
+                            }
                         }
-                    }
-                    ?>
-                </div>
+                        ?>
+                    </tbody>
+                </table>
+
             </div>
         </div>
     </div>
