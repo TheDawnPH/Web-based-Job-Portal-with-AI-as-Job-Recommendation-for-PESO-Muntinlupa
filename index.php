@@ -3,8 +3,7 @@ session_start();
 
 include 'config.php';
 
-// Function to calculate cosine similarity
-function cosineSimilarity($vector1, $vector2)
+function calculateCosineSimilarity($vector1, $vector2)
 {
     $dotProduct = 0;
     $magnitude1 = 0;
@@ -19,11 +18,11 @@ function cosineSimilarity($vector1, $vector2)
     $magnitude1 = sqrt($magnitude1);
     $magnitude2 = sqrt($magnitude2);
 
-    if ($magnitude1 == 0 || $magnitude2 == 0) {
-        return 0;
-    } else {
-        return $dotProduct / ($magnitude1 * $magnitude2);
+    if ($magnitude1 * $magnitude2 == 0) {
+        return 0; // To avoid division by zero
     }
+
+    return $dotProduct / ($magnitude1 * $magnitude2);
 }
 
 ?>
@@ -78,34 +77,28 @@ function cosineSimilarity($vector1, $vector2)
         <div class="row row-cols-1 row-cols-md-2 g-3">
             <?php
             if (isset($_SESSION["user_type"]) && $_SESSION["user_type"] === 'applicant') {
-                // Get the user's preferred skills
+                // Get the user's preferred industry
                 $user_skill_sql = "SELECT * FROM users WHERE user_id =" . $_SESSION['user_id'];
                 $user_skill_result = mysqli_query($conn, $user_skill_sql);
                 $row = mysqli_fetch_assoc($user_skill_result);
-                $user_skills = $row['jinindustry_id'];
-                if (empty($user_skills)) {
-                    $user_skills = '0';
-                }
+                $user_preferred_industry = $row['jinindustry_id'];
 
-                // retrieve all job_listings and set it as array values for job_title, job_description and $jinindustry_id
+                // Retrieve all job_listings
                 $job_sql = "SELECT id, job_title, job_description, jinindustry_id FROM job_listing";
                 $job_result = mysqli_query($conn, $job_sql);
                 $jobs = [];
+
                 while ($row = mysqli_fetch_assoc($job_result)) {
                     $jobs[] = $row;
                 }
 
-                // Calculate cosine similarity between user's skills and job descriptions
-                $user_skills_vector = explode(' ', $user_skills);
-
                 $recommended_jobs = [];
 
                 foreach ($jobs as $job) {
-                    $job_skills_vector = explode(' ', $job['jinindustry_id']);
-                    $similarity = cosineSimilarity($user_skills_vector, $job_skills_vector);
+                    $job_industry = $job['jinindustry_id'];
 
-                    // You can adjust the threshold based on your requirements
-                    if ($similarity > 0.8) {
+                    // Check if the user and job have the same industry
+                    if ($user_preferred_industry == $job_industry) {
                         $recommended_jobs[] = array(
                             'job_id' => $job['id'],
                             'job_title' => $job['job_title']
@@ -115,31 +108,32 @@ function cosineSimilarity($vector1, $vector2)
 
                 // Display the recommended jobs
             ?>
-                <div class="col-md-4">
-                    <h1>Recommended Jobs</h1>
-                    <hr>
-                    <?php if ($user_skills === '0') { ?>
-                        <div class="alert alert-warning fade show" role="alert">
-                            <strong>Warning!</strong><br>You have not set your preferred skills yet. Please update your profile to get recommended jobs.
-                        </div>
-                    <?php } ?>
-                    <?php
-                    foreach ($recommended_jobs as $job) :
-                        $job_list_sql = mysqli_query($conn, "SELECT * FROM job_listing WHERE id =" . $job['job_id']);
-                        $job_list = mysqli_fetch_assoc($job_list_sql);
 
-                        $jinindustry_name = mysqli_query($conn, "SELECT * FROM jinindustry WHERE jinindustry_id =" . $job_list['jinindustry_id']);
-                        $jinindustry = mysqli_fetch_assoc($jinindustry_name);
-                    ?>
-                        <div>
-                            <h2><?php echo $job['job_title']; ?></h2>
-                            <p>Job Industry: <?php echo $jinindustry['jinindustry_name']; ?></p>
-                            <p>Job Salary: ₱<?php echo number_format($job_list['job_salary']); ?></p>
-                            <a href="job_details.php?job_id=<?php echo $job['job_id']; ?>" class="btn btn-primary">View Job</a>
-                            <hr>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+            <div class="col-md-4">
+                <h1>Recommended Jobs</h1>
+                <hr>
+                <?php if (empty($user_preferred_industry)) { ?>
+                    <div class="alert alert-warning fade show" role="alert">
+                        <strong>Warning!</strong><br>You have not set your preferred skills yet. Please update your profile to get recommended jobs.
+                    </div>
+                <?php } ?>
+                <?php
+                foreach ($recommended_jobs as $job) :
+                    $job_list_sql = mysqli_query($conn, "SELECT * FROM job_listing WHERE id =" . $job['job_id']);
+                    $job_list = mysqli_fetch_assoc($job_list_sql);
+
+                    $jinindustry_name = mysqli_query($conn, "SELECT * FROM jinindustry WHERE jinindustry_id =" . $job_list['jinindustry_id']);
+                    $jinindustry = mysqli_fetch_assoc($jinindustry_name);
+                ?>
+                    <div>
+                        <h2><?php echo $job['job_title']; ?></h2>
+                        <p>Job Industry: <?php echo $jinindustry['jinindustry_name']; ?></p>
+                        <p>Job Salary: ₱<?php echo number_format($job_list['job_salary']); ?></p>
+                        <a href="job_details.php?job_id=<?php echo $job['job_id']; ?>" class="btn btn-primary">View Job</a>
+                        <hr>
+                    </div>
+                <?php endforeach; ?>
+            </div>
             <?php
             }
             ?>
