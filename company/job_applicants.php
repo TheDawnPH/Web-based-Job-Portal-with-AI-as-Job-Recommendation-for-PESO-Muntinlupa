@@ -10,6 +10,7 @@ require $root . "/config.php";
 
 // if user is not logged in redirect to login page
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
+    $_SESSION['current_page'] = $_SERVER['REQUEST_URI'];
     header("location: /login.php");
     exit;
 }

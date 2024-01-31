@@ -13,6 +13,7 @@ $root = $_SERVER['DOCUMENT_ROOT'];
 require $root . "/config.php";
 
 if (!isset($_SESSION["user_type"]) || empty($_SESSION["user_type"])) {
+    $_SESSION['current_page'] = $_SERVER['REQUEST_URI'];
     header("location: /login.php");
     exit;
 }

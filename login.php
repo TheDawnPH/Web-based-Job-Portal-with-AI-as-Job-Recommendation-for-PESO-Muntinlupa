@@ -71,9 +71,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                 // if user type is admin redirect to /admin/dashboard.php
                                 if ($user_type == "admin") {
-                                    header("location: admin/dashboard.php");
+                                    if(isset($_SESSION['current_page']) && $_SESSION['current_page'] != "") {
+                                        header("location: " . $_SESSION['current_page']);
+                                    } else {
+                                        header("location: admin/dashboard.php");
+                                    }
                                 } else {
-                                    header("location: index.php");
+                                    if(isset($_SESSION['current_page']) && $_SESSION['current_page'] != "") {
+                                        header("location: " . $_SESSION['current_page']);
+                                    } else {
+                                        header("location: index.php");
+                                    }
                                 }
                             } else {
                                 $verification_err = "Your account is not yet verified. Please check your email for the verification link.";
