@@ -79,6 +79,7 @@ if (isset($_GET['verify_user']) && $_GET['verify_user'] == 1 && !empty($user_id)
         // echo $alert = "Please check your email for the verification link.";
     }
     // end of phpmailer
+    $success = "User has been verified.";
 }
 
 // Retrieve data from the users table where company_verified is 0
@@ -109,6 +110,12 @@ $result = mysqli_query($conn, $sql);
     <div class="container">
         <h1>Requests Portal</h1>
         <br>
+        <?php
+        // Display success message if user has been verified
+        if (isset($success)) {
+            echo "<div class='alert alert-success' role='alert'>$success</div>";
+        }
+        ?>
         <div class="table-responsive">
             <?php
             // Check if there are rows returned

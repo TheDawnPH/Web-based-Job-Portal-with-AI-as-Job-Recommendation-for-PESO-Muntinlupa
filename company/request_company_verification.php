@@ -53,7 +53,7 @@ $mail->AddAddress($_ENV['SMTP_EMAIL'], "PESO Admin");
 $mail->SetFrom($_ENV['SMTP_USER'], $row['fname'] . " " . $row['lname']);
 $mail->Subject = "PESO Muntinlupa - Email Verification";
 // set content of email that redirect admin to verify company
-$content = "Hello! There is a request to verification of company. Please click the link below to verify the company.<br><br><a href='https://{$website}/admin/verify_company.php?user_id={$_SESSION['user_id']}'>Verify Company</a><br><br>Thank you!";
+$content = "Hello! There is a request to verification of company. Please click the link below to verify the company.<br><br><a href='https://{$website}/admin/request_company.php?user_id={$_SESSION['user_id']}'>Verify Company</a><br><br>Thank you!";
 $mail->MsgHTML($content);
 if (!$mail->Send()) {
     // echo $warning = "Error while sending Email.";
