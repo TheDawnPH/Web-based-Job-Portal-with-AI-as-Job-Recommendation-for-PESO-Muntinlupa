@@ -47,6 +47,11 @@ if (!$result) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
+    <script>
+        function confirmAction() {
+            return confirm("Are you sure to delete this user?");
+        }
+    </script>
 </head>
 
 <body>
@@ -75,7 +80,7 @@ if (!$result) {
                     echo "<td>" . htmlspecialchars($row['fname']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['lname']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['user_type']) . "</td>";
-                    echo "<td><a class='btn btn-secondary' role='button' href='/profile.php?user_id=" . htmlspecialchars($row['user_id']) . "'>View Profile</a> <a class='btn btn-danger' role='button' onclick='if(!confirm('Are you sure to delete this user?')){ event.preventDefault() }' href='/admin/delete_user.php?user_id=" . htmlspecialchars($row['user_id']) . "'>Delete User</a></td>";
+                    echo "<td><a class='btn btn-secondary' role='button' href='/profile.php?user_id=" . htmlspecialchars($row['user_id']) . "'>View Profile</a> <a class='btn btn-danger' role='button' onclick='return confirmAction();' href='/admin/delete_user.php?user_id=" . htmlspecialchars($row['user_id']) . "'>Delete User</a></td>";
                     echo "</tr>";
                 }
                 echo "</table>";

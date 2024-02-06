@@ -48,6 +48,11 @@ $row = mysqli_fetch_assoc($result);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
+    <script>
+        function confirmAction_delete() {
+            return confirm("Are you sure to delete this listing?");
+        }
+    </script>
 </head>
 
 <body>
@@ -85,7 +90,7 @@ $row = mysqli_fetch_assoc($result);
                                 <td>
                                     <a href="/job_details.php?job_id=<?php echo htmlspecialchars($row["id"]); ?>" class="btn btn-primary">View</a>
                                     <a href="/company/add_job_applications.php?id=<?php echo htmlspecialchars($row["id"]); ?>" class="btn btn-warning">Edit</a>
-                                    <a href="/company/delete_job_listing.php?id=<?php echo htmlspecialchars($row["id"]); ?>" onclick="if(!confirm('Are you sure to delete this listing?')){ event.preventDefault() }" class="btn btn-danger">Delete</a>
+                                    <a href="/company/delete_job_listing.php?id=<?php echo htmlspecialchars($row["id"]); ?>" onclick="return confirmAction();" class="btn btn-danger">Delete</a>
                                 </td>
                             </tr>
                     <?php

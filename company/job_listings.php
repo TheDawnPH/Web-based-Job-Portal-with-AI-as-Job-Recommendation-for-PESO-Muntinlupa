@@ -49,6 +49,11 @@ $result = mysqli_stmt_get_result($stmt);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
+    <script>
+        function confirmAction() {
+            return confirm("Are you sure to delete this job listing?");
+        }
+    </script>
 </head>
 
 <body>
@@ -89,7 +94,7 @@ $result = mysqli_stmt_get_result($stmt);
                         echo "<td>" . htmlspecialchars($row["job_title"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row2["jinindustry_name"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["job_type"]) . "</td>";
-                        echo "<td><a class='btn btn-primary' href='/job_details.php?job_id=" . htmlspecialchars($row["id"]) . "'>View</a> <a class='btn btn-warning' href='add_job_applications.php?id=" . htmlspecialchars($row["id"]) . "'>Edit</a> <a class='btn btn-danger' onclick='if(!confirm('Are you sure to delete this listing?')){ event.preventDefault() }' href='delete_job_listing.php?id=" . htmlspecialchars($row["id"]) . "'>Delete</a></td>";
+                        echo "<td><a class='btn btn-primary' href='/job_details.php?job_id=" . htmlspecialchars($row["id"]) . "'>View</a> <a class='btn btn-warning' href='add_job_applications.php?id=" . htmlspecialchars($row["id"]) . "'>Edit</a> <a class='btn btn-danger'onclick='return confirmAction();' href='delete_job_listing.php?id=" . htmlspecialchars($row["id"]) . "'>Delete</a></td>";
                         echo "</tr>";
                     }
                     ?>

@@ -44,6 +44,15 @@ $result = mysqli_stmt_get_result($stmt);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
+    <script>
+        function confirmAction_accept() {
+            return confirm("Are you sure to accept this applicant?");
+        }
+
+        function confirmAction_deny() {
+            return confirm("Are you sure to deny this applicant?");
+        }
+    </script>
 </head>
 
 <body>
@@ -80,7 +89,7 @@ $result = mysqli_stmt_get_result($stmt);
                             echo "<td>" . htmlspecialchars($row["job_title"]) . "</td>";
                             // make name a link
                             echo "<td><a target='_blank' href='/profile.php?user_id=" . htmlspecialchars($row3["user_id"]) . "'>" . htmlspecialchars($row3["fname"]) . " " . htmlspecialchars($row3["lname"]) . "</a></td>";
-                            echo "<td><a href='accept_applicant.php?job_listing_id=" . htmlspecialchars($row["id"]) . "&user_id=" . htmlspecialchars($row3["user_id"]) . "' onclick='if(!confirm('Are you sure to accept this applicant?')){ event.preventDefault() }' class='btn btn-success'>Accept</a> <a href='deny_applicant.php?job_listing_id=" . htmlspecialchars($row["id"]) . "&user_id=" . htmlspecialchars($row3["user_id"]) . "' onclick='if(!confirm('Are you sure to deny this applicant?')){ event.preventDefault() }' class='btn btn-danger'>Deny</a></td>";
+                            echo "<td><a href='accept_applicant.php?job_listing_id=" . htmlspecialchars($row["id"]) . "&user_id=" . htmlspecialchars($row3["user_id"]) . "' onclick='return confirmAction_accept();' class='btn btn-success'>Accept</a> <a href='deny_applicant.php?job_listing_id=" . htmlspecialchars($row["id"]) . "&user_id=" . htmlspecialchars($row3["user_id"]) . "' onclick='return confirmAction_deny();' class='btn btn-danger'>Deny</a></td>";
                             echo "</tr>";
                         }
                     }
