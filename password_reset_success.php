@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" name="confirm_password" class="form-control" id="confirm_password" aria-describedby="confirm_passwordHelp">
                 <span class="text-danger"><?php echo $confirm_password_err; ?></span>
             </div>
-            <input type="submit" class="btn btn-primary" value="Reset Password">
+            <input type="submit" class="btn btn-primary" onclick="if(!confirm('Are you sure to reset your password?')){ event.preventDefault() }" value="Reset Password">
         </form>
     </div>
 </body>

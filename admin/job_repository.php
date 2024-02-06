@@ -85,7 +85,7 @@ $row = mysqli_fetch_assoc($result);
                                 <td>
                                     <a href="/job_details.php?job_id=<?php echo htmlspecialchars($row["id"]); ?>" class="btn btn-primary">View</a>
                                     <a href="/company/add_job_applications.php?id=<?php echo htmlspecialchars($row["id"]); ?>" class="btn btn-warning">Edit</a>
-                                    <a href="/company/delete_job_listing.php?id=<?php echo htmlspecialchars($row["id"]); ?>" class="btn btn-danger">Delete</a>
+                                    <a href="/company/delete_job_listing.php?id=<?php echo htmlspecialchars($row["id"]); ?>" onclick="if(!confirm('Are you sure to delete this listing?')){ event.preventDefault() }" class="btn btn-danger">Delete</a>
                                 </td>
                             </tr>
                     <?php

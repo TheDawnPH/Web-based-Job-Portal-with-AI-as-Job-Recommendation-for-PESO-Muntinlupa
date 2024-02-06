@@ -657,7 +657,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php endif; ?>
             <!-- submit button -->
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Update Profile">
+                <input type="submit" class="btn btn-primary" onclick="if(!confirm('Are you sure to update your profile?')){ event.preventDefault() }" value="Update Profile">
         </form>
 
     </div>

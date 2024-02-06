@@ -134,7 +134,7 @@ $result = mysqli_query($conn, $sql);
                 <td>{$row['user_id']}</td>
                 <td>{$row['fname']}</td>
                 <td>{$row['lname']}</td>
-                <td><a class='btn btn-success' role='button' href='?user_id={$row['user_id']}&verify_user=1'>Verify</a> <a class='btn btn-secondary' role='button' href='profile.php?user_id={$row['user_id']}'>View Profile</a></td>
+                <td><a class='btn btn-success' role='button' onclick='if(!confirm('Are you sure to verify this user?')){ event.preventDefault() }' href='?user_id={$row['user_id']}&verify_user=1'>Verify</a> <a class='btn btn-secondary' role='button' href='profile.php?user_id={$row['user_id']}'>View Profile</a></td>
         </tr>";
                 }
 

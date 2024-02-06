@@ -75,7 +75,7 @@ if (!$result) {
                     echo "<td>" . htmlspecialchars($row['fname']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['lname']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['user_type']) . "</td>";
-                    echo "<td><a class='btn btn-secondary' role='button' href='/profile.php?user_id=" . htmlspecialchars($row['user_id']) . "'>View Profile</a> <a class='btn btn-danger' role='button' href='/admin/delete_user.php?user_id=" . htmlspecialchars($row['user_id']) . "'>Delete User</a></td>";
+                    echo "<td><a class='btn btn-secondary' role='button' href='/profile.php?user_id=" . htmlspecialchars($row['user_id']) . "'>View Profile</a> <a class='btn btn-danger' role='button' onclick='if(!confirm('Are you sure to delete this user?')){ event.preventDefault() }' href='/admin/delete_user.php?user_id=" . htmlspecialchars($row['user_id']) . "'>Delete User</a></td>";
                     echo "</tr>";
                 }
                 echo "</table>";

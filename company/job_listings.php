@@ -89,7 +89,7 @@ $result = mysqli_stmt_get_result($stmt);
                         echo "<td>" . htmlspecialchars($row["job_title"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row2["jinindustry_name"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["job_type"]) . "</td>";
-                        echo "<td><a class='btn btn-primary' href='/job_details.php?job_id=" . htmlspecialchars($row["id"]) . "'>View</a> <a class='btn btn-warning' href='add_job_applications.php?id=" . htmlspecialchars($row["id"]) . "'>Edit</a> <a class='btn btn-danger' href='delete_job_listing.php?id=" . htmlspecialchars($row["id"]) . "'>Delete</a></td>";
+                        echo "<td><a class='btn btn-primary' href='/job_details.php?job_id=" . htmlspecialchars($row["id"]) . "'>View</a> <a class='btn btn-warning' href='add_job_applications.php?id=" . htmlspecialchars($row["id"]) . "'>Edit</a> <a class='btn btn-danger' onclick='if(!confirm('Are you sure to delete this listing?')){ event.preventDefault() }' href='delete_job_listing.php?id=" . htmlspecialchars($row["id"]) . "'>Delete</a></td>";
                         echo "</tr>";
                     }
                     ?>
