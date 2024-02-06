@@ -1,7 +1,7 @@
 <?php
 $login = "<a class='nav-link' href='/login.php'>Login/Register</a>";
 $profile = "<a class='nav-link' href='/profile.php'>Profile</a>";
-$logout = "<a class='nav-link' href='/logout.php'>Logout</a>";
+$logout = "<a class='nav-link' onclick='return logout();' href='/logout.php'>Logout</a>";
 $applications = "<a class='nav-link' href='/job_applications.php'> Job Applications</a>";
 ?>
 
@@ -23,6 +23,11 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
           <a class="nav-link" href="/jobs.php">Jobs</a>
         </li>
         <li class="nav-item">
+          <script>
+            function logout() {
+              return confirm("Are you sure to logout?");
+            }
+          </script>
           <?php
           if (isset($_SESSION['loggedin'])) {
             echo $logout;
