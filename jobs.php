@@ -63,17 +63,17 @@ include 'config.php';
                 <label for="salaryRange">Filter by Salary Range:</label>
                 <select id="salaryRange" class="form-control">
                     <option value="">All</option>
-                    <option value="10000">Below 10,000</option>
-                    <option value="20000">11,000 - 20,000</option>
-                    <option value="30000">21,000 - 30,000</option>
-                    <option value="40000">31,000 - 40,000</option>
-                    <option value="50000">41,000 - 50,000</option>
-                    <option value="60000">51,000 - 60,000</option>
-                    <option value="70000">61,000 - 70,000</option>
-                    <option value="80000">71,000 - 80,000</option>
-                    <option value="90000">81,000 - 90,000</option>
-                    <option value="100000">91,000 - 100,000</option>
-                    <option value="100000">Above 100,000</option>
+                    <option value="10000">Below ₱10,000</option>
+                    <option value="11000">₱11,000 - ₱20,000</option>
+                    <option value="21000">₱21,000 - ₱30,000</option>
+                    <option value="31000">₱31,000 - ₱40,000</option>
+                    <option value="41000">₱41,000 - ₱50,000</option>
+                    <option value="51000">₱51,000 - ₱60,000</option>
+                    <option value="61000">₱61,000 - ₱70,000</option>
+                    <option value="71000">₱71,000 - ₱80,000</option>
+                    <option value="81000">₱81,000 - ₱90,000</option>
+                    <option value="91000">₱91,000 - ₱100,000</option>
+                    <option value="100000">Above ₱100,000</option>
                 </select><br>
 
                 <!-- JavaScript code for search and filter -->
@@ -112,9 +112,17 @@ include 'config.php';
                                 var typeMatch = selectedType === '' || selectedType === jobType;
                                 var industryMatch = selectedIndustry === '' || selectedIndustry === jobIndustry;
                                 var salaryMatch = selectedSalary === '' ||
-                                    (selectedSalary === '100001' && jobSalary > 100000) ||
-                                    (jobSalary >= (parseInt(selectedSalary, 10) - 10000) && jobSalary <= parseInt(selectedSalary, 10));
-
+                                    (selectedSalary === '10000' && jobSalary < 10999) ||
+                                    (selectedSalary === '11000' && jobSalary >= 11000 && jobSalary <= 20999) ||
+                                    (selectedSalary === '21000' && jobSalary >= 21000 && jobSalary <= 30999) ||
+                                    (selectedSalary === '31000' && jobSalary >= 31000 && jobSalary <= 40999) ||
+                                    (selectedSalary === '41000' && jobSalary >= 41000 && jobSalary <= 50999) ||
+                                    (selectedSalary === '51000' && jobSalary >= 51000 && jobSalary <= 60999) ||
+                                    (selectedSalary === '61000' && jobSalary >= 61000 && jobSalary <= 70999) ||
+                                    (selectedSalary === '71000' && jobSalary >= 71000 && jobSalary <= 80999) ||
+                                    (selectedSalary === '81000' && jobSalary >= 81000 && jobSalary <= 90999) ||
+                                    (selectedSalary === '91000' && jobSalary >= 91000 && jobSalary <= 100999) ||
+                                    (selectedSalary === '100000' && jobSalary > 100000);
                                 if (titleMatch && typeMatch && industryMatch && salaryMatch) {
                                     row.style.display = '';
                                 } else {
