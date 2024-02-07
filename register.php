@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->MsgHTML($content);
                 if (!$mail->Send()) {
                     $warning = "Error while sending Email.";
-                    var_dump($mail);
+                    //var_dump($mail);
                 } else {
                     $alert = "Please check your email for the verification link.";
                 }
@@ -211,7 +211,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo '<div class="alert alert-danger">' . $confirm_password_err . '</div>';
                     }
                     ?>
-                    <div class="alert alert-danger">Hello, we have disable functionalities of registering due to SMTP Server problem, we are still looking further into this problem.<br><br>For the meantime, you can't use services connected to email sending.</div>
                     <div class="mb-4">
                         <div class="form-text">Already have an account? <a href="login.php">Login here</a>.</div>
                     </div>
@@ -257,7 +256,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 Republic Act 10173 or Data Privacy Act of 2012</a>.</div>
                     </div>
                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                    <input type="submit" class="btn btn-primary disabled" value="Register">
+                    <input type="submit" class="btn btn-primary" value="Register">
                 </form>
             </div>
         </div>

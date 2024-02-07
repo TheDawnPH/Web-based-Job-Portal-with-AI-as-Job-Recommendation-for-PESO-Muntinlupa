@@ -82,7 +82,6 @@ function getJobAcceptanceRate($job_id)
         <div class="cover"></div>
     </div>
     <div class="container">
-        <div class="alert alert-danger">Hello, we have disabled some functionalities due to SMTP Server problem, we are still looking further into this problem.<br>For the meantime, you can't use services connected to email sending.<br><br><b>Do you want to test our system? login with these credentials<br>Email: test@muntinlupajobportal.site<br>Password: testjobportal</b><br>Thank you! - Lyco</div>
         <div class="row row-cols-1 row-cols-md-2 g-3">
             <?php
             if (isset($_SESSION["user_type"]) && $_SESSION["user_type"] === 'applicant') {
