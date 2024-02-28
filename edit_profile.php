@@ -44,26 +44,8 @@ $jinindustry = $row["jinindustry_id"];
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // check if nsrp form and biodata is pdf or docx
-    if (!empty($_FILES["profile_picture"]["name"])) {
-        $image_name = $_FILES["profile_picture"]["name"];
-        $image_name_ext = pathinfo($image_name, PATHINFO_EXTENSION);
-        if ($image_name_ext != "png" && $image_name_ext != "jpg" && $image_name_ext != "jpeg") {
-            $error = "Image must be a png, jpg, or jpeg file.";
-        }
-    } elseif (!empty($_FILES["nsrp_form"]["name"])) {
-        $nsrp_form = $_FILES["nsrp_form"]["name"];
-        $nsrp_form_ext = pathinfo($nsrp_form, PATHINFO_EXTENSION);
-        if ($nsrp_form_ext != "pdf" && $nsrp_form_ext != "docx") {
-            $error = "NSRP form must be a PDF or DOCX file.";
-        }
-    } elseif (!empty($_FILES["biodata_form"]["name"])) {
-        $biodata_form = $_FILES["biodata_form"]["name"];
-        $biodata_form_ext = pathinfo($biodata_form, PATHINFO_EXTENSION);
-        if ($biodata_form_ext != "pdf" && $biodata_form_ext != "docx") {
-            $error = "Biodata form must be a PDF or DOCX file.";
-        }
-    } else {
+    if (isset($_FILES["nsrp_form"]) || isset($_FILES["biodata_form"]) || isset($_FILES["profile_picture"]) || isset($_FILES["loi"]) || isset($_FILES["cp"]) || isset($_FILES["sec_accredit"]) || isset($_FILES["cda_license"]) || isset($_FILES["dole_license"]) || isset($_FILES["loc"]) || isset($_FILES["mbpermit"]) || isset($_FILES["job_vacant"]) || isset($_FILES["job_solicitation"]) || isset($_FILES["phjobnet_reg"]) || isset($_FILES["cert_nopendingcase"]) || isset($_FILES["cert_regSSS"]) || isset($_FILES["cert_regPhHealth"]) || isset($_FILES["cert_regPGIBG"]) || isset($_FILES["sketch_map"]) || isset($_FILES["2303_bir"])) {
+        // check if nsrp form and biodata is pdf or docx
         // Prepare SQL statement
         $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, school_name=?, school_year_begin=IFNULL(?, school_year_begin) , school_year_end= IFNULL(?, school_year_end), technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image), jinindustry_id = IFNULL(?, jinindustry_id) WHERE user_id=?";
 
@@ -96,13 +78,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             // Execute the prepared statement
+            if (!empty($_FILES["profile_picture"]["name"])) {
+                $image_name = $_FILES["profile_picture"]["name"];
+                $image_name_ext = pathinfo($image_name, PATHINFO_EXTENSION);
+                if ($image_name_ext != "png" && $image_name_ext != "jpg" && $image_name_ext != "jpeg") {
+                    $error = "Image must be a png, jpg, or jpeg file.";
+                }
+            }
+            if (!empty($_FILES["nsrp_form"]["name"])) {
+                $nsrp_form = $_FILES["nsrp_form"]["name"];
+                $nsrp_form_ext = pathinfo($nsrp_form, PATHINFO_EXTENSION);
+                if ($nsrp_form_ext != "pdf" && $nsrp_form_ext != "docx") {
+                    $error = "NSRP form must be a PDF or DOCX file.";
+                }
+            }
+            if (!empty($_FILES["biodata_form"]["name"])) {
+                $biodata_form = $_FILES["biodata_form"]["name"];
+                $biodata_form_ext = pathinfo($biodata_form, PATHINFO_EXTENSION);
+                if ($biodata_form_ext != "pdf" && $biodata_form_ext != "docx") {
+                    $error = "Biodata form must be a PDF or DOCX file.";
+                }
+            }
+
             if (mysqli_stmt_execute($stmt)) {
                 // Create a directory for the user if it doesn't exist
                 $user_upload_dir = "uploads/" . $user_id;
                 if (!is_dir($user_upload_dir)) {
                     mkdir($user_upload_dir, 0755, true);
                 }
-
 
                 if (!empty($_FILES["nsrp_form"]["name"])) {
                     move_uploaded_file($_FILES["nsrp_form"]["tmp_name"], $user_upload_dir . "/" . $_FILES["nsrp_form"]["name"]);
@@ -130,290 +133,305 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($loi_ext != "pdf" && $loi_ext != "docx") {
                 $error = "Letter of Intent must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["cp"]["name"])) {
+        }
+        if (!empty($_FILES["cp"]["name"])) {
             $cp = $_FILES["cp"]["name"];
             $cp_ext = pathinfo($cp, PATHINFO_EXTENSION);
             if ($cp_ext != "pdf" && $cp_ext != "docx") {
                 $error = "Company Profile must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["sec_accredit"]["name"])) {
+        }
+        if (!empty($_FILES["sec_accredit"]["name"])) {
             $sec_accredit = $_FILES["sec_accredit"]["name"];
             $sec_accredit_ext = pathinfo($sec_accredit, PATHINFO_EXTENSION);
             if ($sec_accredit_ext != "pdf" && $sec_accredit_ext != "docx") {
                 $error = "SEC Accreditation must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["cda_license"]["name"])) {
+        }
+        if (!empty($_FILES["cda_license"]["name"])) {
             $cda_license = $_FILES["cda_license"]["name"];
             $cda_license_ext = pathinfo($cda_license, PATHINFO_EXTENSION);
             if ($cda_license_ext != "pdf" && $cda_license_ext != "docx") {
                 $error = "CDA License must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["dole_license"]["name"])) {
+        }
+        if (!empty($_FILES["dole_license"]["name"])) {
             $dole_license = $_FILES["dole_license"]["name"];
             $dole_license_ext = pathinfo($dole_license, PATHINFO_EXTENSION);
             if ($dole_license_ext != "pdf" && $dole_license_ext != "docx") {
                 $error = "DOLE License must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["loc"]["name"])) {
+        }
+        if (!empty($_FILES["loc"]["name"])) {
             $loc = $_FILES["loc"]["name"];
             $loc_ext = pathinfo($loc, PATHINFO_EXTENSION);
             if ($loc_ext != "pdf" && $loc_ext != "docx") {
                 $error = "LOC must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["mbpermit"]["name"])) {
+        }
+        if (!empty($_FILES["mbpermit"]["name"])) {
             $mbpermit = $_FILES["mbpermit"]["name"];
             $mbpermit_ext = pathinfo($mbpermit, PATHINFO_EXTENSION);
             if ($mbpermit_ext != "pdf" && $mbpermit_ext != "docx") {
                 $error = "MB Permit must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["job_vacant"]["name"])) {
+        }
+        if (!empty($_FILES["job_vacant"]["name"])) {
             $job_vacant = $_FILES["job_vacant"]["name"];
             $job_vacant_ext = pathinfo($job_vacant, PATHINFO_EXTENSION);
             if ($job_vacant_ext != "pdf" && $job_vacant_ext != "docx") {
                 $error = "Job Vacant must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["job_solicitation"]["name"])) {
+        }
+        if (!empty($_FILES["job_solicitation"]["name"])) {
             $job_solicitation = $_FILES["job_solicitation"]["name"];
             $job_solicitation_ext = pathinfo($job_solicitation, PATHINFO_EXTENSION);
             if ($job_solicitation_ext != "pdf" && $job_solicitation_ext != "docx") {
                 $error = "Job Solicitation must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["phjobnet_reg"]["name"])) {
+        }
+        if (!empty($_FILES["phjobnet_reg"]["name"])) {
             $phjobnet_reg = $_FILES["phjobnet_reg"]["name"];
             $phjobnet_reg_ext = pathinfo($phjobnet_reg, PATHINFO_EXTENSION);
             if ($phjobnet_reg_ext != "pdf" && $phjobnet_reg_ext != "docx") {
                 $error = "PH Jobnet Registration must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["cert_nopendingcase"]["name"])) {
+        }
+        if (!empty($_FILES["cert_nopendingcase"]["name"])) {
             $cert_nopendingcase = $_FILES["cert_nopendingcase"]["name"];
             $cert_nopendingcase_ext = pathinfo($cert_nopendingcase, PATHINFO_EXTENSION);
             if ($cert_nopendingcase_ext != "pdf" && $cert_nopendingcase_ext != "docx") {
                 $error = "Certificate of No Pending Case must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["cert_regSSS"]["name"])) {
+        }
+        if (!empty($_FILES["cert_regSSS"]["name"])) {
             $cert_regSSS = $_FILES["cert_regSSS"]["name"];
             $cert_regSSS_ext = pathinfo($cert_regSSS, PATHINFO_EXTENSION);
             if ($cert_regSSS_ext != "pdf" && $cert_regSSS_ext != "docx") {
                 $error = "Certificate of Registration with SSS must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["cert_regPhHealth"]["name"])) {
+        }
+        if (!empty($_FILES["cert_regPhHealth"]["name"])) {
             $cert_regPhHealth = $_FILES["cert_regPhHealth"]["name"];
             $cert_regPhHealth_ext = pathinfo($cert_regPhHealth, PATHINFO_EXTENSION);
             if ($cert_regPhHealth_ext != "pdf" && $cert_regPhHealth_ext != "docx") {
                 $error = "Certificate of Registration with PhilHealth must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["cert_regPGIBG"]["name"])) {
+        }
+        if (!empty($_FILES["cert_regPGIBG"]["name"])) {
             $cert_regPGIBG = $_FILES["cert_regPGIBG"]["name"];
             $cert_regPGIBG_ext = pathinfo($cert_regPGIBG, PATHINFO_EXTENSION);
             if ($cert_regPGIBG_ext != "pdf" && $cert_regPGIBG_ext != "docx") {
                 $error = "Certificate of Registration with PAG-IBIG must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["sketch_map"]["name"])) {
+        }
+        if (!empty($_FILES["sketch_map"]["name"])) {
             $sketch_map = $_FILES["sketch_map"]["name"];
             $sketch_map_ext = pathinfo($sketch_map, PATHINFO_EXTENSION);
             if ($sketch_map_ext != "pdf" && $sketch_map_ext != "docx") {
                 $error = "Sketch Map must be a PDF or DOCX file.";
             }
-        } elseif (!empty($_FILES["2303_bir"]["name"])) {
+        }
+        if (!empty($_FILES["2303_bir"]["name"])) {
             $bir_2303 = $_FILES["2303_bir"]["name"];
             $bir_2303_ext = pathinfo($bir_2303, PATHINFO_EXTENSION);
             if ($bir_2303_ext != "pdf" && $bir_2303_ext != "docx") {
                 $error = "BIR 2303 must be a PDF or DOCX file.";
             }
-        } else {
-            // check if company documents exist in company_documents table
-            $company_documents_sql = "SELECT * FROM company_documents WHERE user_id = '$user_id'";
-            $company_documents_result = mysqli_query($conn, $company_documents_sql);
-            $company_documents_row = mysqli_fetch_assoc($company_documents_result);
+        }
+        // check if company documents exist in company_documents table
+        $company_documents_sql = "SELECT * FROM company_documents WHERE user_id = '$user_id'";
+        $company_documents_result = mysqli_query($conn, $company_documents_sql);
+        $company_documents_row = mysqli_fetch_assoc($company_documents_result);
 
-            // if company documents exist, update company_documents table
-            if ($company_documents_row > 0) {
-                // Prepare SQL statement
-                $company_documents_sql = "UPDATE company_documents SET loi = IFNULL(?, loi), cp = IFNULL(?, cp), sec_accredit = IFNULL(?, sec_accredit), cda_license = IFNULL(?, cda_license), dole_license = IFNULL(?, dole_license), loc = IFNULL(?, loc), mbpermit = IFNULL(?, mbpermit), job_vacant = IFNULL(?, job_vacant), job_solicitation = IFNULL(?, job_solicitation), phjobnet_reg = IFNULL(?, phjobnet_reg), cert_nopendingcase = IFNULL(?, cert_nopendingcase), cert_regSSS = IFNULL(?, cert_regSSS), cert_regPhHealth = IFNULL(?, cert_regPhHealth), cert_regPGIBG = IFNULL(?, cert_regPGIBG), sketch_map = IFNULL(?, sketch_map), 2303_bir = IFNULL(?, 2303_bir) WHERE user_id = ?";
+        // if company documents exist, update company_documents table
+        if ($company_documents_row > 0) {
+            // Prepare SQL statement
+            $company_documents_sql = "UPDATE company_documents SET loi = IFNULL(?, loi), cp = IFNULL(?, cp), sec_accredit = IFNULL(?, sec_accredit), cda_license = IFNULL(?, cda_license), dole_license = IFNULL(?, dole_license), loc = IFNULL(?, loc), mbpermit = IFNULL(?, mbpermit), job_vacant = IFNULL(?, job_vacant), job_solicitation = IFNULL(?, job_solicitation), phjobnet_reg = IFNULL(?, phjobnet_reg), cert_nopendingcase = IFNULL(?, cert_nopendingcase), cert_regSSS = IFNULL(?, cert_regSSS), cert_regPhHealth = IFNULL(?, cert_regPhHealth), cert_regPGIBG = IFNULL(?, cert_regPGIBG), sketch_map = IFNULL(?, sketch_map), 2303_bir = IFNULL(?, 2303_bir) WHERE user_id = ?";
 
-                if ($stmt = mysqli_prepare($conn, $company_documents_sql)) {
-                    // Bind variables to the prepared statement as parameters
-                    mysqli_stmt_bind_param($stmt, "sssssssssssssssss", $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir, $param_user_id);
+            if ($stmt = mysqli_prepare($conn, $company_documents_sql)) {
+                // Bind variables to the prepared statement as parameters
+                mysqli_stmt_bind_param($stmt, "sssssssssssssssss", $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir, $param_user_id);
 
-                    // Set parameters
-                    $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : null;
-                    $param_cp = !empty($_FILES["cp"]["name"]) ? $_FILES["cp"]["name"] : null;
-                    $param_sec_accredit = !empty($_FILES["sec_accredit"]["name"]) ? $_FILES["sec_accredit"]["name"] : null;
-                    $param_cda_license = !empty($_FILES["cda_license"]["name"]) ? $_FILES["cda_license"]["name"] : null;
-                    $param_dole_license = !empty($_FILES["dole_license"]["name"]) ? $_FILES["dole_license"]["name"] : null;
-                    $param_loc = !empty($_FILES["loc"]["name"]) ? $_FILES["loc"]["name"] : null;
-                    $param_mbpermit = !empty($_FILES["mbpermit"]["name"]) ? $_FILES["mbpermit"]["name"] : null;
-                    $param_job_vacant = !empty($_FILES["job_vacant"]["name"]) ? $_FILES["job_vacant"]["name"] : null;
-                    $param_job_solicitation = !empty($_FILES["job_solicitation"]["name"]) ? $_FILES["job_solicitation"]["name"] : null;
-                    $param_phjobnet_reg = !empty($_FILES["phjobnet_reg"]["name"]) ? $_FILES["phjobnet_reg"]["name"] : null;
-                    $param_cert_nopendingcase = !empty($_FILES["cert_nopendingcase"]["name"]) ? $_FILES["cert_nopendingcase"]["name"] : null;
-                    $param_cert_regSSS = !empty($_FILES["cert_regSSS"]["name"]) ? $_FILES["cert_regSSS"]["name"] : null;
-                    $param_cert_regPhHealth = !empty($_FILES["cert_regPhHealth"]["name"]) ? $_FILES["cert_regPhHealth"]["name"] : null;
-                    $param_cert_regPGIBG = !empty($_FILES["cert_regPGIBG"]["name"]) ? $_FILES["cert_regPGIBG"]["name"] : null;
-                    $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : null;
-                    $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : null;
-                    $param_user_id = $user_id;
+                // Set parameters
+                $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : null;
+                $param_cp = !empty($_FILES["cp"]["name"]) ? $_FILES["cp"]["name"] : null;
+                $param_sec_accredit = !empty($_FILES["sec_accredit"]["name"]) ? $_FILES["sec_accredit"]["name"] : null;
+                $param_cda_license = !empty($_FILES["cda_license"]["name"]) ? $_FILES["cda_license"]["name"] : null;
+                $param_dole_license = !empty($_FILES["dole_license"]["name"]) ? $_FILES["dole_license"]["name"] : null;
+                $param_loc = !empty($_FILES["loc"]["name"]) ? $_FILES["loc"]["name"] : null;
+                $param_mbpermit = !empty($_FILES["mbpermit"]["name"]) ? $_FILES["mbpermit"]["name"] : null;
+                $param_job_vacant = !empty($_FILES["job_vacant"]["name"]) ? $_FILES["job_vacant"]["name"] : null;
+                $param_job_solicitation = !empty($_FILES["job_solicitation"]["name"]) ? $_FILES["job_solicitation"]["name"] : null;
+                $param_phjobnet_reg = !empty($_FILES["phjobnet_reg"]["name"]) ? $_FILES["phjobnet_reg"]["name"] : null;
+                $param_cert_nopendingcase = !empty($_FILES["cert_nopendingcase"]["name"]) ? $_FILES["cert_nopendingcase"]["name"] : null;
+                $param_cert_regSSS = !empty($_FILES["cert_regSSS"]["name"]) ? $_FILES["cert_regSSS"]["name"] : null;
+                $param_cert_regPhHealth = !empty($_FILES["cert_regPhHealth"]["name"]) ? $_FILES["cert_regPhHealth"]["name"] : null;
+                $param_cert_regPGIBG = !empty($_FILES["cert_regPGIBG"]["name"]) ? $_FILES["cert_regPGIBG"]["name"] : null;
+                $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : null;
+                $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : null;
+                $param_user_id = $user_id;
 
-                    // Execute the prepared statement
-                    if (mysqli_stmt_execute($stmt)) {
-                        // Move uploaded files to the user-specific folder
-                        $user_upload_dir = "uploads/" . $user_id;
-                        if (!is_dir($user_upload_dir)) {
-                            mkdir($user_upload_dir, 0755, true);
-                        }
-
-                        if (!empty($_FILES["loi"]["name"])) {
-                            move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
-                        }
-                        if (!empty($_FILES["cp"]["name"])) {
-                            move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
-                        }
-                        if (!empty($_FILES["sec_accredit"]["name"])) {
-                            move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
-                        }
-                        if (!empty($_FILES["cda_license"]["name"])) {
-                            move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
-                        }
-                        if (!empty($_FILES["dole_license"]["name"])) {
-                            move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
-                        }
-                        if (!empty($_FILES["loc"]["name"])) {
-                            move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
-                        }
-                        if (!empty($_FILES["mbpermit"]["name"])) {
-                            move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
-                        }
-                        if (!empty($_FILES["job_vacant"]["name"])) {
-                            move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
-                        }
-                        if (!empty($_FILES["job_solicitation"]["name"])) {
-                            move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
-                        }
-                        if (!empty($_FILES["phjobnet_reg"]["name"])) {
-                            move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
-                        }
-                        if (!empty($_FILES["cert_nopendingcase"]["name"])) {
-                            move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
-                        }
-                        if (!empty($_FILES["cert_regSSS"]["name"])) {
-                            move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
-                        }
-                        if (!empty($_FILES["cert_regPhHealth"]["name"])) {
-                            move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
-                        }
-                        if (!empty($_FILES["cert_regPGIBG"]["name"])) {
-                            move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
-                        }
-                        if (!empty($_FILES["sketch_map"]["name"])) {
-                            move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
-                        }
-                        if (!empty($_FILES["2303_bir"]["name"])) {
-                            move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
-                        }
-
-                        $success = "Profile updated successfully!";
-                    } else {
-                        $error = "Error updating profile.";
+                // Execute the prepared statement
+                if (mysqli_stmt_execute($stmt)) {
+                    // Move uploaded files to the user-specific folder
+                    $user_upload_dir = "uploads/" . $user_id;
+                    if (!is_dir($user_upload_dir)) {
+                        mkdir($user_upload_dir, 0755, true);
                     }
 
-                    // Close statement
-                    mysqli_stmt_close($stmt);
+                    if (!empty($_FILES["loi"]["name"])) {
+                        move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
+                    }
+                    if (!empty($_FILES["cp"]["name"])) {
+                        move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
+                    }
+                    if (!empty($_FILES["sec_accredit"]["name"])) {
+                        move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
+                    }
+                    if (!empty($_FILES["cda_license"]["name"])) {
+                        move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
+                    }
+                    if (!empty($_FILES["dole_license"]["name"])) {
+                        move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
+                    }
+                    if (!empty($_FILES["loc"]["name"])) {
+                        move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
+                    }
+                    if (!empty($_FILES["mbpermit"]["name"])) {
+                        move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
+                    }
+                    if (!empty($_FILES["job_vacant"]["name"])) {
+                        move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
+                    }
+                    if (!empty($_FILES["job_solicitation"]["name"])) {
+                        move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
+                    }
+                    if (!empty($_FILES["phjobnet_reg"]["name"])) {
+                        move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_nopendingcase"]["name"])) {
+                        move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_regSSS"]["name"])) {
+                        move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_regPhHealth"]["name"])) {
+                        move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_regPGIBG"]["name"])) {
+                        move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
+                    }
+                    if (!empty($_FILES["sketch_map"]["name"])) {
+                        move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
+                    }
+                    if (!empty($_FILES["2303_bir"]["name"])) {
+                        move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
+                    }
 
-                    // Close connection
-                    mysqli_close($conn);
+                    $success = "Profile updated successfully!";
+                } else {
+                    $error = "Error updating profile.";
                 }
-            } else {
-                // insert data into company_documents table
-                $company_documents_sql2 = "INSERT INTO company_documents (loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, sketch_map, 2303_bir, user_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                if ($stmt = mysqli_prepare($conn, $company_documents_sql2)) {
-                    // Bind variables to the prepared statement as parameters
-                    mysqli_stmt_bind_param($stmt, "sssssssssssssssss", $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir, $param_user_id);
 
-                    // Set parameters
-                    $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : null;
-                    $param_cp = !empty($_FILES["cp"]["name"]) ? $_FILES["cp"]["name"] : null;
-                    $param_sec_accredit = !empty($_FILES["sec_accredit"]["name"]) ? $_FILES["sec_accredit"]["name"] : null;
-                    $param_cda_license = !empty($_FILES["cda_license"]["name"]) ? $_FILES["cda_license"]["name"] : null;
-                    $param_dole_license = !empty($_FILES["dole_license"]["name"]) ? $_FILES["dole_license"]["name"] : null;
-                    $param_loc = !empty($_FILES["loc"]["name"]) ? $_FILES["loc"]["name"] : null;
-                    $param_mbpermit = !empty($_FILES["mbpermit"]["name"]) ? $_FILES["mbpermit"]["name"] : null;
-                    $param_job_vacant = !empty($_FILES["job_vacant"]["name"]) ? $_FILES["job_vacant"]["name"] : null;
-                    $param_job_solicitation = !empty($_FILES["job_solicitation"]["name"]) ? $_FILES["job_solicitation"]["name"] : null;
-                    $param_phjobnet_reg = !empty($_FILES["phjobnet_reg"]["name"]) ? $_FILES["phjobnet_reg"]["name"] : null;
-                    $param_cert_nopendingcase = !empty($_FILES["cert_nopendingcase"]["name"]) ? $_FILES["cert_nopendingcase"]["name"] : null;
-                    $param_cert_regSSS = !empty($_FILES["cert_regSSS"]["name"]) ? $_FILES["cert_regSSS"]["name"] : null;
-                    $param_cert_regPhHealth = !empty($_FILES["cert_regPhHealth"]["name"]) ? $_FILES["cert_regPhHealth"]["name"] : null;
-                    $param_cert_regPGIBG = !empty($_FILES["cert_regPGIBG"]["name"]) ? $_FILES["cert_regPGIBG"]["name"] : null;
-                    $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : null;
-                    $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : null;
-                    $param_user_id = $user_id;
+                // Close statement
+                mysqli_stmt_close($stmt);
 
-                    // Execute the prepared statement
-                    if (mysqli_stmt_execute($stmt)) {
-                        // Move uploaded files to the user-specific folder
-                        $user_upload_dir = "uploads/" . $user_id;
-                        if (!is_dir($user_upload_dir)) {
-                            mkdir($user_upload_dir, 0755, true);
-                        }
+                // Close connection
+                mysqli_close($conn);
+            }
+        } else {
+            // insert data into company_documents table
+            $company_documents_sql2 = "INSERT INTO company_documents (loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, sketch_map, 2303_bir, user_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            if ($stmt = mysqli_prepare($conn, $company_documents_sql2)) {
+                // Bind variables to the prepared statement as parameters
+                mysqli_stmt_bind_param($stmt, "sssssssssssssssss", $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir, $param_user_id);
 
-                        if (!empty($_FILES["loi"]["name"])) {
-                            move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
-                        }
-                        if (!empty($_FILES["cp"]["name"])) {
-                            move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
-                        }
-                        if (!empty($_FILES["sec_accredit"]["name"])) {
-                            move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
-                        }
-                        if (!empty($_FILES["cda_license"]["name"])) {
-                            move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
-                        }
-                        if (!empty($_FILES["dole_license"]["name"])) {
-                            move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
-                        }
-                        if (!empty($_FILES["loc"]["name"])) {
-                            move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
-                        }
-                        if (!empty($_FILES["mbpermit"]["name"])) {
-                            move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
-                        }
-                        if (!empty($_FILES["job_vacant"]["name"])) {
-                            move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
-                        }
-                        if (!empty($_FILES["job_solicitation"]["name"])) {
-                            move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
-                        }
-                        if (!empty($_FILES["phjobnet_reg"]["name"])) {
-                            move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
-                        }
-                        if (!empty($_FILES["cert_nopendingcase"]["name"])) {
-                            move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
-                        }
-                        if (!empty($_FILES["cert_regSSS"]["name"])) {
-                            move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
-                        }
-                        if (!empty($_FILES["cert_regPhHealth"]["name"])) {
-                            move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
-                        }
-                        if (!empty($_FILES["cert_regPGIBG"]["name"])) {
-                            move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
-                        }
-                        if (!empty($_FILES["sketch_map"]["name"])) {
-                            move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
-                        }
-                        if (!empty($_FILES["2303_bir"]["name"])) {
-                            move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
-                        }
+                // Set parameters
+                $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : null;
+                $param_cp = !empty($_FILES["cp"]["name"]) ? $_FILES["cp"]["name"] : null;
+                $param_sec_accredit = !empty($_FILES["sec_accredit"]["name"]) ? $_FILES["sec_accredit"]["name"] : null;
+                $param_cda_license = !empty($_FILES["cda_license"]["name"]) ? $_FILES["cda_license"]["name"] : null;
+                $param_dole_license = !empty($_FILES["dole_license"]["name"]) ? $_FILES["dole_license"]["name"] : null;
+                $param_loc = !empty($_FILES["loc"]["name"]) ? $_FILES["loc"]["name"] : null;
+                $param_mbpermit = !empty($_FILES["mbpermit"]["name"]) ? $_FILES["mbpermit"]["name"] : null;
+                $param_job_vacant = !empty($_FILES["job_vacant"]["name"]) ? $_FILES["job_vacant"]["name"] : null;
+                $param_job_solicitation = !empty($_FILES["job_solicitation"]["name"]) ? $_FILES["job_solicitation"]["name"] : null;
+                $param_phjobnet_reg = !empty($_FILES["phjobnet_reg"]["name"]) ? $_FILES["phjobnet_reg"]["name"] : null;
+                $param_cert_nopendingcase = !empty($_FILES["cert_nopendingcase"]["name"]) ? $_FILES["cert_nopendingcase"]["name"] : null;
+                $param_cert_regSSS = !empty($_FILES["cert_regSSS"]["name"]) ? $_FILES["cert_regSSS"]["name"] : null;
+                $param_cert_regPhHealth = !empty($_FILES["cert_regPhHealth"]["name"]) ? $_FILES["cert_regPhHealth"]["name"] : null;
+                $param_cert_regPGIBG = !empty($_FILES["cert_regPGIBG"]["name"]) ? $_FILES["cert_regPGIBG"]["name"] : null;
+                $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : null;
+                $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : null;
+                $param_user_id = $user_id;
 
-                        $success = "Profile updated successfully!";
-                    } else {
-                        $error = "Error updating profile.";
+                // Execute the prepared statement
+                if (mysqli_stmt_execute($stmt)) {
+                    // Move uploaded files to the user-specific folder
+                    $user_upload_dir = "uploads/" . $user_id;
+                    if (!is_dir($user_upload_dir)) {
+                        mkdir($user_upload_dir, 0755, true);
                     }
+
+                    if (!empty($_FILES["loi"]["name"])) {
+                        move_uploaded_file($_FILES["loi"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loi"]["name"]);
+                    }
+                    if (!empty($_FILES["cp"]["name"])) {
+                        move_uploaded_file($_FILES["cp"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cp"]["name"]);
+                    }
+                    if (!empty($_FILES["sec_accredit"]["name"])) {
+                        move_uploaded_file($_FILES["sec_accredit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sec_accredit"]["name"]);
+                    }
+                    if (!empty($_FILES["cda_license"]["name"])) {
+                        move_uploaded_file($_FILES["cda_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cda_license"]["name"]);
+                    }
+                    if (!empty($_FILES["dole_license"]["name"])) {
+                        move_uploaded_file($_FILES["dole_license"]["tmp_name"], $user_upload_dir . "/" . $_FILES["dole_license"]["name"]);
+                    }
+                    if (!empty($_FILES["loc"]["name"])) {
+                        move_uploaded_file($_FILES["loc"]["tmp_name"], $user_upload_dir . "/" . $_FILES["loc"]["name"]);
+                    }
+                    if (!empty($_FILES["mbpermit"]["name"])) {
+                        move_uploaded_file($_FILES["mbpermit"]["tmp_name"], $user_upload_dir . "/" . $_FILES["mbpermit"]["name"]);
+                    }
+                    if (!empty($_FILES["job_vacant"]["name"])) {
+                        move_uploaded_file($_FILES["job_vacant"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_vacant"]["name"]);
+                    }
+                    if (!empty($_FILES["job_solicitation"]["name"])) {
+                        move_uploaded_file($_FILES["job_solicitation"]["tmp_name"], $user_upload_dir . "/" . $_FILES["job_solicitation"]["name"]);
+                    }
+                    if (!empty($_FILES["phjobnet_reg"]["name"])) {
+                        move_uploaded_file($_FILES["phjobnet_reg"]["tmp_name"], $user_upload_dir . "/" . $_FILES["phjobnet_reg"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_nopendingcase"]["name"])) {
+                        move_uploaded_file($_FILES["cert_nopendingcase"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_nopendingcase"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_regSSS"]["name"])) {
+                        move_uploaded_file($_FILES["cert_regSSS"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regSSS"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_regPhHealth"]["name"])) {
+                        move_uploaded_file($_FILES["cert_regPhHealth"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPhHealth"]["name"]);
+                    }
+                    if (!empty($_FILES["cert_regPGIBG"]["name"])) {
+                        move_uploaded_file($_FILES["cert_regPGIBG"]["tmp_name"], $user_upload_dir . "/" . $_FILES["cert_regPGIBG"]["name"]);
+                    }
+                    if (!empty($_FILES["sketch_map"]["name"])) {
+                        move_uploaded_file($_FILES["sketch_map"]["tmp_name"], $user_upload_dir . "/" . $_FILES["sketch_map"]["name"]);
+                    }
+                    if (!empty($_FILES["2303_bir"]["name"])) {
+                        move_uploaded_file($_FILES["2303_bir"]["tmp_name"], $user_upload_dir . "/" . $_FILES["2303_bir"]["name"]);
+                    }
+
+                    $success = "Profile updated successfully!";
+                } else {
+                    $error = "Error updating profile.";
                 }
             }
         }
     }
 }
+
 
 ?>
 <html>
