@@ -124,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail = new PHPMailer();
                 $mail->IsSMTP();
                 $mail->Mailer = "smtp";
-                $mail->SMTPDebug  = 3;
+                $mail->SMTPDebug  = 0;
                 $mail->SMTPAuth   = TRUE;
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port       = $_ENV['SMTP_PORT'];
