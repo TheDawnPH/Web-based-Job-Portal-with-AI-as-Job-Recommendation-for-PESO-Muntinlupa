@@ -83,7 +83,7 @@ if (isset($_GET['verify_user']) && $_GET['verify_user'] == 1 && !empty($user_id)
 }
 
 // Retrieve data from the users table where company_verified is 0
-$sql = "SELECT * FROM users WHERE user_type = 'company' AND company_verified = 0 ORDER BY lname ASC";
+$sql = "SELECT * FROM users WHERE user_type = 'company' AND company_verified = 0 AND verification_status = 1 ORDER BY lname ASC";
 $result = mysqli_query($conn, $sql);
 
 

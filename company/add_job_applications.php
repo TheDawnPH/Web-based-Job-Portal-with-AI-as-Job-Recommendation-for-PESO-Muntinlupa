@@ -28,8 +28,16 @@ if ($_SESSION["user_type"] == "applicant") {
     exit;
 }
 
+// mysql to get user company_verified status
+$sql = "SELECT company_verified FROM users WHERE user_id = ?";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "i", $_SESSION["user_id"]);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$row3 = mysqli_fetch_assoc($result);
+
 // if user is not company_verified show error variable
-if ($_SESSION["company_verified"] == 0) {
+if ($row3["company_verified"] == 0) {
     $errortitle = "Verification Error";
     $errordesc = "Your company is not yet verified. Please verify first by clicking the Request Verification below";
     $verifylink = "<a href='/company/request_company_verification.php' class='btn btn-primary'>Request Verification</a>";
@@ -166,6 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p>$errordesc</p>
                     $verifylink
                     </div>";
+                    exit;
                     }
                     ?>
                     <?php if (isset($error)) {
