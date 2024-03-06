@@ -130,6 +130,7 @@ $result = mysqli_query($conn, $sql);
                 <th>User ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>Email</th>
                 <th>Action</th>
             </tr>";
 
@@ -139,6 +140,7 @@ $result = mysqli_query($conn, $sql);
                 <td>{$row['user_id']}</td>
                 <td>{$row['fname']}</td>
                 <td>{$row['lname']}</td>
+                <td>{$row['email']}</td>
                 <td><a class='btn btn-success' role='button' onclick='return confirmAction();' href='?user_id={$row['user_id']}&verify_user=1'>Verify</a> <a class='btn btn-secondary' role='button' href='profile.php?user_id={$row['user_id']}'>View Profile</a></td>
         </tr>";
                 }

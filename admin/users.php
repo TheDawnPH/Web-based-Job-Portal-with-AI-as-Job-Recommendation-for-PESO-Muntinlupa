@@ -69,6 +69,7 @@ if (!$result) {
                 <th>User ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>Email</th>
                 <th>User Type</th>
                 <th>Action</th>
             </tr>";
@@ -79,6 +80,7 @@ if (!$result) {
                     echo "<td>" . htmlspecialchars($row['user_id']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['fname']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['lname']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['user_type']) . "</td>";
                     echo "<td><a class='btn btn-secondary' role='button' href='/profile.php?user_id=" . htmlspecialchars($row['user_id']) . "'>View Profile</a> <a class='btn btn-danger' role='button' onclick='return confirmAction();' href='/admin/delete_user.php?user_id=" . htmlspecialchars($row['user_id']) . "'>Delete User</a></td>";
                     echo "</tr>";
