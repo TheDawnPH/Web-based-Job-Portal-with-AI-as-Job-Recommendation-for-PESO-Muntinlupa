@@ -133,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->Password   = $_ENV['SMTP_PASS']; // password
                 $mail->IsHTML(true);
                 $mail->AddAddress($email, $fname . " " . $lname);
-                $mail->SetFrom($_ENV['SMTP_USER'], "PESO Muntinlupa");
+                $mail->SetFrom($_ENV['SMTP_EMAIL'], "PESO Muntinlupa");
                 $mail->Subject = "PESO Muntinlupa - Email Verification";
                 $content = "<b>Hi " . $fname . " " . $lname . ",</b><br><br>";
                 $content .= "Please click the link below to verify your email address.<br><br>";

@@ -114,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->Password   = $_ENV['SMTP_PASS']; // password
                 $mail->IsHTML(true);
                 $mail->AddAddress($email, $fname . " " . $lname);
-                $mail->SetFrom($_ENV['SMTP_USER'], "PESO Muntinlupa");
+                $mail->SetFrom($_ENV['SMTP_EMAIL'], "PESO Muntinlupa");
                 $mail->Subject = "PESO Muntinlupa Admin - Provision of Account";
                 $content = "<b>Hi " . $fname . " " . $lname . ",</b><br><br>";
                 $content .= "An PESO Admin has been provided you an account,<br>Please click the link below to set your password.<br><br>";

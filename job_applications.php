@@ -64,7 +64,7 @@ if (isset($_GET["job_id"])) {
         $mail->Password   = $_ENV['SMTP_PASS']; // password
         $mail->IsHTML(true);
         $mail->AddAddress($row2['email'], $row2['fname'] . " " . $row2['lname']);
-        $mail->SetFrom($_ENV['SMTP_USER'], "PESO Muntinlupa - Job Application System");
+        $mail->SetFrom($_ENV['SMTP_EMAIL'], "PESO Muntinlupa - Job Application System");
         $mail->Subject = "New Job Application - PESO Muntinlupa";
         // set content of email that a job application has been sent and click the link to view the job application
         $content = "<b>Dear " . $row2['fname'] . " " . $row2['lname'] . ",</b><br><br>";
