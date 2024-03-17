@@ -82,6 +82,11 @@ function getJobAcceptanceRate($job_id)
         <div class="cover"></div>
     </div>
     <div class="container">
+        <?php if ($cverify["company_verified"] == 0) { ?>
+            <div class="alert alert-danger fade show" role="alert">
+                <strong>Warning!</strong><br>Your company is not yet verified. Please <a href="company/request_company_verification.php">click here</a> to verify your company.
+            </div>
+        <?php } ?>
         <div class="row row-cols-1 row-cols-md-2 g-3">
             <?php
             if (isset($_SESSION["user_type"]) && $_SESSION["user_type"] === 'applicant') {
@@ -135,8 +140,7 @@ function getJobAcceptanceRate($job_id)
                                     );
                                 }
                             }
-                        } 
-                    
+                        }
                     }
 
                     if (empty($job_applications)) {
@@ -149,9 +153,9 @@ function getJobAcceptanceRate($job_id)
                         }
                     }
                 }
-                
-                
-                
+
+
+
                 /*
                 foreach ($jobs as $job) {
                     $job_industry = $job['jinindustry_id'];
@@ -168,31 +172,31 @@ function getJobAcceptanceRate($job_id)
                 // Display the recommended jobs
             ?>
 
-            <div class="col-md-4">
-                <h1>Recommended Jobs</h1>
-                <hr>
-                <?php if (empty($user_preferred_industry)) { ?>
-                    <div class="alert alert-warning fade show" role="alert">
-                        <strong>Warning!</strong><br>You have not set your preferred skills yet. Please update your profile to get recommended jobs.
-                    </div>
-                <?php } ?>
-                <?php
-                foreach ($recommended_jobs as $job) :
-                    $job_list_sql = mysqli_query($conn, "SELECT * FROM job_listing WHERE id =" . $job['job_id']);
-                    $job_list = mysqli_fetch_assoc($job_list_sql);
+                <div class="col-md-4">
+                    <h1>Recommended Jobs</h1>
+                    <hr>
+                    <?php if (empty($user_preferred_industry)) { ?>
+                        <div class="alert alert-warning fade show" role="alert">
+                            <strong>Warning!</strong><br>You have not set your preferred skills yet. Please update your profile to get recommended jobs.
+                        </div>
+                    <?php } ?>
+                    <?php
+                    foreach ($recommended_jobs as $job) :
+                        $job_list_sql = mysqli_query($conn, "SELECT * FROM job_listing WHERE id =" . $job['job_id']);
+                        $job_list = mysqli_fetch_assoc($job_list_sql);
 
-                    $jinindustry_name = mysqli_query($conn, "SELECT * FROM jinindustry WHERE jinindustry_id =" . $job_list['jinindustry_id']);
-                    $jinindustry = mysqli_fetch_assoc($jinindustry_name);
-                ?>
-                    <div>
-                        <h2><?php echo $job['job_title']; ?></h2>
-                        <p>Job Industry: <?php echo $jinindustry['jinindustry_name']; ?></p>
-                        <p>Job Salary: ₱<?php echo number_format($job_list['job_salary']); ?></p>
-                        <a href="job_details.php?job_id=<?php echo $job['job_id']; ?>" class="btn btn-primary">View Job</a>
-                        <hr>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+                        $jinindustry_name = mysqli_query($conn, "SELECT * FROM jinindustry WHERE jinindustry_id =" . $job_list['jinindustry_id']);
+                        $jinindustry = mysqli_fetch_assoc($jinindustry_name);
+                    ?>
+                        <div>
+                            <h2><?php echo $job['job_title']; ?></h2>
+                            <p>Job Industry: <?php echo $jinindustry['jinindustry_name']; ?></p>
+                            <p>Job Salary: ₱<?php echo number_format($job_list['job_salary']); ?></p>
+                            <a href="job_details.php?job_id=<?php echo $job['job_id']; ?>" class="btn btn-primary">View Job</a>
+                            <hr>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             <?php
             }
             ?>

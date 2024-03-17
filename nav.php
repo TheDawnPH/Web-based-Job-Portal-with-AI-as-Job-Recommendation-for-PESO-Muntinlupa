@@ -1,4 +1,5 @@
 <?php
+
 $login = "<a class='nav-link' href='/login.php'>Login/Register</a>";
 $profile = "<a class='nav-link' href='/profile.php'>Profile</a>";
 $logout = "<a class='nav-link' onclick='return logout();' href='/logout.php'>Logout</a>";
@@ -62,11 +63,6 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
               <li><a class="dropdown-item" href="/company/add_job_applications.php">Add Job Listing</a></li>
               <li><a class="dropdown-item" href="/company/job_listings.php">View Job Listing</a></li>
               <li><a class="dropdown-item" href="/company/job_applicants.php">View Job Applicants</a></li>
-              <?php
-              if ($_SESSION['company_verified'] == 0) {
-                echo "<li><a class='dropdown-item' href='/company/request_company_verification.php'>Request Verification</a></li>";
-              }
-              ?>
             </ul>
           </li>
         <?php

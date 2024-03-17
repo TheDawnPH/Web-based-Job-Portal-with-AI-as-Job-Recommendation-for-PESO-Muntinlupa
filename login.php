@@ -61,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $_SESSION["loggedin"] = true;
                                 $_SESSION["user_id"] = $user_id;
                                 $_SESSION["user_type"] = $user_type;
-                                $_SESSION["company_verified"] = $company_verified;
                                 $_SESSION['jinindustry_id'] = $jinindustry_id;
 
                                 // set cookies

@@ -143,7 +143,7 @@ $stmt2->close();
                         if ($user_id == $profile_user_id) {
                             echo '<a href="edit_profile.php" class="btn btn-primary">Edit Profile</a>';
                         }
-                        if ($_SESSION['user_type'] === "company" && $user_id === $profile_user_id) {
+                        if ($_SESSION['user_type'] === "company" && $user_id === $profile_user_id && $row['company_verified'] === "0") {
                             echo '<br><br><a href="/company/request_company_verification.php" class="btn btn-primary">Request Company Verification</a>';
                         }
                         ?>

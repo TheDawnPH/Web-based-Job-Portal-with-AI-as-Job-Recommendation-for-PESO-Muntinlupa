@@ -261,4 +261,12 @@ if ($conn === false) {
             echo "ERROR: Could not able to execute $jinsql. " . mysqli_error($conn);
         }
     }
+
+    // mysql to get user company_verified status
+    $sql = "SELECT company_verified FROM users WHERE user_id = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $_SESSION["user_id"]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $cverify = mysqli_fetch_assoc($result);
 }

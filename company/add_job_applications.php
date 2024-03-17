@@ -28,16 +28,8 @@ if ($_SESSION["user_type"] == "applicant") {
     exit;
 }
 
-// mysql to get user company_verified status
-$sql = "SELECT company_verified FROM users WHERE user_id = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "i", $_SESSION["user_id"]);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$row3 = mysqli_fetch_assoc($result);
-
 // if user is not company_verified show error variable
-if ($row3["company_verified"] == 0) {
+if ($cverify["company_verified"] == 0) {
     $errortitle = "Verification Error";
     $errordesc = "Your company is not yet verified. Please verify first by clicking the Request Verification below";
     $verifylink = "<a href='/company/request_company_verification.php' class='btn btn-primary'>Request Verification</a>";
@@ -166,17 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <?php if ($_SESSION["company_verified"] == 1) { ?>
-                    <?php
-                    if (isset($errortitle)) {
-                        echo "<div class='alert alert-danger' role='alert'>
-                    <h4 class='alert-heading'>$errortitle</h4>
-                    <p>$errordesc</p>
-                    $verifylink
-                    </div>";
-                    exit;
-                    }
-                    ?>
+                <?php if ($cverify["company_verified"] == 1) { ?>
                     <?php if (isset($error)) {
                         echo "<div class='alert alert-danger' role='alert'>
                     <h4 class='alert-sheading'>Error!</h4>
@@ -252,7 +234,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input hidden type="text" name="submit_id" value="<?php echo $job_id ?>">
                         <button type="submit" class="btn btn-primary">Add/Update Job Listing</button>
                     </form>
-                <?php } ?>
+                <?php } else { ?>
+                    <?php
+                    if (isset($errortitle)) {
+                        echo "<div class='alert alert-danger' role='alert'>
+                    <h4 class='alert-heading'>$errortitle</h4>
+                    <p>$errordesc</p>
+                    $verifylink
+                    </div>";
+                    }
+                }
+                    ?>
             </div>
         </div>
     </div>
