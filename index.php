@@ -82,7 +82,7 @@ function getJobAcceptanceRate($job_id)
         <div class="cover"></div>
     </div>
     <div class="container">
-        <?php if ($cverify["company_verified"] == 0) { ?>
+        <?php if ($cverify["company_verified"] == 0 && isset($_SESSION["user_type"])) { ?>
             <div class="alert alert-danger fade show" role="alert">
                 <strong>Warning!</strong><br>Your company is not yet verified. Please <a href="company/request_company_verification.php">click here</a> to verify your company.
             </div>
