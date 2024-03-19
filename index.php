@@ -23,10 +23,12 @@ function getJobAcceptanceRate($job_id)
     foreach ($job_applications as $job_application) {
         if ($job_application['application_status'] == '1') {
             $job_accepted_count++;
+        } else {
+            continue;
         }
     }
 
-    if ($job_applications_count == 0) {
+    if (empty($job_applications)) {
         return 0;
     } else {
         return round(($job_accepted_count / $job_applications_count) * 100);
@@ -49,206 +51,152 @@ function getJobAcceptanceRate($job_id)
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
-    <style>
-        .cover {
-            /* use 1350x300px image */
-            background-image: url('img/banner.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 300px;
-
-        }
-
-        @media (max-width: 1200px) {
-            .cover {
-                display: none;
-                /* Hide the cover image on devices with resolution 1200px and below */
-            }
-        }
-    </style>
-    <style>
-        @media screen and (max-width: 500px) {
-            .desktop {
-                display: none !important;
-            }
-        }
-    </style>
 </head>
 
 <body>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0" nonce="CXhHUdMr"></script>
     <?php include 'nav.php'; ?>
-    <div class="col-md-12">
-        <div class="cover"></div>
-    </div>
+    <h1 class="text-container text-center" style="font-family:'Montserrat', sans-serif; color:#000080;"><strong>WELCOME TO MUNTINLUPA CITY JOB PORTAL</strong></h1>
+        <p class="lead text-center text-container" style="font-family:'Montserrat', sans-serif; color:#000080;">May trabaho para sa mga Muntinlupeño</p>
     <div class="container">
-        <?php if ($cverify["company_verified"] == 0 && isset($_SESSION["user_type"])) { ?>
+        <?php if ($cverify["company_verified"] == 0 && isset($_SESSION["user_type"]) && $_SESSION["user_type"] === "company") { ?>
             <div class="alert alert-danger fade show" role="alert">
                 <strong>Warning!</strong><br>Your company is not yet verified. Please <a href="company/request_company_verification.php">click here</a> to verify your company.
             </div>
         <?php } ?>
-        <div class="row row-cols-1 row-cols-md-2 g-3">
-            <?php
-            if (isset($_SESSION["user_type"]) && $_SESSION["user_type"] === 'applicant') {
-                // Get the user's preferred industry
-                $user_skill_sql = "SELECT * FROM users WHERE user_id =" . $_SESSION['user_id'];
-                $user_skill_result = mysqli_query($conn, $user_skill_sql);
-                $row = mysqli_fetch_assoc($user_skill_result);
-                $user_preferred_industry = $row['jinindustry_id'];
-
-                // Retrieve all job_listings
-                $job_sql = "SELECT id, job_title, job_description, jinindustry_id FROM job_listing";
-                $job_result = mysqli_query($conn, $job_sql);
-                $jobs = [];
-
-                while ($row = mysqli_fetch_assoc($job_result)) {
-                    $jobs[] = $row;
-                }
-
-                // retrieve all job applications
-                $job_applications_sql = "SELECT * FROM job_applications";
-                $job_applications_result = mysqli_query($conn, $job_applications_sql);
-                $job_applications_count = mysqli_num_rows($job_applications_result);
-                $job_applications = [];
-
-                while ($row = mysqli_fetch_assoc($job_applications_result)) {
-                    $job_applications[] = $row;
-                }
-
-                $recommended_jobs = [];
-
-                // implement job recommendation algorithm based on accepted job applications
-                foreach ($jobs as $job) {
-                    $job_industry = $job['jinindustry_id'];
-
-                    foreach ($job_applications as $job_application) {
-                        if ($job['id'] == $job_application['job_id']) {
-                            if (getJobAcceptanceRate($job['id']) >= 60) {
-                                // Check if the user and job have the same industry
-                                if ($user_preferred_industry == $job_industry) {
-                                    $recommended_jobs[] = array(
-                                        'job_id' => $job['id'],
-                                        'job_title' => $job['job_title']
-                                    );
-                                }
-                            } else {
-                                // Check if the user and job have the same industry
-                                if ($user_preferred_industry == $job_industry) {
-                                    $recommended_jobs[] = array(
-                                        'job_id' => $job['id'],
-                                        'job_title' => $job['job_title']
-                                    );
-                                }
-                            }
-                        }
-                    }
-
-                    if (empty($job_applications)) {
-                        // Check if the user and job have the same industry
-                        if ($user_preferred_industry == $job_industry) {
-                            $recommended_jobs[] = array(
-                                'job_id' => $job['id'],
-                                'job_title' => $job['job_title']
-                            );
-                        }
-                    }
-                }
-
-
-
-                /*
-                foreach ($jobs as $job) {
-                    $job_industry = $job['jinindustry_id'];
-
-                    // Check if the user and job have the same industry
-                    if ($user_preferred_industry == $job_industry) {
-                        $recommended_jobs[] = array(
-                            'job_id' => $job['id'],
-                            'job_title' => $job['job_title']
-                        );
-                    }
-                }*/
-
-                // Display the recommended jobs
-            ?>
-
-                <div class="col-md-4">
-                    <h1>Recommended Jobs</h1>
-                    <hr>
-                    <?php if (empty($user_preferred_industry)) { ?>
-                        <div class="alert alert-warning fade show" role="alert">
-                            <strong>Warning!</strong><br>You have not set your preferred skills yet. Please update your profile to get recommended jobs.
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card" style="width: 100%">
+                    <div class="card-body">
+                        <h4 class="card-title">Facebook Feed</h4>
+                        <div class="fb-page" data-href="https://www.facebook.com/MuntinlupaPESO" data-tabs="timeline" data-width="" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false">
+                            <blockquote cite="https://www.facebook.com/MuntinlupaPESO" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/MuntinlupaPESO">Muntinlupa PESO</a></blockquote>
                         </div>
-                    <?php } ?>
-                    <?php
-                    foreach ($recommended_jobs as $job) :
-                        $job_list_sql = mysqli_query($conn, "SELECT * FROM job_listing WHERE id =" . $job['job_id']);
-                        $job_list = mysqli_fetch_assoc($job_list_sql);
-
-                        $jinindustry_name = mysqli_query($conn, "SELECT * FROM jinindustry WHERE jinindustry_id =" . $job_list['jinindustry_id']);
-                        $jinindustry = mysqli_fetch_assoc($jinindustry_name);
-                    ?>
-                        <div>
-                            <h2><?php echo $job['job_title']; ?></h2>
-                            <p>Job Industry: <?php echo $jinindustry['jinindustry_name']; ?></p>
-                            <p>Job Salary: ₱<?php echo number_format($job_list['job_salary']); ?></p>
-                            <a href="job_details.php?job_id=<?php echo $job['job_id']; ?>" class="btn btn-primary">View Job</a>
+                        <?php if (!isset($_SESSION["user_type"])) { ?>
                             <hr>
-                        </div>
-                    <?php endforeach; ?>
+                            <h4 class="card-title">Login / Register</h4>
+                            <a href="login.php" class="btn btn-primary">Login</a>
+                            <a href="register.php" class="btn btn-primary">Register</a>
+                        <?php } ?>
+                    </div>
                 </div>
-            <?php
-            }
-            ?>
-            <div class="col-md-4">
-                <h1>Latest Jobs</h1>
-                <hr>
-                <?php
-                // Assuming $conn is your database connection
-                $sql = "SELECT * FROM job_listing ORDER BY id DESC LIMIT 10";
-                $result = mysqli_query($conn, $sql);
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <?php if (isset($_SESSION["user_type"]) && $_SESSION["user_type"] === 'applicant') { ?>
+                            <h3 class="card-title" style="text-align: center">Recommended Jobs</h3>
+                            <hr>
+                            <?php
+                            $sql = "SELECT * FROM job_listing";
+                            $result = mysqli_query($conn, $sql);
 
-                // Check if there are any rows in the result set
-                if (mysqli_num_rows($result) > 0) {
-                    // Loop through the rows and display job information with job industry
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $sql2 = "SELECT * FROM jinindustry WHERE jinindustry_id =" . $row['jinindustry_id'];
-                        $result2 = mysqli_query($conn, $sql2);
-                        $row2 = mysqli_fetch_assoc($result2);
+                            $jobs = [];
 
-                        echo '<div>';
-                        echo '<h2>' . $row['job_title'] . '</h2>';
-                        // show job industry from $row2
-                        echo '<p>Job Industry: ' . $row2['jinindustry_name'] . '</p>';
-                        echo '<p>Job Salary: ₱' . number_format($row['job_salary']) . '</p>';
-                        echo '<a href="job_details.php?job_id=' . $row['id'] . '" class="btn btn-primary">View Job</a>';
-                        echo '</div><hr>';
-                    }
-                } else {
-                    echo '<p>No job listings found.</p>';
-                }
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $jobs[] = $row;
+                            }
 
-                // Close the result set and database connection
-                mysqli_free_result($result);
-                mysqli_close($conn);
-                ?>
-            </div><br>
-            <div class="col-md-4">
-                <h1>Facebook Feed</h1>
-                <hr>
-                <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FMuntinlupaPESO%2F&tabs=timeline&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&appId" width="350" height="500" style="border:none;overflow:hidden;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-            </div><br>
-            <?php if (!isset($_SESSION["user_type"])) { ?>
-                <div class="col-md-3">
-                    <h1>Login or Register</h1>
-                    <hr>
-                    <div class="d-grid gap-2">
-                        <a href="login.php" class="btn btn-primary btn-lg">Login</a>
-                        <a href="register.php" class="btn btn-primary btn-lg">Register</a>
-                    </div><br>
+                            // get all number of approved job applications per job
+                            foreach ($jobs as $key => $job) {
+                                $jobs[$key]['job_acceptance_rate'] = getJobAcceptanceRate($job['id']);
+                            }
+
+                            // sort jobs by job acceptance rate
+                            usort($jobs, function ($a, $b) {
+                                return $b['job_acceptance_rate'] - $a['job_acceptance_rate'];
+                            });
+
+                            // sort recommended jobs by job category chosen by the applicant
+                            if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") {
+                                //get user jininustry_id
+                                $sql = "SELECT jinindustry_id FROM users WHERE user_id = " . $_SESSION['user_id'];
+                                $result = mysqli_query($conn, $sql);
+                                $row = mysqli_fetch_assoc($result);
+
+                                $applicant_category = $row['jinindustry_id'];
+
+                                $recommended_jobs = array_filter($jobs, function ($job) use ($applicant_category) {
+                                    return $job['jinindustry_id'] == $applicant_category;
+                                });
+
+                                // get the top 5 jobs with the highest job acceptance rate
+                                $recommended_jobs = array_slice($recommended_jobs, 0, 5);
+                            }
+
+                            if (empty($recommended_jobs)) {
+                                echo "<p>No recommended jobs found.</p>";
+                            }
+
+
+                            ?>
+                            <?php foreach ($recommended_jobs as $job) : ?>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <table>
+                                            <tbody>
+                                                <tr class="job-row">
+                                                    <td style="width: 100%; overflow: hidden; white-space: normal;">
+                                                        <div class="btn-group" role="group">
+                                                            <h5><?php echo $job['job_title']; ?></h5>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width: 100%; text-align: right;">
+                                                        <div class="btn-group" role="group">
+                                                            <a href="job_details.php?job_id=<?php echo $job['id']; ?>" class="btn btn-secondary">View</a>&nbsp;
+                                                            <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>
+                                                                <a href="job_applications.php?job_id=<?php echo $job['id']; ?>" class="btn btn-primary">Apply</a>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </td>
+                                                    <?php echo $job['job_acceptance_rate']; ?>% Acceptance Rate
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php } ?>
+                        <h3 class="card-title" style="text-align: center">Latest Jobs</h3>
+                        <hr>
+                        <?php
+                        $sql = "SELECT * FROM job_listing ORDER BY created_at DESC LIMIT 10";
+                        $result = mysqli_query($conn, $sql);
+                        $jobs = [];
+
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $jobs[] = $row;
+                        }
+                        ?>
+                        <?php foreach ($jobs as $job) : ?>
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <table>
+                                        <tbody>
+                                            <tr class="job-row">
+                                                <td style="width: 100%; overflow: hidden; white-space: normal;">
+                                                    <div class="btn-group" role="group">
+                                                        <h5><?php echo $job['job_title']; ?></h5>
+                                                    </div>
+                                                </td>
+                                                <td style="width: 100%; text-align: right;">
+                                                    <div class="btn-group" role="group">
+                                                        <a href="job_details.php?job_id=<?php echo $job['id']; ?>" class="btn btn-secondary">View</a>&nbsp;
+                                                        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>
+                                                            <a href="job_applications.php?job_id=<?php echo $job['id']; ?>" class="btn btn-primary">Apply</a>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            <?php
-            } ?>
+            </div>
         </div>
     </div>
 </body>

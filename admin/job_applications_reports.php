@@ -51,6 +51,7 @@ if ($_SESSION["user_type"] != "admin") {
     <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Job Applications Reports</h1>
+        <!-- filter -->
         <div class="table-responsive">
         <input type="button" onclick="printTable()" value="Print Everything" class="no-print btn btn-primary" />
 <br><br>

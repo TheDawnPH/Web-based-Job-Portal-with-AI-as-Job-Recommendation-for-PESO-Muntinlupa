@@ -60,7 +60,7 @@ function nl2br2($string)
 
 <body>
     <?php include "nav.php"; ?>
-    <div class="container mt-4">
+    <div class="container">
         <div class="row row-cols-1 row-cols-md-3 g-2">
             <div class="col-md-6">
                 <div class="card h-100">
@@ -102,7 +102,7 @@ function nl2br2($string)
                         <?php elseif (isset($_SESSION['user_id']) && ($_SESSION['user_type'] == "company" || $_SESSION['user_type'] == "admin")) : ?>
                             <a href='login.php' class='btn btn-success disabled'>Apply in this Job</a>
                         <?php else : ?>
-                            <a href='login.php' class='btn btn-success'>Apply in this Job</a>
+                            <a href='login.php' class='btn btn-primary'>Apply in this Job</a>
                         <?php endif; ?>
                     </div>
                 </div>

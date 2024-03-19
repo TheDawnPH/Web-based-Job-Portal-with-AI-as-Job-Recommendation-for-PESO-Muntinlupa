@@ -90,7 +90,7 @@ $stmt2->close();
 
 <body>
     <?php include "nav.php"; ?>
-    <div class="container mt-3">
+    <div class="container">
         <h1 class="mb-4">User Profile</h1>
         <div class="row row-cols-1 row-cols-md-3 g-2">
             <div class="col-md-6">

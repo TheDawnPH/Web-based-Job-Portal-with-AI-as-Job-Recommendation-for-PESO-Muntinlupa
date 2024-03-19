@@ -27,7 +27,6 @@ include 'config.php';
 
 <body>
     <?php include 'nav.php'; ?>
-    <br>
     <div class="container">
         <h1>Jobs Available</h1><br>
         <div class="row row-cols-1 row-cols-md-2">

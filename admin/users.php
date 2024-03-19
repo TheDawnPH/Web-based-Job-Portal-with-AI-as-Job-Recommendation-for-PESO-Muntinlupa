@@ -59,7 +59,9 @@ if (!$result) {
     <div class="container">
         <h1>Users</h1>
         <a class="btn btn-primary" role="button" href="/admin/add_users.php">Add User</a>
-        <br><br>
+        <br>
+        <!-- Filter User by User Type use js -->
+        <br>
         <div class="table-responsive">
             <?php
             // Check if there are rows returned

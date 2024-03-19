@@ -6,36 +6,22 @@ $logout = "<a class='nav-link' onclick='return logout();' href='/logout.php'>Log
 $applications = "<a class='nav-link' href='/job_applications.php'> Job Applications</a>";
 ?>
 
-<nav class="navbar navbar-expand-lg no-print" data-bs-theme="dark" style="background-color: #000080">
+<nav class="navbar navbar-expand-lg no-print sticky-top" data-bs-theme="light" style="background-color: white;">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="/index.php" style="color:#000080 !important;">
       <img src="/img/peso_muntinlupa.png" alt="PESO Muntinlupa Logo" width="30" class="d-inline-block align-text-top">
       Muntinlupa Job Portal
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav" style="text-align:right; font-size: 18px;">
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav" style="font-size: 18px;">
         <li class="nav-item">
           <a class="nav-link" href="/index.php">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/jobs.php">Jobs</a>
-        </li>
-        <li class="nav-item">
-          <script>
-            function logout() {
-              return confirm("Are you sure to logout?");
-            }
-          </script>
-          <?php
-          if (isset($_SESSION['loggedin'])) {
-            echo $logout;
-          } else {
-            echo $login;
-          }
-          ?>
         </li>
         <li class="nav-item">
           <?php
@@ -87,6 +73,20 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
         <?php
         }
         ?>
+        <li class="nav-item">
+          <script>
+            function logout() {
+              return confirm("Are you sure to logout?");
+            }
+          </script>
+          <?php
+          if (isset($_SESSION['loggedin'])) {
+            echo $logout;
+          } else {
+            echo $login;
+          }
+          ?>
+        </li>
       </ul>
     </div>
   </div>

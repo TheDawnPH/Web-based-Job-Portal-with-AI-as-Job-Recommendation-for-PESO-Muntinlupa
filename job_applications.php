@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 
 // Start secure session
@@ -41,51 +42,60 @@ if (isset($_GET["job_id"])) {
     $result2 = $stmt2->get_result();
     $row2 = $result2->fetch_assoc();
 
-    // Prepare and bind
-    $stmt3 = $conn->prepare("INSERT INTO job_applications (job_id, user_id) VALUES (?, ?)");
-    $stmt3->bind_param("ii", $job_id, $user_id);
-
-    // Execute the statement
-    if ($stmt3->execute()) {
-        // smtp email to company user email
-        require 'PHPMailer/src/Exception.php';
-        require 'PHPMailer/src/PHPMailer.php';
-        require 'PHPMailer/src/SMTP.php';
-
-        $mail = new PHPMailer();
-        $mail->IsSMTP();
-        $mail->Mailer = "smtp";
-        $mail->SMTPDebug  = 0;
-        $mail->SMTPAuth   = TRUE;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = $_ENV['SMTP_PORT'];
-        $mail->Host       = $_ENV['SMTP_HOST'];
-        $mail->Username   = $_ENV['SMTP_USER']; // email address
-        $mail->Password   = $_ENV['SMTP_PASS']; // password
-        $mail->IsHTML(true);
-        $mail->AddAddress($row2['email'], $row2['fname'] . " " . $row2['lname']);
-        $mail->SetFrom($_ENV['SMTP_EMAIL'], "PESO Muntinlupa - Job Application System");
-        $mail->Subject = "New Job Application - PESO Muntinlupa";
-        // set content of email that a job application has been sent and click the link to view the job application
-        $content = "<b>Dear " . $row2['fname'] . " " . $row2['lname'] . ",</b><br><br>";
-        $content .= "A new job application has been sent to you. Please click the link below to view the job application.<br><br>";
-        $content .= "<a href='https://{$_ENV['WEBSITE_URL']}/company/job_applicants.php'>View Job Applications</a><br><br>";
-        $content .= "This is the applicant information:<br><br>";
-        $content .= "<a href='https://{$_ENV['WEBSITE_URL']}/profile.php?user_id=" . $user_id . "'>View Profile</a><br><br>";
-        $content .= "Thank you,<br>";
-        $content .= "PESO Muntinlupa";
-        $mail->MsgHTML($content);
-        if (!$mail->Send()) {
-            // echo $warning = "Error while sending Email.";
-            // var_dump($mail);
-        } else {
-            $alert = "Job application sent successfully.";
-        }
-        // end of phpmailer
+    // check if the job application is already sent
+    $sql = "SELECT * FROM job_applications WHERE job_id = '$job_id' AND user_id = '$user_id'";
+    $result = mysqli_query($conn, $sql);
+    if (!empty(mysqli_num_rows($result))) {
+        $failed = "Job application already sent.";
     } else {
-        $failed = "Job application failed to send.";
+        // Prepare and bind
+        $stmt3 = $conn->prepare("INSERT INTO job_applications (job_id, user_id) VALUES (?, ?)");
+        $stmt3->bind_param("ii", $job_id, $user_id);
+
+        // Execute the statement
+        if ($stmt3->execute()) {
+            // smtp email to company user email
+            require 'PHPMailer/src/Exception.php';
+            require 'PHPMailer/src/PHPMailer.php';
+            require 'PHPMailer/src/SMTP.php';
+
+            $mail = new PHPMailer();
+            $mail->IsSMTP();
+            $mail->Mailer = "smtp";
+            $mail->SMTPDebug  = 0;
+            $mail->SMTPAuth   = TRUE;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = $_ENV['SMTP_PORT'];
+            $mail->Host       = $_ENV['SMTP_HOST'];
+            $mail->Username   = $_ENV['SMTP_USER']; // email address
+            $mail->Password   = $_ENV['SMTP_PASS']; // password
+            $mail->IsHTML(true);
+            $mail->AddAddress($row2['email'], $row2['fname'] . " " . $row2['lname']);
+            $mail->SetFrom($_ENV['SMTP_EMAIL'], "PESO Muntinlupa - Job Application System");
+            $mail->Subject = "New Job Application - PESO Muntinlupa";
+            // set content of email that a job application has been sent and click the link to view the job application
+            $content = "<b>Dear " . $row2['fname'] . " " . $row2['lname'] . ",</b><br><br>";
+            $content .= "A new job application has been sent to you. Please click the link below to view the job application.<br><br>";
+            $content .= "<a href='https://{$_ENV['WEBSITE_URL']}/company/job_applicants.php'>View Job Applications</a><br><br>";
+            $content .= "This is the applicant information:<br><br>";
+            $content .= "<a href='https://{$_ENV['WEBSITE_URL']}/profile.php?user_id=" . $user_id . "'>View Profile</a><br><br>";
+            $content .= "Thank you,<br>";
+            $content .= "PESO Muntinlupa";
+            $mail->MsgHTML($content);
+            if (!$mail->Send()) {
+                // echo $warning = "Error while sending Email.";
+                // var_dump($mail);
+            } else {
+                $alert = "Job application sent successfully.";
+            }
+            // end of phpmailer
+        } else {
+            $failed = "Job application failed to send.";
+        }
     }
 }
+
+
 
 
 ?>
