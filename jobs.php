@@ -157,7 +157,7 @@ include 'config.php';
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="job_details.php?job_id=<?php echo $row['id']; ?>" class="btn btn-secondary">View</a>&nbsp;
+                                            <a href="job_details.php?job_id=<?php echo $row['id']; ?>" class="btn btn-warning">View</a>&nbsp;
                                             <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>
                                                 <a href="job_applications.php?job_id=<?php echo $row['id']; ?>" class="btn btn-primary">Apply</a>
                                             <?php endif; ?>

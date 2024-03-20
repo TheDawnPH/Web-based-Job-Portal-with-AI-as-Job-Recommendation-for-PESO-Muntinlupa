@@ -80,7 +80,7 @@ function getJobAcceptanceRate($job_id)
                             <hr>
                             <h4 class="card-title">Login / Register</h4>
                             <a href="login.php" class="btn btn-primary">Login</a>
-                            <a href="register.php" class="btn btn-primary">Register</a>
+                            <a href="register.php" class="btn btn-warning">Register</a>
                         <?php } ?>
                     </div>
                 </div>
@@ -147,7 +147,7 @@ function getJobAcceptanceRate($job_id)
                                                     </td>
                                                     <td style="width: 100%; text-align: right;">
                                                         <div class="btn-group" role="group">
-                                                            <a href="job_details.php?job_id=<?php echo $job['id']; ?>" class="btn btn-secondary">View</a>&nbsp;
+                                                            <a href="job_details.php?job_id=<?php echo $job['id']; ?>" class="btn btn-warning">View</a>&nbsp;
                                                             <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>
                                                                 <a href="job_applications.php?job_id=<?php echo $job['id']; ?>" class="btn btn-primary">Apply</a>
                                                             <?php endif; ?>
@@ -185,7 +185,7 @@ function getJobAcceptanceRate($job_id)
                                                 </td>
                                                 <td style="width: 100%; text-align: right;">
                                                     <div class="btn-group" role="group">
-                                                        <a href="job_details.php?job_id=<?php echo $job['id']; ?>" class="btn btn-secondary">View</a>&nbsp;
+                                                        <a href="job_details.php?job_id=<?php echo $job['id']; ?>" class="btn btn-warning">View</a>&nbsp;
                                                         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>
                                                             <a href="job_applications.php?job_id=<?php echo $job['id']; ?>" class="btn btn-primary">Apply</a>
                                                         <?php endif; ?>

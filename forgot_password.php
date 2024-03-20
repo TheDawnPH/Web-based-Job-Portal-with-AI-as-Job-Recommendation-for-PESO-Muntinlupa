@@ -160,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="g-recaptcha" data-sitekey="<?php echo $_ENV['SITE_KEY']; ?>"></div>
                     <br>
-                    <button type="submit" class="btn btn-success">Recover Password</button>
+                    <button type="submit" class="btn btn-warning">Recover Password</button>
                 </form>
             </div>
         </div>

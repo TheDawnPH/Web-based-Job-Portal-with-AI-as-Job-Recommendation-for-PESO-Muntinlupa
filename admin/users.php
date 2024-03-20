@@ -84,7 +84,7 @@ if (!$result) {
                     echo "<td>" . htmlspecialchars($row['lname']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['user_type']) . "</td>";
-                    echo "<td><a class='btn btn-secondary' role='button' href='/profile.php?user_id=" . htmlspecialchars($row['user_id']) . "'>View Profile</a> <a class='btn btn-danger' role='button' onclick='return confirmAction();' href='/admin/delete_user.php?user_id=" . htmlspecialchars($row['user_id']) . "'>Delete User</a></td>";
+                    echo "<td><a class='btn btn-warning' role='button' href='/profile.php?user_id=" . htmlspecialchars($row['user_id']) . "'>View Profile</a> <a class='btn btn-danger' role='button' onclick='return confirmAction();' href='/admin/delete_user.php?user_id=" . htmlspecialchars($row['user_id']) . "'>Delete User</a></td>";
                     echo "</tr>";
                 }
                 echo "</table>";

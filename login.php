@@ -179,7 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="g-recaptcha" data-sitekey="<?php echo $_ENV['SITE_KEY']; ?>"></div>
                     <div class="mb-4 text-end"><a href="forgot_password.php">Forgot Password?</a></div>
                     <button type="submit" class="btn btn-primary">Login</button>
-                    <a href="register.php" class="btn btn-secondary">Register</a>
+                    <a href="register.php" class="btn btn-warning">Register</a>
                 </form>
             </div>
         </div>
