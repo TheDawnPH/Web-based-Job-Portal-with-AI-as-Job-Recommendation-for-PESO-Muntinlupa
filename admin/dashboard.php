@@ -196,12 +196,9 @@ if ($row) {
 
 <body>
     <?php include $root . '/nav.php'; ?>
-
     <div class="container">
-        <div class="page-header">
-            <h1>Admin Dashboard</h1>
-        </div>
-
+        <h1>Admin Dashboard</h1>
+        <br>
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <?php
             $cards = [
@@ -213,8 +210,8 @@ if ($row) {
                 ['Total Job Posting', $totalJobPostings, 'Total number of job postings in the system.'],
                 ['Total Application', $totalApplication, 'Total number of applications in the system.'],
                 ['Total Pending Applications', $totalPendingApplication, 'Total number of pending applications in the system.'],
-                ['% of Accepted Application', $totalAcceptedApplication, 'Total percentage of accepted applicants.'],
-                ['% of Rejected Application', $totalRejectedApplication, 'Total percentage of rejected applicants.']
+                ['% of Accepted Application', $totalAcceptedApplication.'%', 'Total percentage of accepted applicants.'],
+                ['% of Rejected Application', $totalRejectedApplication.'%', 'Total percentage of rejected applicants.']
             ];
             ?>
 

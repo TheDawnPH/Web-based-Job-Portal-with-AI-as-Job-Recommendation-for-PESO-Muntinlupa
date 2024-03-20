@@ -21,12 +21,15 @@ function getJobAcceptanceRate($job_id)
     $job_accepted_count = 0;
 
     foreach ($job_applications as $job_application) {
-        if ($job_application['application_status'] == '1') {
+        if ($job_application['application_status'] === '1') {
             $job_accepted_count++;
+        } elseif ($job_application['application_status'] === '2') {
+            $job_accepted_count--;
         } else {
             continue;
         }
     }
+
 
     if (empty($job_applications)) {
         return 0;
@@ -122,7 +125,7 @@ function getJobAcceptanceRate($job_id)
                                 });
 
                                 // get the top 5 jobs with the highest job acceptance rate
-                                $recommended_jobs = array_slice($recommended_jobs, 0, 5);
+                                $recommended_jobs = array_slice($recommended_jobs, 0, 10);
                             }
 
                             if (empty($recommended_jobs)) {
