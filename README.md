@@ -27,6 +27,10 @@ WEBSITE_URL = muntinlupajobportal.site
 # Cloudflare Configuration
 CLOUDFLARE_API_KEY = # insert api key
 CLOUDFLARE_ZONE_ID = # insert zone id
+
+# reCAPTCHA Configuration
+SITE_KEY = # insert site key
+SECRET_KEY = #insert secret key
 ```
 - Save it and start your webserver
 
