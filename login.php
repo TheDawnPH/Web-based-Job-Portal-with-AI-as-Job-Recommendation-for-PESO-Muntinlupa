@@ -34,7 +34,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = trim($_POST["password"]);
     }
 
-    if (empty($email_err) && empty($password_err)) {
+    // Verify reCAPTCHA response
+    if(!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
+        $verification_err = "Please complete the reCAPTCHA challenge.";
+    } else {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify?secret='.$_ENV['SECRET_KEY'].'&response='.$_POST['g-recaptcha-response']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response);
+        if (!$response->success) {
+            $verification_err = "reCAPTCHA verification failed. Please try again.";
+        }
+    }
+
+    if (empty($email_err) && empty($password_err) && empty($verification_err)) {
         $sql = "SELECT user_id, user_type, fname, mname, lname, suffix, email, user_password, verification_status, company_verified, jinindustry_id FROM users WHERE email = ?";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
@@ -132,6 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
+    <script src='https://www.google.com/recaptcha/api.js' async defer ></script>
 </head>
 
 <body>
@@ -160,6 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" id="password" aria-describedby="passwordHelp">
                         <div class="invalid-feedback"><?php echo $password_err; ?></div>
                     </div>
+                    <div class="g-recaptcha" data-sitekey="<?php echo $_ENV['SITE_KEY']; ?>"></div>
                     <div class="mb-4 text-end"><a href="forgot_password.php">Forgot Password?</a></div>
                     <button type="submit" class="btn btn-primary">Login</button>
                     <a href="register.php" class="btn btn-secondary">Register</a>

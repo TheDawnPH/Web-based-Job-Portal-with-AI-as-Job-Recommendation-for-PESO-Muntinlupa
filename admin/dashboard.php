@@ -210,8 +210,8 @@ if ($row) {
                 ['Total Job Posting', $totalJobPostings, 'Total number of job postings in the system.'],
                 ['Total Application', $totalApplication, 'Total number of applications in the system.'],
                 ['Total Pending Applications', $totalPendingApplication, 'Total number of pending applications in the system.'],
-                ['% of Accepted Application', $totalAcceptedApplication.'%', 'Total percentage of accepted applicants.'],
-                ['% of Rejected Application', $totalRejectedApplication.'%', 'Total percentage of rejected applicants.']
+                ['% of Accepted Application', round($totalAcceptedApplication) . '%' , 'Total percentage of accepted applicants.'],
+                ['% of Rejected Application', round($totalRejectedApplication) . '%' , 'Total percentage of rejected applicants.']
             ];
             ?>
 

@@ -90,6 +90,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    // Verify reCAPTCHA response
+    if(!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
+        $warning = "Please complete the reCAPTCHA challenge.";
+    } else {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify?secret='.$_ENV['SECRET_KEY'].'&response='.$_POST['g-recaptcha-response']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $response = json_decode($response);
+        if (!$response->success) {
+            $warning = "reCAPTCHA verification failed. Please try again.";
+        }
+    }    
+
     if (empty($email_err) && isEmailExists($conn, $email)) {
         $email_err = "Email already exists.";
     }
@@ -99,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         return bin2hex(random_bytes(16)); // Generates a random 32-character string
     }
 
-    if (empty($user_type_err) && empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)) {
+    if (empty($user_type_err) && empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err) && empty($warning)) {
         $sql = "INSERT INTO users (user_type, fname, mname, lname, suffix, email, user_password, verification_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
@@ -175,6 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
+    <script src='https://www.google.com/recaptcha/api.js' async defer ></script>
 </head>
 
 <body>
@@ -255,6 +271,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="form-text">By Registering yourself in this website, you agree on <a href="https://privacy.gov.ph/data-privacy-act/" target="_blank">Privacy Notice from
                                 Republic Act 10173 or Data Privacy Act of 2012</a>.</div>
                     </div>
+                    <div class="g-recaptcha" data-sitekey="<?php echo $_ENV['SITE_KEY']; ?>"></div>
+                    <br>
                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                     <input type="submit" class="btn btn-primary" value="Register">
                 </form>
