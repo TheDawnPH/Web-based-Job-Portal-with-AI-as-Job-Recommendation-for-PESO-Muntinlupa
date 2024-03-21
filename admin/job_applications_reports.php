@@ -51,10 +51,39 @@ if ($_SESSION["user_type"] != "admin") {
     <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Job Applications Reports</h1>
-        <!-- filter -->
         <div class="table-responsive">
-        <input type="button" onclick="printTable()" value="Print Everything" class="no-print btn btn-primary" />
-<br><br>
+            <br>
+            <input type="button" onclick="printTable()" value="Print Everything" class="no-print btn btn-primary" />
+            <br><br>
+            <!-- filter dropdown -->
+            <label for="filter">Filter by Application Status:</label>
+            <select id="filter" class="form-select" onchange="filterTable()">
+                <option value="all">All</option>
+                <option value="Approved">Approved</option>
+                <option value="Denied">Denied</option>
+                <option value="Pending">Pending</option>
+            </select>
+            <!-- javascript for filter -->
+            <script>
+                function filterTable() {
+                    var filter = document.getElementById("filter").value;
+                    var table = document.getElementById("data");
+                    var tr = table.getElementsByTagName("tr");
+                    for (var i = 0; i < tr.length; i++) {
+                        var td = tr[i].getElementsByTagName("td")[5];
+                        if (td) {
+                            if (filter == "all") {
+                                tr[i].style.display = "";
+                            } else if (td.innerHTML == filter) {
+                                tr[i].style.display = "";
+                            } else {
+                                tr[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
+            </script>
+            <br><br>
             <table class="table table-striped table-bordered border-start" id="data" data-show-print="true">
                 <thead>
                     <tr>

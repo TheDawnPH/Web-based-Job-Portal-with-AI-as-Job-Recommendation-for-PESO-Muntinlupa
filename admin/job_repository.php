@@ -58,7 +58,30 @@ $row = mysqli_fetch_assoc($result);
 <body>
     <?php include $root . '/nav.php'; ?>
     <div class="container">
-        <h1>All Job Listings</h1>
+        <h1>All Job Listings</h1><br>
+        <!-- search bar for job listings use js to filter table -->
+        <input type="text" id="search" onkeyup="searchTable()" placeholder="Search for job title.." class="form-control">
+        <script>
+            function searchTable() {
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("search");
+                filter = input.value.toUpperCase();
+                table = document.getElementsByTagName("table")[0];
+                tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
+        <br>
         <div class="table-responsive">
             <!-- display all job listing from session user_id and add actions such as view, edit and delete -->
             <table class="table table-striped table-bordered border-start">

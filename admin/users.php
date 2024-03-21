@@ -58,15 +58,43 @@ if (!$result) {
     <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Users</h1>
-        <a class="btn btn-primary" role="button" href="/admin/add_users.php">Add User</a>
         <br>
-        <!-- Filter User by User Type use js -->
+        <a class="btn btn-primary" role="button" href="/admin/add_users.php">Add User</a>
+        <br><br>
+        <!-- filter dropdown user type -->
+        <label for="filter">Filter by User Type:</label>
+        <select id="filter" class="form-select" onchange="filterTable()">
+            <option value="all">All</option>
+            <option value="admin">Admin</option>
+            <option value="company">Employer</option>
+            <option value="applicant">Applicant</option>
+        </select>
+        <!-- js for filter -->
+        <script>
+            function filterTable() {
+                var filter = document.getElementById("filter").value;
+                var table = document.getElementById("data");
+                var tr = table.getElementsByTagName("tr");
+                for (var i = 0; i < tr.length; i++) {
+                    var td = tr[i].getElementsByTagName("td")[4];
+                    if (td) {
+                        if (filter == "all") {
+                            tr[i].style.display = "";
+                        } else if (td.innerHTML == filter) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
         <br>
         <div class="table-responsive">
             <?php
             // Check if there are rows returned
             if (mysqli_num_rows($result) > 0) {
-                echo "<table class='table table-striped table-bordered border-start'>
+                echo "<table class='table table-striped table-bordered border-start' id='data'>
             <tr>
                 <th>User ID</th>
                 <th>First Name</th>
@@ -75,7 +103,7 @@ if (!$result) {
                 <th>User Type</th>
                 <th>Action</th>
             </tr>";
-            
+
                 // Loop through each row returned by the query
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "<tr>";
@@ -91,7 +119,7 @@ if (!$result) {
             } else {
                 echo "<div class='alert alert-danger' role='alert'>No users found.</div>";
             }
-            
+
             // Close the database connection
             mysqli_close($conn);
             ?>
