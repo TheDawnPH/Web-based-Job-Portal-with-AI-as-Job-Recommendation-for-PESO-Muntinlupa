@@ -141,7 +141,7 @@ $result = mysqli_query($conn, $sql);
                 <td>{$row['fname']}</td>
                 <td>{$row['lname']}</td>
                 <td>{$row['email']}</td>
-                <td><a class='btn btn-success' role='button' onclick='return confirmAction();' href='?user_id={$row['user_id']}&verify_user=1'>Verify</a> <a class='btn btn-warning' role='button' href='profile.php?user_id={$row['user_id']}'>View Profile</a></td>
+                <td><a class='btn btn-success' role='button' onclick='return confirmAction();' href='?user_id={$row['user_id']}&verify_user=1'>Verify</a> <a class='btn btn-warning' role='button' href='/profile.php?user_id={$row['user_id']}'>View Profile</a></td>
         </tr>";
                 }
 
