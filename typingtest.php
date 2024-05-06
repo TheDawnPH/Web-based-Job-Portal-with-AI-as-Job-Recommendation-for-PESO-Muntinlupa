@@ -2,6 +2,22 @@
 session_start();
 
 include 'config.php';
+
+/* Function to record WPM into user's profile [wip]
+function recordWPM($conn, $wpm)
+{
+    $user_id = $_SESSION["user_id"];
+    $sql = "UPDATE users SET wpm = ? WHERE user_id = ?";
+    if ($stmt = mysqli_prepare($conn, $sql)) {
+        mysqli_stmt_bind_param($stmt, "ii", $param_wpm, $param_user_id);
+        $param_wpm = $wpm;
+        $param_user_id = $user_id;
+        if (mysqli_stmt_execute($stmt)) {
+            return true;
+        }
+    }
+    return false;
+} */
 ?>
 
 <html>
@@ -35,7 +51,7 @@ include 'config.php';
         <div class="row">
             <div class="col-md-12">
                 <h1>Typing Test</h1>
-                <p>Test your typing speed and accuracy. Press <strong>Start Test</strong> and type the following below</p>
+                <p>Test your typing speed and accuracy. Type the following below:</p>
                 <div id="typing-area"></div>
                 <input type="text" id="user-input" class="form-control mt-3" placeholder="Type here">
                 <p id="result"></p>
@@ -86,6 +102,14 @@ include 'config.php';
                 resultDisplay.textContent = `Your typing speed: ${wpm} WPM, Accuracy: ${accuracy}%`;
                 startBtn.style.display = 'block';
                 startBtn.textContent = 'Restart Test';
+
+                // If user is logged in, record WPM into user's profile
+                <?php
+                /* wip
+                if (isset($_SESSION["user_id"])) {
+                    echo "recordWPM($conn, $wpm);"; // Fixed passing of parameters
+                } */
+                ?>
             }
 
             // Function to calculate accuracy

@@ -100,6 +100,7 @@ $stmt2->close();
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>User Type:</strong> <?php echo ($user_type == 'applicant') ? "Applicant" : (($user_type == 'company') ? "Company" : "Admin"); ?></li>
                             <li class="list-group-item"><strong>Name:</strong> <?php echo "{$row['fname']} {$row['mname']} {$row['lname']} {$row['suffix']}"; ?></li>
+                            <li class="list-group-item"><strong>WPM:</strong> <?php if($row['wpm'] == 0 || $row['wpm'] == NULL){echo 0;} else{echo $row['wpm'];} ?></li>
                             <li class="list-group-item"><strong>Email:</strong> <?php echo $row['email']; ?></li>
                             <li class="list-group-item"><strong>Gender:</strong> <?php echo ($gender == 'male') ? 'Male' : 'Female'; ?></li>
                             <li class="list-group-item"><strong>Birthday:</strong>

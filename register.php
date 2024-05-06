@@ -75,6 +75,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = trim($_POST["email"]);
     }
 
+    // check if email is valid
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $email_err = "Invalid email format.";
+    }
+
     if (empty(trim($_POST["password"]))) {
         $password_err = "Please enter password.";
     } else {

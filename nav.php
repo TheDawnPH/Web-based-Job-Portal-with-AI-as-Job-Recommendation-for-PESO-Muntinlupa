@@ -24,6 +24,9 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
           <a class="nav-link" href="/jobs.php">Jobs</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="/typingtest.php">Typing Test</a>
+        </li>
+        <li class="nav-item">
           <?php
           if (isset($_SESSION['loggedin'])) {
             echo $profile;

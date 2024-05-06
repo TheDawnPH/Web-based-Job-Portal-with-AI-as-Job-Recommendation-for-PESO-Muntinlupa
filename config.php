@@ -106,6 +106,7 @@ if ($conn === false) {
         sex VARCHAR(255),
         profile_image text,
         company_verified INT(1) DEFAULT 0,
+        wpm INT(3),
         FOREIGN KEY (jinindustry_id) REFERENCES jinindustry(jinindustry_id))
         ";
     if (mysqli_query($conn, $user)) {
