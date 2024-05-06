@@ -38,7 +38,7 @@ $result = mysqli_stmt_get_result($stmt);
 <html>
 
 <head>
-    <title>PESO Job Portal - Job Listings</title>
+    <title>Job Listings - Company</title>
     <link rel="stylesheet" href="/css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
