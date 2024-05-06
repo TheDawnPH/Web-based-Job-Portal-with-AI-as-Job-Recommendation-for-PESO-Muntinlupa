@@ -38,6 +38,8 @@ function getJobAcceptanceRate($job_id)
     }
 }
 
+
+
 ?>
 
 <html>

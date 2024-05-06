@@ -23,158 +23,6 @@ if ($_SESSION["user_type"] != "admin") {
     exit;
 }
 
-// Cloudflare API key and Zone ID
-$apiKey = $_ENV['CLOUDFLARE_API_KEY'];
-$zoneId = $_ENV['CLOUDFLARE_ZONE_ID'];
-
-// Cloudflare GraphQL API endpoint for analytics
-$apiEndpoint = "https://api.cloudflare.com/client/v4/graphql";
-
-$date_lt = date('Y-m-d');
-
-// GraphQL query for analytics
-$query = <<<GRAPHQL
-query { viewer { zones(filter: { zoneTag: "$zoneId" }) { httpRequests1dGroups(filter: { date: "$date_lt" }, limit: 10000) { uniq { uniques }}}}}
-GRAPHQL;
-
-// Set up the cURL request for GraphQL
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $apiEndpoint);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['query' => $query]));
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Authorization: Bearer ' . $apiKey,
-    'Content-Type: application/json',
-));
-
-// Execute cURL request
-$response = curl_exec($ch);
-
-// Check for errors
-if (curl_errno($ch)) {
-    echo 'Curl error: ' . curl_error($ch);
-}
-
-// Decode the JSON response
-$data = json_decode($response, true);
-
-// Check if the necessary data is present
-if (isset($data['data']['viewer']['zones'][0]['httpRequests1dGroups'][0]['uniq']['uniques'])) {
-    // Get the total visitors count
-    $totalVisitors = $data['data']['viewer']['zones'][0]['httpRequests1dGroups'][0]['uniq']['uniques'];
-} else {
-    // Set a default value or handle the case when the data is not present
-    $totalVisitors = 'N/A';
-}
-
-// Close cURL session
-curl_close($ch);
-
-// intialize variables
-$totalApplicants = 0;
-$totalCompany = 0;
-$totalVerifiedCompany = 0;
-$totalNOTVerifiedCompany = 0;
-$totalJobPostings = 0;
-$totalApplication = 0;
-$totalPendingApplication = 0;
-$totalAcceptedApplication = 0;
-$totalRejectedApplication = 0;
-
-// get total applicants
-$sql = "SELECT COUNT(*) AS total FROM users WHERE user_type = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "s", $user_type);
-$user_type = 'applicant';
-if (!mysqli_stmt_execute($stmt)) {
-    die("Error executing query: " . mysqli_error($conn));
-}
-$result = mysqli_stmt_get_result($stmt);
-$row = mysqli_fetch_assoc($result);
-
-if ($row) {
-    $totalApplicants = $row['total'];
-}
-
-// get total company
-$sql = "SELECT COUNT(*) AS total FROM users WHERE user_type = 'company'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-
-if ($row) {
-    $totalCompany = $row['total'];
-}
-
-// get total verified company
-$sql = "SELECT COUNT(*) AS total FROM users WHERE user_type = 'company' AND company_verified = 1";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-
-if ($row) {
-    $totalVerifiedCompany = $row['total'];
-}
-
-// get total not verified company
-$sql = "SELECT COUNT(*) AS total FROM users WHERE user_type = 'company' AND company_verified = 0";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-
-if ($row) {
-    $totalNOTVerifiedCompany = $row['total'];
-}
-
-// get total job postings
-$sql = "SELECT COUNT(*) AS total FROM job_listing";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-
-if ($row) {
-    $totalJobPostings = $row['total'];
-}
-
-// get total application
-$sql = "SELECT COUNT(*) AS total FROM job_applications";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-
-if ($row) {
-    $totalApplication = $row['total'];
-}
-
-// get total pending application
-$sql = "SELECT COUNT(*) AS total FROM job_applications WHERE application_status = '0'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-
-if ($row) {
-    $totalPendingApplication = $row['total'];
-}
-
-// get total accepted application
-$sql = "SELECT COUNT(*) AS total FROM job_applications WHERE application_status = '1'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-
-if ($row) {
-    $totalAcceptedApplication = $row['total'];
-    if ($totalApplication > 0) {
-        $totalAcceptedApplication = $totalAcceptedApplication / $totalApplication * 100;
-    }
-}
-
-// get total rejected application
-$sql = "SELECT COUNT(*) AS total FROM job_applications WHERE application_status = '2'";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-
-if ($row) {
-    $totalRejectedApplication = $row['total'];
-    if ($totalApplication > 0) {
-        $totalRejectedApplication = $totalRejectedApplication / $totalApplication * 100;
-    }
-}
-
 
 ?>
 
@@ -199,7 +47,7 @@ if ($row) {
     <div class="container">
         <h1>Admin Dashboard</h1>
         <br>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- <div class="row row-cols-1 row-cols-md-3 g-4">
             <?php
             $cards = [
                 ['Total User Count', $totalVisitors, 'Total number of users visiting the site.'],
@@ -219,7 +67,7 @@ if ($row) {
                 <div class="col-md-4">
                     <div class="card mb-4 h-100 text-bg-dark">
                         <div class="card-body">
-                            <h1 class="card-title mb-2 text-center"><?php echo $card[1]; ?></h1>
+                            <h3 class="card-title mb-2 text-center"><?php echo $card[1]; ?></h3>
                             <hr>
                             <h6 class="card-subtitle"><?php echo $card[0]; ?></h6>
                             <p class="card-text"><?php echo $card[2]; ?></p>
@@ -227,7 +75,273 @@ if ($row) {
                     </div>
                 </div>
             <?php endforeach; ?>
-        </div>
+        </div> -->
+        <!-- create a graph per group from analytics table -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col-md-4">
+                        <div class="card mb-4 h-100 text-bg-dark">
+                            <div class="card-body">
+                                <h3 class="card-title mb-2 text-center">Total Visitors</h3>
+                                <canvas id="chart_totalvisitors"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4 h-100 text-bg-dark">
+                            <div class="card-body">
+                                <h3 class="card-title mb-2 text-center">Total Applicants</h3>
+                                <canvas id="chart_totalapplicants"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4 h-100 text-bg-dark">
+                            <div class="card-body">
+                                <h3 class="card-title mb-2 text-center">Total Company</h3>
+                                <canvas id="chart_totalcompany"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4 h-100 text-bg-dark">
+                            <div class="card-body">
+                                <h3 class="card-title mb-2 text-center">Total Verified Company</h3>
+                                <canvas id="chart_totalverifiedcompany"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4 h-100 text-bg-dark">
+                            <div class="card-body">
+                                <h3 class="card-title mb-2 text-center">Total Not Verified Company</h3>
+                                <canvas id="chart_totalnotverifiedcompany"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4 h-100 text-bg-dark">
+                            <div class="card-body">
+                                <h3 class="card-title mb-2 text-center">Total Job Postings</h3>
+                                <canvas id="chart_totaljobpostings"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4 h-100 text-bg-dark">
+                            <div class="card-body">
+                                <h3 class="card-title mb-2 text-center">Total Application</h3>
+                                <canvas id="chart_totalapplication"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4 h-100 text-bg-dark">
+                            <div class="card-body">
+                                <h3 class="card-title mb-2 text-center">Total Pending Application</h3>
+                                <canvas id="chart_totalpendingapplication"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                $sql = "SELECT * FROM analytics";
+                $result = mysqli_query($conn, $sql);
+                $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                $total_visitors = array_column($data, 'total_visitors');
+                $total_applicants = array_column($data, 'total_applicants');
+                $total_company = array_column($data, 'total_company');
+                $total_verified_company = array_column($data, 'total_verified_company');
+                $total_not_verified_company = array_column($data, 'total_not_verified_company');
+                $total_job_postings = array_column($data, 'total_job_postings');
+                $total_application = array_column($data, 'total_application');
+                $total_pending_application = array_column($data, 'total_pending_application');
+                $created_at = array_column($data, 'created_at');
+                ?>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    var ctx = document.getElementById('chart_totalvisitors').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: <?php echo json_encode($created_at); ?>,
+                            datasets: [{
+                                label: 'Total Visitors',
+                                data: <?php echo json_encode($total_visitors); ?>,
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx = document.getElementById('chart_totalapplicants').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: <?php echo json_encode($created_at); ?>,
+                            datasets: [{
+                                label: 'Total Applicants',
+                                data: <?php echo json_encode($total_applicants); ?>,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx = document.getElementById('chart_totalcompany').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: <?php echo json_encode($created_at); ?>,
+                            datasets: [{
+                                label: 'Total Company',
+                                data: <?php echo json_encode($total_company); ?>,
+                                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                                borderColor: 'rgba(255, 206, 86, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx = document.getElementById('chart_totalverifiedcompany').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: <?php echo json_encode($created_at); ?>,
+                            datasets: [{
+                                label: 'Total Verified Company',
+                                data: <?php echo json_encode($total_verified_company); ?>,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx = document.getElementById('chart_totalnotverifiedcompany').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: <?php echo json_encode($created_at); ?>,
+                            datasets: [{
+                                label: 'Total Not Verified Company',
+                                data: <?php echo json_encode($total_not_verified_company); ?>,
+                                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                borderColor: 'rgba(153, 102, 255, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx = document.getElementById('chart_totaljobpostings').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: <?php echo json_encode($created_at); ?>,
+                            datasets: [{
+                                label: 'Total Job Postings',
+                                data: <?php echo json_encode($total_job_postings); ?>,
+                                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                borderColor: 'rgba(255, 159, 64, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx = document.getElementById('chart_totalapplication').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: <?php echo json_encode($created_at); ?>,
+                            datasets: [{
+                                label: 'Total Application',
+                                data: <?php echo json_encode($total_application); ?>,
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    var ctx = document.getElementById('chart_totalpendingapplication').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: <?php echo json_encode($created_at); ?>,
+                            datasets: [{
+                                label: 'Total Pending Application',
+                                data: <?php echo json_encode($total_pending_application); ?>,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                </script>
+
+            </div>
         <br>
     </div>
 </body>

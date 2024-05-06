@@ -265,8 +265,36 @@ if ($conn === false) {
     // mysql to get user company_verified status
     $sql = "SELECT company_verified FROM users WHERE user_id = ?";
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $_SESSION["user_id"]);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $cverify = mysqli_fetch_assoc($result);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "i", $_SESSION["user_id"]);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        if ($result) {
+            $cverify = mysqli_fetch_assoc($result);
+            if (!$cverify) {
+                // No data returned, set default value
+                $cverify = array("company_verified" => 0);
+            }
+        } else {
+            // Error in fetching result
+            echo "Error: " . mysqli_error($conn);
+        }
+    } else {
+        // Error in preparing statement
+        echo "Error: " . mysqli_error($conn);
+    }
+
+    // implement analytics, insert table for analytics
+    $analytics = "CREATE TABLE IF NOT EXISTS analytics (
+        id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        total_visitors INT NOT NULL,
+        total_applicants INT NOT NULL,
+        total_company INT NOT NULL,
+        total_not_verified_company INT NOT NULL,
+        total_verified_company INT NOT NULL,
+        total_job_postings INT NOT NULL,
+        total_application INT NOT NULL,
+        total_pending_application INT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )";
 }
