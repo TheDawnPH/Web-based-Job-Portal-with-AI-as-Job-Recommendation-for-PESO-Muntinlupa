@@ -58,8 +58,8 @@ if ($_SESSION["user_type"] != "admin") {
                 ['Total Job Posting', $totalJobPostings, 'Total number of job postings in the system.'],
                 ['Total Application', $totalApplication, 'Total number of applications in the system.'],
                 ['Total Pending Applications', $totalPendingApplication, 'Total number of pending applications in the system.'],
-                ['% of Accepted Application', round($totalAcceptedApplication) . '%' , 'Total percentage of accepted applicants.'],
-                ['% of Rejected Application', round($totalRejectedApplication) . '%' , 'Total percentage of rejected applicants.']
+                ['% of Accepted Application', round($totalAcceptedApplication) . '%', 'Total percentage of accepted applicants.'],
+                ['% of Rejected Application', round($totalRejectedApplication) . '%', 'Total percentage of rejected applicants.']
             ];
             ?>
 
@@ -150,15 +150,17 @@ if ($_SESSION["user_type"] != "admin") {
                 $sql = "SELECT * FROM analytics";
                 $result = mysqli_query($conn, $sql);
                 $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                $total_visitors = array_column($data, 'total_visitors');
-                $total_applicants = array_column($data, 'total_applicants');
-                $total_company = array_column($data, 'total_company');
-                $total_verified_company = array_column($data, 'total_verified_company');
-                $total_not_verified_company = array_column($data, 'total_not_verified_company');
-                $total_job_postings = array_column($data, 'total_job_postings');
-                $total_application = array_column($data, 'total_application');
-                $total_pending_application = array_column($data, 'total_pending_application');
-                $created_at = array_column($data, 'created_at');
+                $total_visitors = array_slice(array_column($data, 'total_visitors'), -10);
+                $total_applicants = array_slice(array_column($data, 'total_applicants'), -10);
+                $total_company = array_slice(array_column($data, 'total_company'), -10);
+                $total_verified_company = array_slice(array_column($data, 'total_verified_company'), -10);
+                $total_not_verified_company = array_slice(array_column($data, 'total_not_verified_company'), -10);
+                $total_job_postings = array_slice(array_column($data, 'total_job_postings'), -10);
+                $total_application = array_slice(array_column($data, 'total_application'), -10);
+                $total_pending_application = array_slice(array_column($data, 'total_pending_application'), -10);
+                $created_at = array_slice(array_map(function ($time) {
+                    return date("m/d g:i a", strtotime($time));
+                }, array_column($data, 'created_at')), -10);
                 ?>
 
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -338,12 +340,11 @@ if ($_SESSION["user_type"] != "admin") {
                             }
                         }
                     });
-
                 </script>
 
             </div>
-        <br>
-    </div>
+            <br>
+        </div>
 </body>
 
 </html>
