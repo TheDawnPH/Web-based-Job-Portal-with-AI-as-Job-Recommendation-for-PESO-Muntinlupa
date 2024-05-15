@@ -72,11 +72,9 @@ function recordWPM($conn, $wpm)
                 const words = ['The quick brown fox jumps over the lazy dog.', 
                 'How much wood would a woodchuck chuck if a woodchuck could chuck wood?', 
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 
-                'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.', 
                 'Were not they supposed to put in a left-hand turn lane three years ago? he thought as he waited through three lights at the intersection with Exchange Street.', 
                 'He had a routine. He would stick to it. It would get him through the day.', 
-                'She never blamed him, as he feared she would. She picked up and went on. He was again amazed by her lightness, her resiliency.',
-                'Sipping again, he felt the slow warmth spreading deep, under seven layers of derma, under fat, under the muscle beneath that, spreading even into his exhausted angry bones which stiffened with age and an inertia more persuasive by the day.'];
+                'She never blamed him, as he feared she would. She picked up and went on. He was again amazed by her lightness, her resiliency.'];
                 textToType = words[Math.floor(Math.random() * words.length)];
                 typingArea.textContent = textToType;
             }
@@ -99,7 +97,7 @@ function recordWPM($conn, $wpm)
                 const accuracy = calculateAccuracy(typedText, textToType);
                 const wordsTyped = typedText.split(' ').length;
                 const wpm = Math.round((wordsTyped / elapsedTime) * 60);
-                resultDisplay.textContent = `Your typing speed: ${wpm} WPM, Accuracy: ${accuracy}%`;
+                resultDisplay.textContent = `Your typing speed: ${wpm} WPM`;
                 startBtn.style.display = 'block';
                 startBtn.textContent = 'Restart Test';
 
