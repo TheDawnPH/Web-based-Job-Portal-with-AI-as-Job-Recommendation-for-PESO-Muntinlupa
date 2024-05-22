@@ -298,4 +298,10 @@ if ($conn === false) {
         total_pending_application INT NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )";
+
+    if (mysqli_query($conn, $analytics)) {
+        //echo "analytics added successfully.";
+    } else {
+        echo "ERROR: Could not able to execute $analytics. " . mysqli_error($conn);
+    }
 }
