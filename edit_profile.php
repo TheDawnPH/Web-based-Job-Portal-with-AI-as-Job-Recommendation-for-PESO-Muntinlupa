@@ -70,9 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_school_year_begin = !empty($_POST["school_year_begin"]) ? $_POST["school_year_begin"] : null;
             $param_school_year_end = !empty($_POST["school_year_end"]) ? $_POST["school_year_end"] : null;
             $param_technicalschool_name = $_POST["technicalschool_name"];
-            $param_nsrp_form = !empty($_FILES["nsrp_form"]["name"]) ? $_FILES["nsrp_form"]["name"] : NULL;
-            $param_biodata_form = !empty($_FILES["biodata_form"]["name"]) ? $_FILES["biodata_form"]["name"] : NULL;
-            $param_profile_picture = !empty($_FILES["profile_picture"]["name"]) ? $_FILES["profile_picture"]["name"] : NULL;
             $param_user_id = $user_id;
             $param_jinindustry_id = $_POST["jinindustry"];
 
@@ -83,6 +80,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $image_name_ext = pathinfo($image_name, PATHINFO_EXTENSION);
                 if ($image_name_ext != "png" && $image_name_ext != "jpg" && $image_name_ext != "jpeg") {
                     $error = "Image must be a png, jpg, or jpeg file.";
+                } else {
+                    $param_profile_picture = !empty($_FILES["profile_picture"]["name"]) ? $_FILES["profile_picture"]["name"] : NULL;
                 }
             }
             if (!empty($_FILES["nsrp_form"]["name"])) {
@@ -90,6 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $nsrp_form_ext = pathinfo($nsrp_form, PATHINFO_EXTENSION);
                 if ($nsrp_form_ext != "pdf" && $nsrp_form_ext != "docx") {
                     $error = "NSRP form must be a PDF or DOCX file.";
+                } else {
+                    $param_nsrp_form = !empty($_FILES["nsrp_form"]["name"]) ? $_FILES["nsrp_form"]["name"] : NULL;
                 }
             }
             if (!empty($_FILES["biodata_form"]["name"])) {
@@ -97,10 +98,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $biodata_form_ext = pathinfo($biodata_form, PATHINFO_EXTENSION);
                 if ($biodata_form_ext != "pdf" && $biodata_form_ext != "docx") {
                     $error = "Biodata form must be a PDF or DOCX file.";
+                } else {
+                    $param_biodata_form = !empty($_FILES["biodata_form"]["name"]) ? $_FILES["biodata_form"]["name"] : NULL;
                 }
             }
 
-            if (mysqli_stmt_execute($stmt)) {
+            if (mysqli_stmt_execute($stmt) && empty($error)) {
+                
                 // Create a directory for the user if it doesn't exist
                 $user_upload_dir = "uploads/" . $user_id;
                 if (!is_dir($user_upload_dir)) {
@@ -120,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $success = "Profile updated successfully!";
             } else {
-                $error =  "Error updating profile.";
+                // handled by $error
             }
         }
     }
@@ -132,6 +136,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $loi_ext = pathinfo($loi, PATHINFO_EXTENSION);
             if ($loi_ext != "pdf" && $loi_ext != "docx") {
                 $error = "Letter of Intent must be a PDF or DOCX file.";
+            } else {
+                $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["cp"]["name"])) {
@@ -139,6 +145,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cp_ext = pathinfo($cp, PATHINFO_EXTENSION);
             if ($cp_ext != "pdf" && $cp_ext != "docx") {
                 $error = "Company Profile must be a PDF or DOCX file.";
+            } else {
+                $param_cp = !empty($_FILES["cp"]["name"]) ? $_FILES["cp"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["sec_accredit"]["name"])) {
@@ -146,6 +154,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sec_accredit_ext = pathinfo($sec_accredit, PATHINFO_EXTENSION);
             if ($sec_accredit_ext != "pdf" && $sec_accredit_ext != "docx") {
                 $error = "SEC Accreditation must be a PDF or DOCX file.";
+            } else {
+                $param_sec_accredit = !empty($_FILES["sec_accredit"]["name"]) ? $_FILES["sec_accredit"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["cda_license"]["name"])) {
@@ -153,6 +163,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cda_license_ext = pathinfo($cda_license, PATHINFO_EXTENSION);
             if ($cda_license_ext != "pdf" && $cda_license_ext != "docx") {
                 $error = "CDA License must be a PDF or DOCX file.";
+            } else {
+                $param_cda_license = !empty($_FILES["cda_license"]["name"]) ? $_FILES["cda_license"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["dole_license"]["name"])) {
@@ -160,6 +172,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $dole_license_ext = pathinfo($dole_license, PATHINFO_EXTENSION);
             if ($dole_license_ext != "pdf" && $dole_license_ext != "docx") {
                 $error = "DOLE License must be a PDF or DOCX file.";
+            } else {
+                $param_dole_license = !empty($_FILES["dole_license"]["name"]) ? $_FILES["dole_license"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["loc"]["name"])) {
@@ -167,6 +181,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $loc_ext = pathinfo($loc, PATHINFO_EXTENSION);
             if ($loc_ext != "pdf" && $loc_ext != "docx") {
                 $error = "LOC must be a PDF or DOCX file.";
+            } else {
+                $param_loc = !empty($_FILES["loc"]["name"]) ? $_FILES["loc"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["mbpermit"]["name"])) {
@@ -174,6 +190,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mbpermit_ext = pathinfo($mbpermit, PATHINFO_EXTENSION);
             if ($mbpermit_ext != "pdf" && $mbpermit_ext != "docx") {
                 $error = "MB Permit must be a PDF or DOCX file.";
+            } else {
+                $param_mbpermit = !empty($_FILES["mbpermit"]["name"]) ? $_FILES["mbpermit"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["job_vacant"]["name"])) {
@@ -181,6 +199,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $job_vacant_ext = pathinfo($job_vacant, PATHINFO_EXTENSION);
             if ($job_vacant_ext != "pdf" && $job_vacant_ext != "docx") {
                 $error = "Job Vacant must be a PDF or DOCX file.";
+            } else {
+                $param_job_vacant = !empty($_FILES["job_vacant"]["name"]) ? $_FILES["job_vacant"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["job_solicitation"]["name"])) {
@@ -188,6 +208,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $job_solicitation_ext = pathinfo($job_solicitation, PATHINFO_EXTENSION);
             if ($job_solicitation_ext != "pdf" && $job_solicitation_ext != "docx") {
                 $error = "Job Solicitation must be a PDF or DOCX file.";
+            } else {
+                $param_job_solicitation = !empty($_FILES["job_solicitation"]["name"]) ? $_FILES["job_solicitation"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["phjobnet_reg"]["name"])) {
@@ -195,6 +217,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $phjobnet_reg_ext = pathinfo($phjobnet_reg, PATHINFO_EXTENSION);
             if ($phjobnet_reg_ext != "pdf" && $phjobnet_reg_ext != "docx") {
                 $error = "PH Jobnet Registration must be a PDF or DOCX file.";
+            } else {
+                $param_phjobnet_reg = !empty($_FILES["phjobnet_reg"]["name"]) ? $_FILES["phjobnet_reg"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["cert_nopendingcase"]["name"])) {
@@ -202,6 +226,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cert_nopendingcase_ext = pathinfo($cert_nopendingcase, PATHINFO_EXTENSION);
             if ($cert_nopendingcase_ext != "pdf" && $cert_nopendingcase_ext != "docx") {
                 $error = "Certificate of No Pending Case must be a PDF or DOCX file.";
+            } else {
+                $param_cert_nopendingcase = !empty($_FILES["cert_nopendingcase"]["name"]) ? $_FILES["cert_nopendingcase"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["cert_regSSS"]["name"])) {
@@ -209,6 +235,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cert_regSSS_ext = pathinfo($cert_regSSS, PATHINFO_EXTENSION);
             if ($cert_regSSS_ext != "pdf" && $cert_regSSS_ext != "docx") {
                 $error = "Certificate of Registration with SSS must be a PDF or DOCX file.";
+            } else {
+                $param_cert_regSSS = !empty($_FILES["cert_regSSS"]["name"]) ? $_FILES["cert_regSSS"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["cert_regPhHealth"]["name"])) {
@@ -216,6 +244,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cert_regPhHealth_ext = pathinfo($cert_regPhHealth, PATHINFO_EXTENSION);
             if ($cert_regPhHealth_ext != "pdf" && $cert_regPhHealth_ext != "docx") {
                 $error = "Certificate of Registration with PhilHealth must be a PDF or DOCX file.";
+            } else {
+                $param_cert_regPhHealth = !empty($_FILES["cert_regPhHealth"]["name"]) ? $_FILES["cert_regPhHealth"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["cert_regPGIBG"]["name"])) {
@@ -223,6 +253,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $cert_regPGIBG_ext = pathinfo($cert_regPGIBG, PATHINFO_EXTENSION);
             if ($cert_regPGIBG_ext != "pdf" && $cert_regPGIBG_ext != "docx") {
                 $error = "Certificate of Registration with PAG-IBIG must be a PDF or DOCX file.";
+            } else {
+                $param_cert_regPGIBG = !empty($_FILES["cert_regPGIBG"]["name"]) ? $_FILES["cert_regPGIBG"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["sketch_map"]["name"])) {
@@ -230,6 +262,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sketch_map_ext = pathinfo($sketch_map, PATHINFO_EXTENSION);
             if ($sketch_map_ext != "pdf" && $sketch_map_ext != "docx") {
                 $error = "Sketch Map must be a PDF or DOCX file.";
+            } else {
+                $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : NULL;
             }
         }
         if (!empty($_FILES["2303_bir"]["name"])) {
@@ -237,6 +271,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $bir_2303_ext = pathinfo($bir_2303, PATHINFO_EXTENSION);
             if ($bir_2303_ext != "pdf" && $bir_2303_ext != "docx") {
                 $error = "BIR 2303 must be a PDF or DOCX file.";
+            } else {
+                $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : NULL;
             }
         }
         // check if company documents exist in company_documents table
@@ -254,26 +290,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_bind_param($stmt, "sssssssssssssssss", $param_loi, $param_cp, $param_sec_accredit, $param_cda_license, $param_dole_license, $param_loc, $param_mbpermit, $param_job_vacant, $param_job_solicitation, $param_phjobnet_reg, $param_cert_nopendingcase, $param_cert_regSSS, $param_cert_regPhHealth, $param_cert_regPGIBG, $param_sketch_map, $param_2303_bir, $param_user_id);
 
                 // Set parameters
-                $param_loi = !empty($_FILES["loi"]["name"]) ? $_FILES["loi"]["name"] : null;
-                $param_cp = !empty($_FILES["cp"]["name"]) ? $_FILES["cp"]["name"] : null;
-                $param_sec_accredit = !empty($_FILES["sec_accredit"]["name"]) ? $_FILES["sec_accredit"]["name"] : null;
-                $param_cda_license = !empty($_FILES["cda_license"]["name"]) ? $_FILES["cda_license"]["name"] : null;
-                $param_dole_license = !empty($_FILES["dole_license"]["name"]) ? $_FILES["dole_license"]["name"] : null;
-                $param_loc = !empty($_FILES["loc"]["name"]) ? $_FILES["loc"]["name"] : null;
-                $param_mbpermit = !empty($_FILES["mbpermit"]["name"]) ? $_FILES["mbpermit"]["name"] : null;
-                $param_job_vacant = !empty($_FILES["job_vacant"]["name"]) ? $_FILES["job_vacant"]["name"] : null;
-                $param_job_solicitation = !empty($_FILES["job_solicitation"]["name"]) ? $_FILES["job_solicitation"]["name"] : null;
-                $param_phjobnet_reg = !empty($_FILES["phjobnet_reg"]["name"]) ? $_FILES["phjobnet_reg"]["name"] : null;
-                $param_cert_nopendingcase = !empty($_FILES["cert_nopendingcase"]["name"]) ? $_FILES["cert_nopendingcase"]["name"] : null;
-                $param_cert_regSSS = !empty($_FILES["cert_regSSS"]["name"]) ? $_FILES["cert_regSSS"]["name"] : null;
-                $param_cert_regPhHealth = !empty($_FILES["cert_regPhHealth"]["name"]) ? $_FILES["cert_regPhHealth"]["name"] : null;
-                $param_cert_regPGIBG = !empty($_FILES["cert_regPGIBG"]["name"]) ? $_FILES["cert_regPGIBG"]["name"] : null;
-                $param_sketch_map = !empty($_FILES["sketch_map"]["name"]) ? $_FILES["sketch_map"]["name"] : null;
-                $param_2303_bir = !empty($_FILES["2303_bir"]["name"]) ? $_FILES["2303_bir"]["name"] : null;
                 $param_user_id = $user_id;
 
                 // Execute the prepared statement
-                if (mysqli_stmt_execute($stmt)) {
+                if (mysqli_stmt_execute($stmt) && empty($error)) {
                     // Move uploaded files to the user-specific folder
                     $user_upload_dir = "uploads/" . $user_id;
                     if (!is_dir($user_upload_dir)) {
@@ -331,7 +351,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $success = "Profile updated successfully!";
                 } else {
-                    $error = "Error updating profile.";
+                    // handled by $error
                 }
 
                 // Close statement
