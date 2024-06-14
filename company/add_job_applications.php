@@ -98,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // attempt to execute the prepared statement
-        if (mysqli_stmt_execute($stmt)) {
+        if (mysqli_stmt_execute($stmt) && empty($error)) {
             if ($submit_job_id != $job_id) {
                 // Update: create upload directory if not exists and move uploaded file
                 $upload_dir = "uploads/" . $submit_job_id . "/";
