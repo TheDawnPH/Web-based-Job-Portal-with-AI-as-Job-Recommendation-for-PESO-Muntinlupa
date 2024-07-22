@@ -65,9 +65,9 @@ function getJobAcceptanceRate($job_id)
     <h1 class="text-container text-center" style="font-family:'Montserrat', sans-serif; color:#000080;"><strong>WELCOME TO MUNTINLUPA CITY JOB PORTAL</strong></h1>
     <p class="lead text-center text-container" style="font-family:'Montserrat', sans-serif; color:#000080;">May trabaho para sa mga Muntinlupeño</p>
     <div class="container">
-        <div class="alert alert-danger fade show" role="alert">
+        <!-- <div class="alert alert-danger fade show" role="alert">
             Hello! This site is a capstone project for Muntinlupa PESO, this site is <strong>not affiliated in Muntinlupa PESO, and Muntinlupa City Government. This is only a proposal for Muntinlupa PESO.</strong> Please do not insert actual personal information. Thank you!
-        </div>
+        </div> -->
         <?php if ($cverify["company_verified"] == 0 && isset($_SESSION["user_type"]) && $_SESSION["user_type"] === "company") { ?>
             <div class="alert alert-danger fade show" role="alert">
                 <strong>Warning!</strong><br>Your company is not yet verified. Please <a href="company/request_company_verification.php">click here</a> to verify your company.
