@@ -140,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 
 <head>
-    <title>PESO Job Portal - Add/Update Job Listing</title>
+    <title>Add/Update Job Listing - Company</title>
     <link rel="stylesheet" href="/css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -184,6 +184,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>";
                     } ?>
                     <h1>Add Job Listing</h1>
+                    <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+                    <br><br>
                     <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="POST" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="job_title" class="form-label">Job Title</label>
@@ -235,7 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <button type="submit" class="btn btn-primary">Add/Update Job Listing</button>
                     </form>
                 <?php } else { ?>
-                    <?php
+                <?php
                     if (isset($errortitle)) {
                         echo "<div class='alert alert-danger' role='alert'>
                     <h4 class='alert-heading'>$errortitle</h4>
@@ -244,7 +246,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>";
                     }
                 }
-                    ?>
+                ?>
             </div>
         </div>
     </div>

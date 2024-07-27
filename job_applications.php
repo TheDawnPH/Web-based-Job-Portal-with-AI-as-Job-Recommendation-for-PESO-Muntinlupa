@@ -71,8 +71,8 @@ if (isset($_GET["job_id"])) {
             $mail->Password   = $_ENV['SMTP_PASS']; // password
             $mail->IsHTML(true);
             $mail->AddAddress($row2['email'], $row2['fname'] . " " . $row2['lname']);
-            $mail->SetFrom($_ENV['SMTP_EMAIL'], "PESO Muntinlupa - Job Application System");
-            $mail->Subject = "New Job Application - PESO Muntinlupa";
+            $mail->SetFrom($_ENV['SMTP_EMAIL'], "PESO Muntinlupa Job Portal");
+            $mail->Subject = "New Job Application - PESO Muntinlupa Job Portal";
             // set content of email that a job application has been sent and click the link to view the job application
             $content = "<b>Dear " . $row2['fname'] . " " . $row2['lname'] . ",</b><br><br>";
             $content .= "A new job application has been sent to you. Please click the link below to view the job application.<br><br>";
@@ -102,7 +102,7 @@ if (isset($_GET["job_id"])) {
 <html>
 
 <head>
-    <title>Pending Job Applications - Muntinlupa Job Portal</title>
+    <title>Pending Job Applications - PESO Muntinlupa Job Portal</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -119,6 +119,8 @@ if (isset($_GET["job_id"])) {
     <?php include "nav.php"; ?>
     <div class="container">
         <h1>Your Job Applications</h1>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <?php if (isset($sucess)) { ?>
             <div class="alert alert-success" role="alert">
                 <?php echo $sucess; ?>
@@ -135,8 +137,10 @@ if (isset($_GET["job_id"])) {
                 <thead>
                     <tr>
                         <th scope="col">Job Title</th>
+                        <th scope="col">Company</th>
                         <th scope="col">Date Applied</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Date Updated</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -150,11 +154,17 @@ if (isset($_GET["job_id"])) {
                         $result2 = mysqli_query($conn, $sql2);
                         $row2 = mysqli_fetch_assoc($result2);
                         $company_id = $row2["user_id"];
+                        $sql3 = "SELECT * FROM users WHERE user_id = '$company_id'";
+                        $result3 = mysqli_query($conn, $sql3);
+                        $row3 = mysqli_fetch_assoc($result3);
                     ?>
                         <tr>
                             <td><?php echo $row2["job_title"]; ?></td>
+                            <td><?php echo $row3["company_name"]; ?></td>
                             <td><?php echo date("h:i:s A F j, Y", strtotime($row["created_at"])); ?></td>
-                            <td><?php echo ($row["application_status"] === '0') ? 'Pending' : 'Approved'  ?></td>
+                            <td><?php echo ($row["application_status"] === '0') ? 'Pending' : (($row["application_status"] === '2') ? 'Rejected' : 'Approved'); ?>
+                            <td><?php echo date("h:i:s A F j, Y", strtotime($row["updated_at"])); ?></td>                            
+                            </td>
                         </tr>
                     <?php } ?>
                 </tbody>

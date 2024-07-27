@@ -66,7 +66,8 @@ while ($row = mysqli_fetch_assoc($result)) {
     <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Job Applicants</h1>
-        <br>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <!-- filter dropdown based on job listings created by the session user_id -->
         <label for="filter">Filter by Job Title:</label>
         <select id="filter" class="form-select" onchange="filterTable()">

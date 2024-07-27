@@ -60,6 +60,8 @@ if (mysqli_stmt_execute($stmt)) {
             $sql3 = "SELECT * FROM job_listing WHERE id = ?";
             $stmt3 = mysqli_prepare($conn, $sql3);
             mysqli_stmt_bind_param($stmt3, "i", $row2['job_id']);
+
+
             if (mysqli_stmt_execute($stmt3)) {
                 $result3 = mysqli_stmt_get_result($stmt3);
                 $row3 = mysqli_fetch_array($result3);
@@ -90,10 +92,10 @@ if (mysqli_stmt_execute($stmt)) {
                     $mail->IsHTML(true);
                     $mail->AddAddress($row['email'], $row['fname'] . " " . $row['lname']);
                     $mail->SetFrom($_ENV['SMTP_EMAIL'], $row4['fname'] . " " . $row4['lname']);
-                    $mail->Subject = "PESO Muntinlupa - Email Verification";
+                    $mail->Subject = "PESO Muntinlupa Job Portal - Your Application on " . $row3['job_title'] . " has been declined";
                     // set content of email that the applicant is accepted
                     $content = "<b>Dear " . $row['fname'] . " " . $row['lname'] . ",</b><br><br>";
-                    $content .= "Congratulations! You are accepted to the job " . $row3['job_title'] . ".<br>";
+                    $content .= "Congratulations! You are <b>short-listed</b> to the job " . $row3['job_title'] . " on " . $row4['company_name'] . "<br>";
                     $content .= "Please wait for the recruitment agent to contact you about your application.<br><br>";
                     $content .= "Thank you for using PESO Muntinlupa Job Portal.<br>";
                     $content .= "Best Regards,<br>";

@@ -21,12 +21,11 @@ if ($_SESSION["user_type"] != "admin") {
     header("location: /404.php");
     exit;
 }
-
 ?>
 <html>
 
 <head>
-    <title>Job Application Reports</title>
+    <title>Job Application Reports - Admin</title>
     <link rel="stylesheet" href="/css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -51,10 +50,15 @@ if ($_SESSION["user_type"] != "admin") {
     <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Job Applications Reports</h1>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <div class="table-responsive">
             <br>
             <input type="button" onclick="printTable()" value="Print Everything" class="no-print btn btn-primary" />
             <br><br>
+            <!-- search bar for job listings -->
+            <input type="text" id="search" onkeyup="searchTable()" placeholder="Search for Job title/Company.." class="form-control">
+            <br>
             <!-- filter dropdown -->
             <label for="filter">Filter by Application Status:</label>
             <select id="filter" class="form-select" onchange="filterTable()">
@@ -63,35 +67,18 @@ if ($_SESSION["user_type"] != "admin") {
                 <option value="Denied">Denied</option>
                 <option value="Pending">Pending</option>
             </select>
-            <!-- javascript for filter -->
-            <script>
-                function filterTable() {
-                    var filter = document.getElementById("filter").value;
-                    var table = document.getElementById("data");
-                    var tr = table.getElementsByTagName("tr");
-                    for (var i = 0; i < tr.length; i++) {
-                        var td = tr[i].getElementsByTagName("td")[5];
-                        if (td) {
-                            if (filter == "all") {
-                                tr[i].style.display = "";
-                            } else if (td.innerHTML == filter) {
-                                tr[i].style.display = "";
-                            } else {
-                                tr[i].style.display = "none";
-                            }
-                        }
-                    }
-                }
-            </script>
-            <br><br>
+            <br>
+            <p>Number of Results: <span id="count"></span></p>
             <table class="table table-striped table-bordered border-start" id="data" data-show-print="true">
                 <thead>
                     <tr>
                         <th>Application ID</th>
                         <th>Job Title</th>
+                        <th>Company Name</th>
                         <th>Applicant Name</th>
                         <th>Applicant Email</th>
                         <th>Application Date</th>
+                        <th>Updated At</th>
                         <th>Application Status</th>
                         <th>Action</th>
                     </tr>
@@ -103,15 +90,22 @@ if ($_SESSION["user_type"] != "admin") {
                     while ($row = mysqli_fetch_array($result)) {
                         $Jobname = mysqli_fetch_array(mysqli_query($conn, "SELECT job_title FROM job_listing WHERE id = '" . $row['job_id'] . "'"));
                         $userdetails = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '" . $row['user_id'] . "'"));
+                        $companydetails = mysqli_fetch_array(mysqli_query($conn, "SELECT user_id FROM job_listing WHERE id = '" . $row['job_id'] . "'"));
+                        $companydetails = mysqli_fetch_array(mysqli_query($conn, "SELECT company_name FROM users WHERE user_id = '" . $companydetails['user_id'] . "'"));
 
                         echo "<tr>";
                         echo "<td>" . $row['app_id'] . "</td>";
                         echo "<td>" . $Jobname['job_title'] . "</td>";
+                        echo "<td>" . $companydetails['company_name'] . "</td>";
                         echo "<td>" . $userdetails['fname'] . " " . $userdetails['mname'] . " " . $userdetails['lname'] . "</td>";
                         echo "<td>" . $userdetails['email'] . "</td>";
                         echo "<td>" . date("h:i:s A F j, Y", strtotime($row["created_at"])) . "</td>";
+                        echo "<td>" . date("h:i:s A F j, Y", strtotime($row["updated_at"])) . "</td>";
                         echo "<td>" . ($row['application_status'] == '1' ? 'Approved' : ($row['application_status'] == '2' ? 'Denied' : 'Pending')) . "</td>";
-                        echo "<td><a href='/profile.php?user_id=" . $userdetails['user_id'] . "' class='btn btn-primary'>View User</a></td>";
+                        echo "<td>
+                        <a href='/profile.php?user_id=" . $userdetails['user_id'] . "' class='btn btn-primary' role='button'>View User</a><br><br>
+                        <a href='/job_details.php?job_id=" . $row['job_id'] . "' class='btn btn-warning' role='button'>View Job Listing</a>
+                        </td>";
                         echo "</tr>";
                     }
                     ?>
@@ -131,5 +125,67 @@ if ($_SESSION["user_type"] != "admin") {
             myWindow.close();
             return true;
         }
+
+        // Function to count visible rows and update the result count
+        function countVisibleRows() {
+            var table = document.getElementById("data");
+            var tr = table.getElementsByTagName("tr");
+            var count = 0;
+            for (var i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+                if (tr[i].style.display !== "none") {
+                    count++;
+                }
+            }
+            document.getElementById("count").innerText = count;
+        }
+
+        // Function to filter the table based on application status
+        function filterTable() {
+            var filter = document.getElementById("filter").value;
+            var table = document.getElementById("data");
+            var tr = table.getElementsByTagName("tr");
+            for (var i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+                var td = tr[i].getElementsByTagName("td")[7];
+                if (td) {
+                    if (filter == "all") {
+                        tr[i].style.display = "";
+                    } else if (td.innerHTML == filter) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+            countVisibleRows();
+        }
+
+        // Function to search the table based on company name and job title
+        function searchTable() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("data");
+            tr = table.getElementsByTagName("tr");
+            for (i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+                tr[i].style.display = "none";
+                tdCompany = tr[i].getElementsByTagName("td")[2];
+                tdJobTitle = tr[i].getElementsByTagName("td")[1];
+                if (tdCompany || tdJobTitle) {
+                    txtValueCompany = tdCompany.textContent || tdCompany.innerText;
+                    txtValueJobTitle = tdJobTitle.textContent || tdJobTitle.innerText;
+                    if (txtValueCompany.toUpperCase().indexOf(filter) > -1 || txtValueJobTitle.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                }
+            }
+            countVisibleRows();
+        }
+
+        // Initialize count on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            countVisibleRows();
+        });
     </script>
 </body>
+
+</html>

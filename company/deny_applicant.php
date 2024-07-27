@@ -90,10 +90,10 @@ if (mysqli_stmt_execute($stmt)) {
                     $mail->IsHTML(true);
                     $mail->AddAddress($row['email'], $row['fname'] . " " . $row['lname']);
                     $mail->SetFrom($_ENV['SMTP_EMAIL'], $row4['fname'] . " " . $row4['lname']);
-                    $mail->Subject = "PESO Muntinlupa - Email Verification";
+                    $mail->Subject = "PESO Muntinlupa Job Portal - Your Application on " . $row3['job_title'] . " has been declined";
                     // set content of email that the applicant is accepted
                     $content = "<b>Dear " . $row['fname'] . " " . $row['lname'] . ",</b><br><br>";
-                    $content .= "Hello, Your application for " . $row3['job_title'] . " has been declined.<br>";
+                    $content .= "Hello, Your application for " . $row3['job_title'] . " on " . $row4['company_name'] . " has been declined. <br>";
                     $content .= "Don't worry, you can browse more jobs in our Job Portal again.<br><br>";
                     $content .= "Thank you for using PESO Muntinlupa Job Portal.<br>";
                     $content .= "Best Regards,<br>";

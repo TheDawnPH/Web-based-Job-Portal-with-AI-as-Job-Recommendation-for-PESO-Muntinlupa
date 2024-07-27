@@ -11,7 +11,7 @@ include 'config.php';
 <html>
 
 <head>
-    <title>Jobs - Muntinlupa Job Portal</title>
+    <title>Jobs - PESO Muntinlupa Job Portal</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -28,7 +28,9 @@ include 'config.php';
 <body>
     <?php include 'nav.php'; ?>
     <div class="container">
-        <h1>Jobs Available</h1><br>
+        <h1>Jobs Available</h1>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <div class="row row-cols-1 row-cols-md-2">
             <div class="col-md-5">
                 <!-- Search input -->
@@ -137,7 +139,7 @@ include 'config.php';
                 <table class="table">
                     <tbody>
                         <?php
-                        $sql = "SELECT * FROM job_listing ORDER BY created_at DESC";
+                        $sql = "SELECT * FROM job_listing WHERE visible = 1 ORDER BY created_at DESC";
                         $result = mysqli_query($conn, $sql);
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {

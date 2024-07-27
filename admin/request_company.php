@@ -65,7 +65,7 @@ if (isset($_GET['verify_user']) && $_GET['verify_user'] == 1 && !empty($user_id)
     $mail->IsHTML(true);
     $mail->AddAddress($row['email'], $row['fname'] . " " . $row['lname']);
     $mail->SetFrom($_ENV['SMTP_USER'], "PESO Muntinlupa");
-    $mail->Subject = "PESO Muntinlupa - Request to Verify Company";
+    $mail->Subject = "PESO Muntinlupa Job Portal - Request to Verify Company";
     // set content of email that need to relogin the user to take effect
     $content = "<b>Dear {$row['fname']} {$row['lname']},</b><br><br>";
     $content .= "Your request to verify your company has been approved. Please logout and login to your account to take effect.<br><br>";
@@ -92,7 +92,7 @@ $result = mysqli_query($conn, $sql);
 <html>
 
 <head>
-    <title>Requests Verifications</title>
+    <title>Requests Verification - Admin</title>
     <link rel="stylesheet" href="/css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -114,7 +114,8 @@ $result = mysqli_query($conn, $sql);
     <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Requests Portal</h1>
-        <br>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <?php
         // Display success message if user has been verified
         if (isset($success)) {

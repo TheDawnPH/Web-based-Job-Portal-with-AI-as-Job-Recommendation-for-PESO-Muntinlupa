@@ -39,6 +39,8 @@ $technicalschool_name = $row["technicalschool_name"];
 $nsrp_form = $biodata_form = $profile_picture = "";
 $loi = $cp = $sec_accredit = $cda_license = $dole_license = $loc = $mbpermit = $job_vacant = $job_solicitation = $phjobnet_reg = $cert_nopendingcase = $cert_regSSS = $cert_regPhHealth = $cert_regPGIBG = $sketch_map = $bir_2303 = "";
 $jinindustry = $row["jinindustry_id"];
+$company_name = $row["company_name"];
+$company_position = $row["company_position"];
 
 
 // Processing form data when form is submitted
@@ -47,11 +49,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_FILES["nsrp_form"]) || isset($_FILES["biodata_form"]) || isset($_FILES["profile_picture"]) || isset($_FILES["loi"]) || isset($_FILES["cp"]) || isset($_FILES["sec_accredit"]) || isset($_FILES["cda_license"]) || isset($_FILES["dole_license"]) || isset($_FILES["loc"]) || isset($_FILES["mbpermit"]) || isset($_FILES["job_vacant"]) || isset($_FILES["job_solicitation"]) || isset($_FILES["phjobnet_reg"]) || isset($_FILES["cert_nopendingcase"]) || isset($_FILES["cert_regSSS"]) || isset($_FILES["cert_regPhHealth"]) || isset($_FILES["cert_regPGIBG"]) || isset($_FILES["sketch_map"]) || isset($_FILES["2303_bir"])) {
         // check if nsrp form and biodata is pdf or docx
         // Prepare SQL statement
-        $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, school_name=?, school_year_begin=IFNULL(?, school_year_begin) , school_year_end= IFNULL(?, school_year_end), technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image), jinindustry_id = IFNULL(?, jinindustry_id) WHERE user_id=?";
+        $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, school_name=?, school_year_begin=IFNULL(?, school_year_begin) , school_year_end= IFNULL(?, school_year_end), technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image), jinindustry_id = IFNULL(?, jinindustry_id) WHERE user_id=?, company_name = IFNULL(?, company_name), company_position = IFNULL(?, company_position)";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sssssssssssssssssssss", $param_sex, $param_birth_day, $param_birth_month, $param_birth_year, $param_contact_number, $param_house_number, $param_street, $param_subdivision, $param_barangay, $param_city, $param_province, $param_zip_code, $param_school_name, $param_school_year_begin, $param_school_year_end, $param_technicalschool_name, $param_nsrp_form, $param_biodata_form, $param_profile_picture, $param_jinindustry_id, $param_user_id);
+            mysqli_stmt_bind_param($stmt, "sssssssssssssssssssss", $param_sex, $param_birth_day, $param_birth_month, $param_birth_year, $param_contact_number, $param_house_number, $param_street, $param_subdivision, $param_barangay, $param_city, $param_province, $param_zip_code, $param_school_name, $param_school_year_begin, $param_school_year_end, $param_technicalschool_name, $param_nsrp_form, $param_biodata_form, $param_profile_picture, $param_jinindustry_id, $param_user_id, $param_company_name, $param_company_position);
 
             // Set parameters
             $param_sex = $_POST["gender"];
@@ -72,6 +74,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_technicalschool_name = $_POST["technicalschool_name"];
             $param_user_id = $user_id;
             $param_jinindustry_id = $_POST["jinindustry"];
+            $param_company_name = !empty($_POST["company_name"]) ? $_POST["company_name"] : null;
+            $param_company_position = !empty($_POST["company_position"]) ? $_POST["company_position"] : null;
 
 
             // Execute the prepared statement
@@ -104,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if (mysqli_stmt_execute($stmt) && empty($error)) {
-                
+
                 // Create a directory for the user if it doesn't exist
                 $user_upload_dir = "uploads/" . $user_id;
                 if (!is_dir($user_upload_dir)) {
@@ -457,7 +461,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 
 <head>
-    <title>Edit Profile - Muntinlupa Job Portal</title>
+    <title>Edit Profile - PESO Muntinlupa Job Portal</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -479,6 +483,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include "nav.php"; ?>
     <div class="container">
         <h1>Edit Profile</h1>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <?php if (isset($success)) : ?>
             <div class="alert alert-success" role="alert">
                 <?php echo $success; ?>
@@ -613,7 +619,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ?>
                 </select>
             </div><br>
+            <div class="form-group">
+                <label for="profile_picture">Profile Picture (PNG, JPG, or JPEG Format)</label>
+                <input type="file" name="profile_picture" class="form-control" accept="image/png, image/jpeg, image/jpg">
+            </div><br>
+
             <?php if ($user_type == 'applicant') : ?>
+                <hr>
+                <h2>Applicant Documents</h2>
                 <div class="form-group">
                     <label for="nsrp_form">NSRP Form (PDF or DOCX only)</label>
                     <div class="form-text">No NSRP Form? <a href="admin/forms/NSRP-Form.pdf" target="_blank">Click here
@@ -626,13 +639,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div><br>
             <?php endif; ?>
 
-            <div class="form-group">
-                <label for="profile_picture">Profile Picture (PNG, JPG, or JPEG Format)</label>
-                <input type="file" name="profile_picture" class="form-control" accept="image/png, image/jpeg, image/jpg">
-            </div><br>
-
             <!-- loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, setch_map, 2303_bir document upload as company -->
             <?php if ($user_type == 'company') : ?>
+                <hr>
+                <h2>Company Details and Documents</h2>
+                <div class="form-group">
+                    <label for="company_name">Company Name</label>
+                    <input type="text" name="company_name" class="form-control" value="<?php echo $company_name; ?>">
+                </div><br>
+                <div class="form-group">
+                    <label for="company_position">Position</label>
+                    <input type="text" name="company_position" class="form-control" value="<?php echo $company_position; ?>">
+                </div><br>
                 <div class="form-group">
                     <label for="loi">Letter of Intent (PDF or DOCX only)</label>
                     <input type="file" name="loi" class="form-control" accept="application/pdf,.docx">

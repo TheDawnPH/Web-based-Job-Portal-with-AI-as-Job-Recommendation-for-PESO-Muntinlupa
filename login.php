@@ -35,11 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Verify reCAPTCHA response
-    if(!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
+    if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
         $verification_err = "Please complete the reCAPTCHA challenge.";
     } else {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify?secret='.$_ENV['SECRET_KEY'].'&response='.$_POST['g-recaptcha-response']);
+        curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify?secret=' . $_ENV['SECRET_KEY'] . '&response=' . $_POST['g-recaptcha-response']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
         curl_close($ch);
@@ -85,13 +85,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                 // if user type is admin redirect to /admin/dashboard.php
                                 if ($user_type == "admin") {
-                                    if(isset($_SESSION['current_page']) && $_SESSION['current_page'] != "") {
+                                    if (isset($_SESSION['current_page']) && $_SESSION['current_page'] != "") {
                                         header("location: " . $_SESSION['current_page']);
                                     } else {
                                         header("location: admin/dashboard.php");
                                     }
                                 } else {
-                                    if(isset($_SESSION['current_page']) && $_SESSION['current_page'] != "") {
+                                    if (isset($_SESSION['current_page']) && $_SESSION['current_page'] != "") {
                                         header("location: " . $_SESSION['current_page']);
                                     } else {
                                         header("location: index.php");
@@ -136,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 
 <head>
-    <title>Login - Muntinlupa Job Portal</title>
+    <title>Login - PESO Muntinlupa Job Portal</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -147,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
-    <script src='https://www.google.com/recaptcha/api.js' async defer ></script>
+    <script src='https://www.google.com/recaptcha/api.js' async defer></script>
 </head>
 
 <body>
@@ -155,11 +155,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="index.php" class="btn btn-secondary">Back to Homepage</a><br><br>
         <div class="row g-0">
             <div class="col-md">
-                <img src="img/peso_muntinlupa.png" alt="PESO Logo" class="img-fluid">
+                <img src="img/peso_muntinlupa.png" alt="PESO Logo" class="img-fluid mx-auto d-block">
             </div>
             <div class="col-md">
                 <br>
                 <h1>Login</h1>
+                <br>
+                <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+                <br><br>
                 <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="post">
                     <?php
                     if (!empty($verification_err)) {

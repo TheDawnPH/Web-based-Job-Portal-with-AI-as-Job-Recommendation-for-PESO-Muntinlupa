@@ -163,6 +163,12 @@ if (!mysqli_stmt_execute($stmt)) {
     die("Error executing query: " . mysqli_error($conn));
 }
 
+// if created_at at job listing is more than 30 days, set visible to 0
+$sql = "UPDATE job_listing SET visible = 0 WHERE updated_at < DATE_SUB(NOW(), INTERVAL 30 DAY)";
+if (!mysqli_query($conn, $sql)) {
+    die("Error executing query: " . mysqli_error($conn));
+}
+
 mysqli_stmt_close($stmt);
 mysqli_close($conn);
 exit;

@@ -8,9 +8,9 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
 
 <nav class="navbar navbar-expand-lg no-print sticky-top" data-bs-theme="light" style="background-color: white;">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/index.php" style="color:#000080 !important;">
+    <a class="navbar-brand" href="/index.php" style="color:#003595 !important;">
       <img src="/img/peso_muntinlupa.png" alt="PESO Muntinlupa Logo" width="30" class="d-inline-block align-text-top">
-      Muntinlupa Job Portal
+      PESO Muntinlupa Job Portal
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>

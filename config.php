@@ -107,6 +107,8 @@ if ($conn === false) {
         profile_image text,
         company_verified INT(1) DEFAULT 0,
         wpm INT(3),
+        company_name VARCHAR(255),
+        company_position VARCHAR(255),
         FOREIGN KEY (jinindustry_id) REFERENCES jinindustry(jinindustry_id))
         ";
     if (mysqli_query($conn, $user)) {
@@ -127,6 +129,8 @@ if ($conn === false) {
         jinindustry_id INT NOT NULL,
         shs_qualified INT(1) DEFAULT 0,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        visible INT(1) DEFAULT 1,
         FOREIGN KEY (user_id) REFERENCES users(user_id),
         FOREIGN KEY (jinindustry_id) REFERENCES jinindustry(jinindustry_id))
         ";
@@ -170,6 +174,7 @@ if ($conn === false) {
         job_id INT NOT NULL,
         application_status INT(1) DEFAULT 0,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(user_id),
         FOREIGN KEY (job_id) REFERENCES job_listing(id)
     )";

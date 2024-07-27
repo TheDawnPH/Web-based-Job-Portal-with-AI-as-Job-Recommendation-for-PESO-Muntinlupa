@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $mail->IsHTML(true);
                             $mail->AddAddress($email, $fname . " " . $lname);
                             $mail->SetFrom($_ENV['SMTP_EMAIL'], "PESO Muntinlupa");
-                            $mail->Subject = "PESO Muntinlupa - Reset Password";
+                            $mail->Subject = "PESO Muntinlupa Job Portal - Reset Password";
                             $content = "<b>Hi " . $fname . " " . $lname . ",</b><br><br>";
                             $content .= "Please click the link below to reset your password.<br><br>";
                             $content .= "<a href='http://" . $website . "/password_reset_success.php?code=$param_verification_code'>Verify Email</a><br><br>";
@@ -116,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 
 <head>
-    <title>Forgot Password - Muntinlupa Job Portal</title>
+    <title>Forgot Password - PESO Muntinlupa Job Portal</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -136,11 +136,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="login.php" class="btn btn-secondary">Back to Login</a><br><br>
         <div class="row">
             <div class="col-md">
-                <img src="img/peso_muntinlupa.png" alt="PESO Logo" class="img-fluid">
+                <img src="img/peso_muntinlupa.png" alt="PESO Logo" class="img-fluid mx-auto d-block">
             </div>
             <div class="col-md">
                 <br>
                 <h1>Forgot Password</h1>
+                <br>
+                <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+                <br><br>
                 <?php
                 if (!empty($alert)) {
                     echo '<div class="alert alert-success">' . $alert . '</div>';

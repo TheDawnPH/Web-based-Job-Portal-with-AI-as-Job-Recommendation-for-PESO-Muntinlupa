@@ -39,6 +39,19 @@ function nl2br2($string)
     return $string;
 }
 
+// Get Company name from users who posted the job, use prepared statement
+$stmt3 = $conn->prepare("SELECT * FROM users WHERE user_id = ?");
+$stmt3->bind_param("i", $row['user_id']);
+$stmt3->execute();
+$result3 = $stmt3->get_result();
+$row3 = $result3->fetch_assoc();
+$company_name = $row3['company_name'];
+
+// Close the statement
+$stmt->close();
+$stmt2->close();
+$stmt3->close();
+
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +60,7 @@ function nl2br2($string)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Details - Muntinlupa Job Portal</title>
+    <title><?php echo $row['job_title'];?> - PESO Muntinlupa Job Portal</title>
     <link rel="stylesheet" href="css/index.css">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -65,9 +78,9 @@ function nl2br2($string)
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h1 class="card-title"><?php echo $row['job_title']; ?></h1>
+                        <h1 class="card-title"><?php echo $row['job_title']; ?> - <?php echo $row3['company_name']; ?></h1>
                         <?php if (!empty($row['image_name'])) : ?>
-                            <img src='/company/uploads/<?php echo $row['id']; ?>/<?php echo $row['image_name']; ?>' class="card-img-bottom" alt='Company Image'>
+                            <img src='/company/uploads/<?php echo $row['id']; ?>/<?php echo $row['image_name']; ?>' class="card-img-bottom mx-auto d-block" alt='Company Image'>
                         <?php endif; ?>
                     </div>
                 </div>

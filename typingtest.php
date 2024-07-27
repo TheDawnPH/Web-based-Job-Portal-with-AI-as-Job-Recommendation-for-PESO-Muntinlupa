@@ -23,7 +23,7 @@ function recordWPM($conn, $wpm)
 <html>
 
 <head>
-    <title>PESO Muntinlupa - Job Portal</title>
+    <title>Typing Test - PESO Muntinlupa Job Portal</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -51,6 +51,8 @@ function recordWPM($conn, $wpm)
         <div class="row">
             <div class="col-md-12">
                 <h1>Typing Test</h1>
+                <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+                <br><br>
                 <p>Test your typing speed and accuracy. Type the following below:</p>
                 <div id="typing-area"></div>
                 <input type="text" id="user-input" class="form-control mt-3" placeholder="Type here">
@@ -69,12 +71,13 @@ function recordWPM($conn, $wpm)
 
             // Generate random text for typing
             function generateText() {
-                const words = ['The quick brown fox jumps over the lazy dog.', 
-                'How much wood would a woodchuck chuck if a woodchuck could chuck wood?', 
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 
-                'Were not they supposed to put in a left-hand turn lane three years ago? he thought as he waited through three lights at the intersection with Exchange Street.', 
-                'He had a routine. He would stick to it. It would get him through the day.', 
-                'She never blamed him, as he feared she would. She picked up and went on. He was again amazed by her lightness, her resiliency.'];
+                const words = ['The quick brown fox jumps over the lazy dog.',
+                    'How much wood would a woodchuck chuck if a woodchuck could chuck wood?',
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                    'Were not they supposed to put in a left-hand turn lane three years ago? he thought as he waited through three lights at the intersection with Exchange Street.',
+                    'He had a routine. He would stick to it. It would get him through the day.',
+                    'She never blamed him, as he feared she would. She picked up and went on. He was again amazed by her lightness, her resiliency.'
+                ];
                 textToType = words[Math.floor(Math.random() * words.length)];
                 typingArea.textContent = textToType;
             }

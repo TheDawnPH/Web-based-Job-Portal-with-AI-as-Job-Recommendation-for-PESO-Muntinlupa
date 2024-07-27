@@ -61,6 +61,8 @@ $result = mysqli_stmt_get_result($stmt);
     <br>
     <div class="container">
         <h1>Job Listings</h1>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <?php if ($deletebox === "1") { ?>
             <div class="alert alert-success" role="alert">
                 Job listing deleted successfully!
@@ -76,6 +78,7 @@ $result = mysqli_stmt_get_result($stmt);
                         <th scope="col">Job Title</th>
                         <th scope="col">Job Category</th>
                         <th scope="col">Job Type</th>
+                        <th scope="col">Visible</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -93,7 +96,9 @@ $result = mysqli_stmt_get_result($stmt);
                         echo "<tr>";
                         echo "<td>" . htmlspecialchars($row["job_title"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row2["jinindustry_name"]) . "</td>";
-                        echo "<td>" . htmlspecialchars($row["job_type"]) . "</td>";
+                        echo "<td>" . htmlspecialchars($row["job_type"]) . "</td>";?>
+                        <td><?php echo ($row["visible"] == 1) ? 'Yes' : 'No'; ?></td>
+                        <?php
                         echo "<td><a class='btn btn-primary' href='/job_details.php?job_id=" . htmlspecialchars($row["id"]) . "'>View</a> <a class='btn btn-warning' href='add_job_applications.php?id=" . htmlspecialchars($row["id"]) . "'>Edit</a> <a class='btn btn-danger' onclick='return confirmAction();' href='delete_job_listing.php?id=" . htmlspecialchars($row["id"]) . "'>Delete</a></td>";
                         echo "</tr>";
                     }

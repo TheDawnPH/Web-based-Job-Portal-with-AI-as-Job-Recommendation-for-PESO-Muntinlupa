@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->IsHTML(true);
                 $mail->AddAddress($email, $fname . " " . $lname);
                 $mail->SetFrom($_ENV['SMTP_EMAIL'], "PESO Muntinlupa");
-                $mail->Subject = "PESO Muntinlupa Admin - Provision of Account";
+                $mail->Subject = "PESO Muntinlupa Job Portal - Provision of Account";
                 $content = "<b>Hi " . $fname . " " . $lname . ",</b><br><br>";
                 $content .= "An PESO Admin has been provided you an account,<br>Please click the link below to set your password.<br><br>";
                 $content .= "<a href='https://".$_ENV['WEBSITE_URL']."/password_reset_success.php?code=$param_verification_code'>Set Password</a><br><br>";
@@ -144,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 
 <head>
-    <title>Add Users</title>
+    <title>Add Users - Admin</title>
     <link rel="stylesheet" href="/css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -161,6 +161,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Add Users</h1>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="post">
             <?php
             if (!empty($alert)) {

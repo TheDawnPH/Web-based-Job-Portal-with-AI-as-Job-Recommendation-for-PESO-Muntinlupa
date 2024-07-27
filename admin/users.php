@@ -36,7 +36,7 @@ if (!$result) {
 <html>
 
 <head>
-    <title>Users</title>
+    <title>Users - Admin</title>
     <link rel="stylesheet" href="/css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -45,12 +45,48 @@ if (!$result) {
     <link rel="icon" type="image/png" href="/img/peso_muntinlupa.png">
     <link rel="manifest" href="/site.webmanifest">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script>
         function confirmAction() {
-            return confirm("Are you sure to delete this user?");
+            return confirm("Are you sure you want to delete this user?");
         }
+
+        function filterTable() {
+            var filter = document.getElementById("filter").value;
+            var table = document.getElementById("data");
+            var tr = table.getElementsByTagName("tr");
+            for (var i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+                var td = tr[i].getElementsByTagName("td")[4];
+                if (td) {
+                    if (filter == "all") {
+                        tr[i].style.display = "";
+                    } else if (td.innerHTML == filter) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+            countVisibleRows();
+        }
+
+        // Function to count visible rows and update the result count
+        function countVisibleRows() {
+            var table = document.getElementById("data");
+            var tr = table.getElementsByTagName("tr");
+            var count = 0;
+            for (var i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+                if (tr[i].style.display !== "none") {
+                    count++;
+                }
+            }
+            document.getElementById("count").innerText = count;
+        }
+
+        // Initialize count on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            countVisibleRows();
+        });
     </script>
 </head>
 
@@ -58,7 +94,8 @@ if (!$result) {
     <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Users</h1>
-        <br>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <a class="btn btn-primary" role="button" href="/admin/add_users.php">Add User</a>
         <br><br>
         <!-- filter dropdown user type -->
@@ -69,40 +106,25 @@ if (!$result) {
             <option value="company">Employer</option>
             <option value="applicant">Applicant</option>
         </select>
-        <!-- js for filter -->
-        <script>
-            function filterTable() {
-                var filter = document.getElementById("filter").value;
-                var table = document.getElementById("data");
-                var tr = table.getElementsByTagName("tr");
-                for (var i = 0; i < tr.length; i++) {
-                    var td = tr[i].getElementsByTagName("td")[4];
-                    if (td) {
-                        if (filter == "all") {
-                            tr[i].style.display = "";
-                        } else if (td.innerHTML == filter) {
-                            tr[i].style.display = "";
-                        } else {
-                            tr[i].style.display = "none";
-                        }
-                    }
-                }
-            }
-        </script>
         <br>
+        <p>Number of Results: <span id="count"></span></p>
         <div class="table-responsive">
             <?php
             // Check if there are rows returned
             if (mysqli_num_rows($result) > 0) {
                 echo "<table class='table table-striped table-bordered border-start' id='data'>
-            <tr>
-                <th>User ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>User Type</th>
-                <th>Action</th>
-            </tr>";
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>User Type</th>
+                        <th>Date and Time of Registration</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>";
 
                 // Loop through each row returned by the query
                 while ($row = mysqli_fetch_assoc($result)) {
@@ -112,10 +134,11 @@ if (!$result) {
                     echo "<td>" . htmlspecialchars($row['lname']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                     echo "<td>" . htmlspecialchars($row['user_type']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['created_at']) . "</td>";
                     echo "<td><a class='btn btn-warning' role='button' href='/profile.php?user_id=" . htmlspecialchars($row['user_id']) . "'>View Profile</a> <a class='btn btn-danger' role='button' onclick='return confirmAction();' href='/admin/delete_user.php?user_id=" . htmlspecialchars($row['user_id']) . "'>Delete User</a></td>";
                     echo "</tr>";
                 }
-                echo "</table>";
+                echo "</tbody></table>";
             } else {
                 echo "<div class='alert alert-danger' role='alert'>No users found.</div>";
             }

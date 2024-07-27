@@ -74,7 +74,7 @@ $stmt2->close();
 
 <head>
     <meta charset="UTF-8">
-    <title>Profile - Muntinlupa Job Portal</title>
+    <title>Profile - PESO Muntinlupa Job Portal</title>
     <link rel="stylesheet" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -92,6 +92,8 @@ $stmt2->close();
     <?php include "nav.php"; ?>
     <div class="container">
         <h1 class="mb-4">User Profile</h1>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <div class="row row-cols-1 row-cols-md-3 g-2">
             <div class="col-md-6">
                 <div class="card h-100">
@@ -100,7 +102,11 @@ $stmt2->close();
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>User Type:</strong> <?php echo ($user_type == 'applicant') ? "Applicant" : (($user_type == 'company') ? "Company" : "Admin"); ?></li>
                             <li class="list-group-item"><strong>Name:</strong> <?php echo "{$row['fname']} {$row['mname']} {$row['lname']} {$row['suffix']}"; ?></li>
-                            <!-- <li class="list-group-item"><strong>WPM:</strong> <?php if($row['wpm'] == 0 || $row['wpm'] == NULL){echo 0;} else{echo $row['wpm'];} ?></li> -->
+                            <!-- <li class="list-group-item"><strong>WPM:</strong> <?php if ($row['wpm'] == 0 || $row['wpm'] == NULL) {
+                                                                                        echo 0;
+                                                                                    } else {
+                                                                                        echo $row['wpm'];
+                                                                                    } ?></li> -->
                             <li class="list-group-item"><strong>Email:</strong> <?php echo $row['email']; ?></li>
                             <li class="list-group-item"><strong>Gender:</strong> <?php echo ($gender == 'male') ? 'Male' : 'Female'; ?></li>
                             <li class="list-group-item"><strong>Birthday:</strong>
@@ -118,7 +124,9 @@ $stmt2->close();
                             <li class="list-group-item"><strong>Address:</strong>
                                 <?php echo "{$house_number}, {$street}, {$subdivision}, {$barangay}, {$city}, {$province}, {$zip_code}"; ?>
                             </li>
-                            <li class="list-group-item"><strong>Selected Job Industry:</strong> <?php if(!empty($row2['jinindustry_name'])){echo $row2['jinindustry_name'];} ?></li>
+                            <li class="list-group-item"><strong>Selected Job Industry:</strong> <?php if (!empty($row2['jinindustry_name'])) {
+                                                                                                    echo $row2['jinindustry_name'];
+                                                                                                } ?></li>
                         </ul>
                     </div>
                 </div>
@@ -151,7 +159,7 @@ $stmt2->close();
                     </div>
                 </div>
             </div>
-            <?php if ($user_type === "applicant" || $user_type === "admin") : ?>
+            <?php if ($user_type === "applicant") : ?>
                 <div class="col-md-6">
                     <div class="card h-100">
                         <div class="card-body">
@@ -176,8 +184,12 @@ $stmt2->close();
                 <div class="col-md-6">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h5 class="card-title">Company Documents</h5>
+                            <h5 class="card-title">Company Details and Documents</h5>
                             <hr>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Company Name:</strong> <?php echo $row['company_name']; ?></li>
+                                <li class="list-group-item"><strong>Position:</strong> <?php echo $row['company_position']; ?></li>
+                            </ul>
                             <?php
                             $documents = array(
                                 'loi' => 'Letter of Intent',
@@ -205,6 +217,12 @@ $stmt2->close();
                                 if (isset($row[$documentKey]) && $row[$documentKey] != "") {
                                     echo '<a target="_blank" href="uploads/' . $profile_user_id . '/' . $row[$documentKey] . '" class="btn btn-primary fluid">View ' . $documentLabel . '</a><hr>';
                                 }
+                                // if no documents uploaded say no documents uploaded
+                                else {
+                                    echo '<hr>';
+                                    echo '<p>No documents uploaded</p>';
+                                    exit;
+                                }
                             }
                             ?>
                         </div>
@@ -214,4 +232,5 @@ $stmt2->close();
         </div>
     </div>
 </body>
+
 </html>

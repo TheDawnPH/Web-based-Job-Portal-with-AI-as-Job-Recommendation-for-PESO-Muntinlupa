@@ -29,7 +29,7 @@ if ($_SESSION["user_type"] != "admin") {
 <html>
 
 <head>
-    <title>Dashboard</title>
+    <title>Dashboard - Admin</title>
     <link rel="stylesheet" href="/css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -46,7 +46,8 @@ if ($_SESSION["user_type"] != "admin") {
     <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Admin Dashboard</h1>
-        <br>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <br><br>
         <!-- <div class="row row-cols-1 row-cols-md-3 g-4">
             <?php
             $cards = [
