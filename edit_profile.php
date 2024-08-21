@@ -43,6 +43,7 @@ $company_name = $row["company_name"];
 $company_position = $row["company_position"];
 
 
+
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -76,6 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_jinindustry_id = $_POST["jinindustry"];
             $param_company_name = !empty($_POST["company_name"]) ? $_POST["company_name"] : null;
             $param_company_position = !empty($_POST["company_position"]) ? $_POST["company_position"] : null;
+
 
 
             // Execute the prepared statement
@@ -497,6 +499,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
         <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="post" enctype="multipart/form-data">
             <!-- display user type, First Name, Middle Name, Last Name, Suffix, Email -->
+             <h2>Personal Information</h2>
             <div class="form-group">
                 <label for="user_type">User Type</label>
                 <select class="form-control" disabled>
@@ -505,8 +508,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="Company" <?php echo ($user_type === 'company') ? 'selected' : ''; ?>>Company</option>
                 </select>
             </div><br>
-
-
             <div class="form-group">
                 <label for="first_name">First Name</label>
                 <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['fname']); ?>" disabled>
@@ -606,6 +607,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="text" name="technicalschool_name" class="form-control" value="<?php echo $technicalschool_name; ?>">
             </div><br>
             <div class="form-group">
+                <label for="4ps_member">4Ps Member</label>
+                <div class="form-text">Check this box if you are a 4Ps Member</div>
+                <input type="checkbox" name="4ps_member" value="1" <?php echo ($fourps_member == 1) ? 'checked' : ''; ?>>
+            </div><br>
+            <div class="form-group">
+                <label for="pwd">PWD</label>
+                <div class="form-text">Check this box if you are a PWD</div>
+                <input type="checkbox" name="pwd" value="1" <?php echo ($pwd == 1) ? 'checked' : ''; ?>>
+            </div><br>
+            <div class="form-group">
+                <label for="skills">Skills</label>
+                <div class="form-text">Please separate each skill with a comma (,)</div>
+                <input type="text" name="skills" class="form-control" value="<?php echo $skills; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="work_experience">Work Experience</label>
+                <div class="form-text">Please separate each work experience with a comma (,)</div>
+                <input type="text" name="work_experience" class="form-control" value="<?php echo $work_experience; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="ofw">OFW</label>
+                <div class="form-text">Check this box if you are an current OFW</div>
+                <input type="checkbox" name="ofw" value="1" <?php echo ($ofw == 1) ? 'checked' : ''; ?>>    
+            </div><br>
+            <div class="form-group">
+                <label for="ofw_country">Current OFW Country</label>
+                <input type="text" name="ofw_country" class="form-control" value="<?php echo $ofw_country; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="former_ofw">Former OFW</label>
+                <div class="form-text">Check this box if you are an current OFW</div>
+                <input type="checkbox" name="ofw" value="1" <?php echo ($former_ofw == 1) ? 'checked' : ''; ?>>    
+            </div><br>
+            <div class="form-group">
+                <label for="former_ofw_country">Former OFW Country</label>
+                <input type="text" name="former_ofw_country" class="form-control" value="<?php echo $former_ofw_country; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="former_ofw_country">Last YEar of Former OFW</label>
+                <input type="text" name="last_ofw_year" class="form-control" value="<?php echo $last_ofw_year; ?>">
+            </div><br>
+            <div class="form-group">
                 <label for="jinindustry">Select Job Industry</label>
                 <div class="form-text">Select a Job Industry you want to apply on</div>
                 <select class="form-select" aria-label="Default select example" id="jinindustry" name="jinindustry" required>
@@ -642,15 +685,87 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, setch_map, 2303_bir document upload as company -->
             <?php if ($user_type == 'company') : ?>
                 <hr>
-                <h2>Company Details and Documents</h2>
+                <h2>Company/Business Details</h2>
                 <div class="form-group">
-                    <label for="company_name">Company Name</label>
+                    <label for="company_name">Business Name</label>
                     <input type="text" name="company_name" class="form-control" value="<?php echo $company_name; ?>">
                 </div><br>
                 <div class="form-group">
-                    <label for="company_position">Position</label>
+                    <label for="trade_name">Trade Name</label>
+                    <input type="text" name="trade_name" class="form-control" value="<?php echo $trade_name; ?>">
+                </div><br>
+                <div class="form-group">
+                    <label for="company_position">Position on the Company</label>
                     <input type="text" name="company_position" class="form-control" value="<?php echo $company_position; ?>">
                 </div><br>
+                <hr>
+                <div class="form-group">
+                    <label for="tin_number">Tax Identification Number</label>
+                    <input type="text" name="tin_number" class="form-control" value="<?php echo $tin_number; ?>">
+                </div><br>
+                <div class="form-group">
+                    <label for="pjn_accredit">PhilJobNet Accreditation</label>
+                    <div class="form-text">Check this box if you are accredited by PhilJobNet</div>
+                    <input type="checkbox" name="pjn_accredited" value="1" <?php echo ($pjn_accredited == 1) ? 'checked' : ''; ?>>
+                </div>
+                <div class="form-group">
+                    <label for="employment_type">Employment Type</label>
+                    <input type="text" name="employment_type" class="form-control" value="<?php echo $employment_type; ?>">
+                </div><br>
+                <div class="form-group">
+                    <label for="employment_size">Employment Size</label>
+                    <input type="text" name="employment_size" class="form-control" value="<?php echo $employment_size; ?>">
+                </div><br>
+                <div class="form-group">
+                    <label for="location_address">Address</label>
+                    <input type="text" name="location_address" class="form-control" value="<?php echo $location_address; ?>">
+                </div><br>
+                <div class="form-group">
+                    <label for="barangay">Barangay</label>
+                    <input type="text" name="barangay" class="form-control" value="<?php echo $barangay; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" name="city" class="form-control" value="<?php echo $city; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="province">Province</label>
+                    <input type="text" name="province" class="form-control" value="<?php echo $province; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="region">Region</label>
+                    <input type="text" name="region" class="form-control" value="<?php echo $region; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="contact_person_name">Name of Contact Person</label>
+                    <input type="text" name="contact_person_name" class="form-control" value="<?php echo $contact_person_name; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="contact_person_position">Position of Contact Person</label>
+                    <input type="text" name="contact_person_position" class="form-control" value="<?php echo $contact_person_position; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="cellphone_number">Cellphone Number of Contact Person</label>
+                    <input type="text" name="cellphone_number" class="form-control" value="<?php echo $cellphone_number; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email of Contact Person</label>
+                    <input type="text" name="email" class="form-control" value="<?php echo $email; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="telephone_number">Telephone Number of Company</label>
+                    <input type="text" name="telephone_number" class="form-control" value="<?php echo $telephone_number; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="fax_number">Fax Number of Company</label>
+                    <input type="text" name="fax_number" class="form-control" value="<?php echo $fax_number; ?>">
+                </div>
+                <hr>
+                <h2>Company Documents</h2>
+                <div class="form-group"></div>
+                    <label for="registration_date">Date of Company Registration to BPLO (Business Permit and Licensing Office)</label>
+                    <input type="date" name="registration_date" class="form-control" value="<?php echo $registration_date; ?>">
+                </div>
                 <div class="form-group">
                     <label for="loi">Letter of Intent (PDF or DOCX only)</label>
                     <input type="file" name="loi" class="form-control" accept="application/pdf,.docx">
