@@ -38,25 +38,54 @@ $stmt->close();
 
 
 // Define variables and initialize with empty values
-$gender = $row['sex']; // Assuming 'gender' is a column in your users table
-$birth_day = $row['birth_day'];
-$birth_month = $row['birth_month'];
-$birth_year = $row['birth_year'];
-$contact_number = $row['contact_number'];
-$house_number = $row['house_number'];
-$street = $row['street'];
-$subdivision = $row['subdivision'];
-$barangay = $row['barangay'];
-$city = $row['city'];
-$province = $row['province'];
-$zip_code = $row['zip_code'];
-$school_name = $row['school_name'];
-$school_year_begin = $row['school_year_begin'];
-$school_year_end = $row['school_year_end'];
-$technicalschool_name = $row['technicalschool_name'];
-$profile_picture = "uploads/{$profile_user_id}/{$row['profile_image']}";
-$jinindustry = $row['jinindustry_id'];
+$gender = $row['sex'] ?? 'N/A'; 
+$birth_day = $row['birth_day'] ?? 'N/A';
+$birth_month = $row['birth_month'] ?? 'N/A';
+$birth_year = $row['birth_year'] ?? 'N/A';
+$contact_number = $row['contact_number'] ?? 'N/A';
+$house_number = $row['house_number'] ?? 'N/A';
+$street = $row['street'] ?? 'N/A';
+$subdivision = $row['subdivision'] ?? 'N/A';
+$barangay = $row['barangay'] ?? 'N/A';
+$city = $row['city'] ?? 'N/A';
+$province = $row['province'] ?? 'N/A';
+$zip_code = $row['zip_code'] ?? 'N/A';
+$school_name = $row['latest_school_name'] ?? 'N/A';
+$school_year_begin = $row['latest_school_year_begin'] ?? 'N/A';
+$school_year_end = $row['latest_school_year_end'] ?? 'N/A';
+$technicalschool_name = $row['technicalschool_name'] ?? 'N/A';
+$profile_picture = !empty($row['profile_image']) ? "uploads/{$profile_user_id}/{$row['profile_image']}" : 'img/cat.png';
+$jinindustry = $row['jinindustry_id'] ?? 'N/A';
 $user_type = $row['user_type'];
+
+// other applicant details
+$fourps_member = $row["fourps_member"] ?? 'N/A';
+$pwd = $row["pwd"] ?? 'N/A';
+$disability_type = $row["disability_type"] ?? 'N/A';
+$skills = $row["skills"] ?? 'N/A';
+$work_experience = $row["work_experience"] ?? 'N/A';
+$ofw = $row["ofw"] ?? 'N/A';
+$ofw_country = $row["ofw_country"] ?? 'N/A';
+$former_ofw = $row["former_ofw"] ?? 'N/A';
+$former_ofw_country = $row["former_ofw_country"] ?? 'N/A';
+$last_ofw_year = $row["last_ofw_year"] ?? 'N/A';
+$business_name = $row["business_name"] ?? 'N/A';
+$trade_name = $row["trade_name"] ?? 'N/A';
+$tin_number = $row["tin_number"] ?? 'N/A';
+$pjn_accredited = $row["pjn_accredited"] ?? 'N/A';
+$employment_type = $row["employment_type"] ?? 'N/A';
+$employment_size = $row["employment_size"] ?? 'N/A';
+$location_address = $row["location_address"] ?? 'N/A';
+$location_barangay = $row["location_barangay"] ?? 'N/A';
+$location_city = $row["location_city"] ?? 'N/A';
+$location_province = $row["location_province"] ?? 'N/A';
+$contact_person_name = $row["contact_person_name"] ?? 'N/A';
+$contact_person_position = $row["contact_person_position"] ?? 'N/A';
+$cellphone_number = $row["cellphone_number"] ?? 'N/A';
+$telephone_number = $row["telephone_number"] ?? 'N/A';
+$email = $row["email"] ?? 'N/A';
+$registration_date = $row["registration_date"] ?? 'N/A';
+
 
 // name jinindustry_id
 $stmt2 = $conn->prepare("SELECT * FROM jinindustry WHERE jinindustry_id = ?");
@@ -112,9 +141,18 @@ $stmt2->close();
                             <li class="list-group-item"><strong>Birthday:</strong>
                                 <?php
                                 $months = [
-                                    1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April',
-                                    5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August',
-                                    9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'
+                                    1 => 'January',
+                                    2 => 'February',
+                                    3 => 'March',
+                                    4 => 'April',
+                                    5 => 'May',
+                                    6 => 'June',
+                                    7 => 'July',
+                                    8 => 'August',
+                                    9 => 'September',
+                                    10 => 'October',
+                                    11 => 'November',
+                                    12 => 'December'
                                 ];
                                 $birth_month_word = isset($months[$birth_month]) ? $months[$birth_month] : '';
                                 echo "{$birth_month_word} {$birth_day}, {$birth_year}";
@@ -127,6 +165,18 @@ $stmt2->close();
                             <li class="list-group-item"><strong>Selected Job Industry:</strong> <?php if (!empty($row2['jinindustry_name'])) {
                                                                                                     echo $row2['jinindustry_name'];
                                                                                                 } ?></li>
+                            <?php if ($user_type === "company") : ?>
+                                <li class="list-group-item"><strong>4P's Memeber:</strong> <?php echo ($fourps_member == 1) ? "Yes" : "No"; ?></li>
+                                <li class="list-group-item"><strong>PWD:</strong> <?php echo ($pwd == 1) ? "Yes" : "No"; ?></li>
+                                <li class="list-group-item"><strong>Disability Type:</strong> <?php echo $disability_type; ?></li>
+                                <li class="list-group-item"><strong>Skills:</strong> <?php echo $skills; ?></li>
+                                <li class="list-group-item"><strong>Work Experience:</strong> <?php echo $work_experience; ?></li>
+                                <li class="list-group-item"><strong>OFW:</strong> <?php echo ($ofw == 1) ? "Yes" : "No"; ?></li>
+                                <li class="list-group-item"><strong>OFW Country:</strong> <?php echo $ofw_country; ?></li>
+                                <li class="list-group-item"><strong>Former OFW:</strong> <?php echo ($former_ofw == 1) ? "Yes" : "No"; ?></li>
+                                <li class="list-group-item"><strong>Former OFW Country:</strong> <?php echo $former_ofw_country; ?></li>
+                                <li class="list-group-item"><strong>Last OFW Year:</strong> <?php echo $last_ofw_year; ?></li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </div>
@@ -169,11 +219,17 @@ $stmt2->close();
                             $sql = "SELECT * FROM users WHERE user_id = '$profile_user_id'";
                             $result = mysqli_query($conn, $sql);
                             $row = mysqli_fetch_assoc($result);
-                            if ($row['nsrp_form'] != "") {
-                                echo '<a target="_blank" href="uploads/' . $profile_user_id . '/' . $row['nsrp_form'] . '" class="btn btn-primary">View NSRP Form</a>&nbsp;';
-                            }
-                            if ($row['biodata_form'] != "") {
-                                echo '<a target="_blank" href="uploads/' . $profile_user_id . '/' . $row['biodata_form'] . '" class="btn btn-primary">View Biodata Form</a>';
+                            // if no documents uploaded say no documents uploaded
+                            if (empty($row['nsrp_form']) && empty($row['biodata_form'])) {
+                                echo '<p>No documents uploaded</p>';
+                                exit;
+                            } else {
+                                if ($row['nsrp_form'] != "") {
+                                    echo '<a target="_blank" href="uploads/' . $profile_user_id . '/' . $row['nsrp_form'] . '" class="btn btn-primary">View NSRP Form</a>&nbsp;';
+                                }
+                                if ($row['biodata_form'] != "") {
+                                    echo '<a target="_blank" href="uploads/' . $profile_user_id . '/' . $row['biodata_form'] . '" class="btn btn-primary">View Biodata Form</a>';
+                                }
                             }
                             ?>
                         </div>
@@ -189,6 +245,18 @@ $stmt2->close();
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><strong>Company Name:</strong> <?php echo $row['company_name']; ?></li>
                                 <li class="list-group-item"><strong>Position:</strong> <?php echo $row['company_position']; ?></li>
+                                <li class="list-group-item"><strong>Business Name:</strong> <?php echo $business_name; ?></li>
+                                <li class="list-group-item"><strong>Trade Name:</strong> <?php echo $trade_name; ?></li>
+                                <li class="list-group-item"><strong>TIN Number:</strong> <?php echo $tin_number; ?></li>
+                                <li class="list-group-item"><strong>PJN Accredited:</strong> <?php echo ($pjn_accredited == 1) ? "Yes" : "No"; ?></li>
+                                <li class="list-group-item"><strong>Employment Type:</strong> <?php echo $employment_type; ?></li>
+                                <li class="list-group-item"><strong>Employment Size:</strong> <?php echo $employment_size; ?></li>
+                                <li class="list-group-item"><strong>Location Address:</strong> <?php echo $location_address . ", " . $location_barangay . ", " . $location_city . ", " . $location_province; ?></li>
+                                <li class="list-group-item"><strong>Contact Person Name:</strong> <?php echo $contact_person_name; ?></li>
+                                <li class="list-group-item"><strong>Contact Person Position:</strong> <?php echo $contact_person_position; ?></li>
+                                <li class="list-group-item"><strong>Cellphone Number:</strong> <?php echo $cellphone_number; ?></li>
+                                <li class="list-group-item"><strong>Telephone Number:</strong> <?php echo $telephone_number; ?></li>
+                                <li class="list-group-item"><strong>Email:</strong> <?php echo $email; ?></li>
                             </ul>
                             <?php
                             $documents = array(

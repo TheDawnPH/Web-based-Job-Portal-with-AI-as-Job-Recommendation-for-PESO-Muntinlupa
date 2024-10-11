@@ -76,6 +76,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = trim($_POST["email"]);
     }
 
+    if ($user_type === 'company') {
+        if (empty(trim($_POST["companyname"]))) {
+            $company_name = "N/A";
+        } else {
+            $company_name = trim($_POST["companyname"]);
+        }
+
+        if (empty(trim($_POST["companyposition"]))) {
+            $company_position = "N/A";
+        } else {
+            $company_position = trim($_POST["companyposition"]);
+        }
+    }
+
     // check if email is valid
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $email_err = "Invalid email format.";
@@ -121,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($user_type_err) && empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err) && empty($warning)) {
-        $sql = "INSERT INTO users (user_type, fname, mname, lname, suffix, email, user_password, verification_code, company_name, company_positon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO users (user_type, fname, mname, lname, suffix, email, user_password, verification_code, company_name, company_position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
             mysqli_stmt_bind_param($stmt, "ssssssssss", $param_user_type, $param_fname, $param_mname, $param_lname, $param_suffix, $param_email, $param_password, $param_verification_code, $param_company_name, $param_company_position);
@@ -201,8 +215,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js' async defer></script>
     <script>
+        // show privacy modal once
         $(document).ready(function() {
-            $('#PrivacyPopup').modal('show');
+            if (localStorage.getItem('privacyPopup') !== 'shown') {
+                $('.PrivacyPopup').modal('show');
+                localStorage.setItem('privacyPopup', 'shown');
+            }
         });
     </script>
 </head>

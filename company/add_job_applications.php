@@ -84,12 +84,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $job_image = !empty($_FILES["job_image"]["name"]) ? $_FILES["job_image"]["name"] : NULL;
         $user_id = $_SESSION["user_id"];
         $submit_job_id = $_POST["submit_id"];
+        $update_visible = 1;
 
         // prepare update statement if submitted with job_id
         if ($submit_job_id != $job_id) {
-            $sql = "UPDATE job_listing SET job_title = ?, job_description = ?, job_requirements = ?, job_salary = ?, job_type = ?, image_name = IFNULL(?, image_name), jinindustry_id = ?, shs_qualified = ? WHERE id = ?";
+            $sql = "UPDATE job_listing SET job_title = ?, job_description = ?, job_requirements = ?, job_salary = ?, job_type = ?, image_name = IFNULL(?, image_name), jinindustry_id = ?, shs_qualified = ?, visible =? WHERE id = ?";
             $stmt = mysqli_prepare($conn, $sql);
-            mysqli_stmt_bind_param($stmt, "ssssssssi", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $submit_job_id);
+            mysqli_stmt_bind_param($stmt, "sssssssssi", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $update_visible, $submit_job_id);
         } else {
             // prepare an insert statement
             $sql = "INSERT INTO job_listing (job_title, job_description, job_requirements, job_salary, job_type, image_name, jinindustry_id, shs_qualified, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";

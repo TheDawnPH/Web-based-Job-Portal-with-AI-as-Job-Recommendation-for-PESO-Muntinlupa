@@ -33,16 +33,20 @@ if ($_SESSION["user_type"] != "admin") {
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="icon" type="image/png" href="/img/peso_muntinlupa.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
-    <script src="extensions/print/bootstrap-table-print.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.23.5/extensions/print/bootstrap-table-print.js">
+    </script>
     <style>
-        @media print {
-            .no-print {
-                display: none;
-            }
+    @media print {
+        .no-print {
+            display: none;
         }
+    }
     </style>
 </head>
 
@@ -50,25 +54,27 @@ if ($_SESSION["user_type"] != "admin") {
     <?php include $root . '/nav.php'; ?>
     <div class="container">
         <h1>Job Applications Reports</h1>
-        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
-        <br><br>
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg"
+            class="img-fluid" alt="Responsive image">
+        <br class="no-print">
+        <br class="no-print">
+        <input type="button" onclick="printTable()" value="Print Everything" class="no-print btn btn-primary" />
+        <br class="no-print"><br class="no-print">
+        <!-- search bar for job listings -->
+        <input type="text" id="search" onkeyup="searchTable()" placeholder="Search for Job title/Company.."
+            class="no-print form-control">
+        <br>
+        <!-- filter dropdown -->
+        <label for="filter" class="no-print">Filter by Application Status:</label>
+        <select id="filter" class="no-print form-select" onchange="filterTable()">
+            <option value="all">All</option>
+            <option value="Approved">Approved</option>
+            <option value="Denied">Denied</option>
+            <option value="Pending">Pending</option>
+        </select>
+        <br>
+        <p>Number of Results: <span id="count"></span></p>
         <div class="table-responsive">
-            <br>
-            <input type="button" onclick="printTable()" value="Print Everything" class="no-print btn btn-primary" />
-            <br><br>
-            <!-- search bar for job listings -->
-            <input type="text" id="search" onkeyup="searchTable()" placeholder="Search for Job title/Company.." class="form-control">
-            <br>
-            <!-- filter dropdown -->
-            <label for="filter">Filter by Application Status:</label>
-            <select id="filter" class="form-select" onchange="filterTable()">
-                <option value="all">All</option>
-                <option value="Approved">Approved</option>
-                <option value="Denied">Denied</option>
-                <option value="Pending">Pending</option>
-            </select>
-            <br>
-            <p>Number of Results: <span id="count"></span></p>
             <table class="table table-striped table-bordered border-start" id="data" data-show-print="true">
                 <thead>
                     <tr>
@@ -80,7 +86,7 @@ if ($_SESSION["user_type"] != "admin") {
                         <th>Application Date</th>
                         <th>Updated At</th>
                         <th>Application Status</th>
-                        <th>Action</th>
+                        <th class="no-print">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,77 +120,74 @@ if ($_SESSION["user_type"] != "admin") {
         </div>
     </div>
     <script>
-        function printTable() {
-            var tableData = '<table border="1" style="text-align:center;">' + document.getElementsByTagName('table')[0].innerHTML + '</table>';
-            var data = tableData;
-            var myWindow = window.open('', '', 'width=800,height=600');
-            myWindow.document.write(data);
-            myWindow.document.close();
-            myWindow.focus();
-            myWindow.print();
-            myWindow.close();
-            return true;
-        }
+    // hide action column when printing
+    function printTable() {
+        var table = document.getElementById("data");
+        table.classList.add("table-print");
+        window.print();
+        table.classList.remove("table-print");
+    }
 
-        // Function to count visible rows and update the result count
-        function countVisibleRows() {
-            var table = document.getElementById("data");
-            var tr = table.getElementsByTagName("tr");
-            var count = 0;
-            for (var i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
-                if (tr[i].style.display !== "none") {
-                    count++;
+    // Function to count visible rows and update the result count
+    function countVisibleRows() {
+        var table = document.getElementById("data");
+        var tr = table.getElementsByTagName("tr");
+        var count = 0;
+        for (var i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+            if (tr[i].style.display !== "none") {
+                count++;
+            }
+        }
+        document.getElementById("count").innerText = count;
+    }
+
+    // Function to filter the table based on application status
+    function filterTable() {
+        var filter = document.getElementById("filter").value;
+        var table = document.getElementById("data");
+        var tr = table.getElementsByTagName("tr");
+        for (var i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+            var td = tr[i].getElementsByTagName("td")[7];
+            if (td) {
+                if (filter == "all") {
+                    tr[i].style.display = "";
+                } else if (td.innerHTML == filter) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
                 }
             }
-            document.getElementById("count").innerText = count;
         }
+        countVisibleRows();
+    }
 
-        // Function to filter the table based on application status
-        function filterTable() {
-            var filter = document.getElementById("filter").value;
-            var table = document.getElementById("data");
-            var tr = table.getElementsByTagName("tr");
-            for (var i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
-                var td = tr[i].getElementsByTagName("td")[7];
-                if (td) {
-                    if (filter == "all") {
-                        tr[i].style.display = "";
-                    } else if (td.innerHTML == filter) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
+    // Function to search the table based on company name and job title
+    function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("search");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("data");
+        tr = table.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+            tr[i].style.display = "none";
+            tdCompany = tr[i].getElementsByTagName("td")[2];
+            tdJobTitle = tr[i].getElementsByTagName("td")[1];
+            if (tdCompany || tdJobTitle) {
+                txtValueCompany = tdCompany.textContent || tdCompany.innerText;
+                txtValueJobTitle = tdJobTitle.textContent || tdJobTitle.innerText;
+                if (txtValueCompany.toUpperCase().indexOf(filter) > -1 || txtValueJobTitle.toUpperCase().indexOf(
+                    filter) > -1) {
+                    tr[i].style.display = "";
                 }
             }
-            countVisibleRows();
         }
+        countVisibleRows();
+    }
 
-        // Function to search the table based on company name and job title
-        function searchTable() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("search");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("data");
-            tr = table.getElementsByTagName("tr");
-            for (i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
-                tr[i].style.display = "none";
-                tdCompany = tr[i].getElementsByTagName("td")[2];
-                tdJobTitle = tr[i].getElementsByTagName("td")[1];
-                if (tdCompany || tdJobTitle) {
-                    txtValueCompany = tdCompany.textContent || tdCompany.innerText;
-                    txtValueJobTitle = tdJobTitle.textContent || tdJobTitle.innerText;
-                    if (txtValueCompany.toUpperCase().indexOf(filter) > -1 || txtValueJobTitle.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    }
-                }
-            }
-            countVisibleRows();
-        }
-
-        // Initialize count on page load
-        document.addEventListener("DOMContentLoaded", function() {
-            countVisibleRows();
-        });
+    // Initialize count on page load
+    document.addEventListener("DOMContentLoaded", function() {
+        countVisibleRows();
+    });
     </script>
 </body>
 

@@ -21,6 +21,7 @@ $row = mysqli_fetch_assoc($result);
 
 // Define variables and initialize with values from row
 $gender = $row["sex"];
+$civil_status = $row["civil_status"];
 $birth_day = $row["birth_day"];
 $birth_month = $row["birth_month"];
 $birth_year = $row["birth_year"];
@@ -32,16 +33,42 @@ $barangay = $row["barangay"];
 $city = $row["city"];
 $province = $row["province"];
 $zip_code = $row["zip_code"];
-$school_name = $row["school_name"];
-$school_year_begin = $row["school_year_begin"];
-$school_year_end = $row["school_year_end"];
+$school_name = isset($row["school_name"]) ? $row["school_name"] : null;
+$school_year_begin = isset($row["school_year_begin"]) ? $row["school_year_begin"] : null;
+$school_year_end = isset($row["school_year_end"]) ? $row["school_year_end"] : null;
 $technicalschool_name = $row["technicalschool_name"];
 $nsrp_form = $biodata_form = $profile_picture = "";
 $loi = $cp = $sec_accredit = $cda_license = $dole_license = $loc = $mbpermit = $job_vacant = $job_solicitation = $phjobnet_reg = $cert_nopendingcase = $cert_regSSS = $cert_regPhHealth = $cert_regPGIBG = $sketch_map = $bir_2303 = "";
 $jinindustry = $row["jinindustry_id"];
 $company_name = $row["company_name"];
 $company_position = $row["company_position"];
-
+$fourps_member = $row["fourps_member"];
+$pwd = isset($row["pwd"]) ? $row["pwd"] : null;
+$disability_type = isset($row["disability_type"]) ? $row["disability_type"] : null;
+$skills = $row["skills"];
+$work_experience = $row["work_experience"];
+$ofw = $row["ofw"];
+$ofw_country = $row["ofw_country"];
+$former_ofw = $row["former_ofw"];
+$former_ofw_country = isset($row["former_ofw_country"]) ? $row["former_ofw_country"] : null;
+$last_ofw_year = $row["last_ofw_year"];
+$business_name = isset($row["business_name"]) ? $row["business_name"] : null;
+$trade_name = isset($row["trade_name"]) ? $row["trade_name"] : null;
+$tin_number = isset($row["tin_number"]) ? $row["tin_number"] : null;
+$pjn_accredited = isset($row["pjn_accredited"]) ? $row["pjn_accredited"] : null;
+$employment_type = isset($row["employment_type"]) ? $row["employment_type"] : null;
+$employment_size = isset($row["employment_size"]) ? $row["employment_size"] : null;
+$location_address = isset($row["location_address"]) ? $row["location_address"] : null;
+$location_barangay = isset($row["location_barangay"]) ? $row["location_barangay"] : null;
+$location_city = isset($row["location_city"]) ? $row["location_city"] : null;
+$location_province = isset($row["location_province"]) ? $row["location_province"] : null;
+$location_province = isset($row["location_province"]) ? $row["location_province"] : null;
+$contact_person_name = isset($row["contact_person_name"]) ? $row["contact_person_name"] : null;
+$contact_person_position = isset($row["contact_person_position"]) ? $row["contact_person_position"] : null;
+$cellphone_number = isset($row["cellphone_number"]) ? $row["cellphone_number"] : null;
+$telephone_number = isset($row["telephone_number"]) ? $row["telephone_number"] : null;
+$email = $row["email"];
+$registration_date = isset($row["registration_date"]) ? $row["registration_date"] : null;
 
 
 // Processing form data when form is submitted
@@ -50,11 +77,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_FILES["nsrp_form"]) || isset($_FILES["biodata_form"]) || isset($_FILES["profile_picture"]) || isset($_FILES["loi"]) || isset($_FILES["cp"]) || isset($_FILES["sec_accredit"]) || isset($_FILES["cda_license"]) || isset($_FILES["dole_license"]) || isset($_FILES["loc"]) || isset($_FILES["mbpermit"]) || isset($_FILES["job_vacant"]) || isset($_FILES["job_solicitation"]) || isset($_FILES["phjobnet_reg"]) || isset($_FILES["cert_nopendingcase"]) || isset($_FILES["cert_regSSS"]) || isset($_FILES["cert_regPhHealth"]) || isset($_FILES["cert_regPGIBG"]) || isset($_FILES["sketch_map"]) || isset($_FILES["2303_bir"])) {
         // check if nsrp form and biodata is pdf or docx
         // Prepare SQL statement
-        $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, school_name=?, school_year_begin=IFNULL(?, school_year_begin) , school_year_end= IFNULL(?, school_year_end), technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image), jinindustry_id = IFNULL(?, jinindustry_id) WHERE user_id=?, company_name = IFNULL(?, company_name), company_position = IFNULL(?, company_position)";
+        $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, latest_school_name=?, latest_school_year_begin=IFNULL(?, latest_school_year_begin) , latest_school_year_end= IFNULL(?, latest_school_year_end), technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image), jinindustry_id = IFNULL(?, jinindustry_id), company_name = IFNULL(?, company_name), company_position = IFNULL(?, company_position), civil_status = IFNULL(?, civil_status) WHERE user_id=?";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sssssssssssssssssssss", $param_sex, $param_birth_day, $param_birth_month, $param_birth_year, $param_contact_number, $param_house_number, $param_street, $param_subdivision, $param_barangay, $param_city, $param_province, $param_zip_code, $param_school_name, $param_school_year_begin, $param_school_year_end, $param_technicalschool_name, $param_nsrp_form, $param_biodata_form, $param_profile_picture, $param_jinindustry_id, $param_user_id, $param_company_name, $param_company_position);
+            mysqli_stmt_bind_param($stmt, "sssssssssssssssssssssss", $param_sex, $param_birth_day, $param_birth_month, $param_birth_year, $param_contact_number, $param_house_number, $param_street, $param_subdivision, $param_barangay, $param_city, $param_province, $param_zip_code, $param_school_name, $param_school_year_begin, $param_school_year_end, $param_technicalschool_name, $param_nsrp_form, $param_biodata_form, $param_profile_picture, $param_jinindustry_id, $param_company_name, $param_company_position, $param_civil_status, $param_user_id);
 
             // Set parameters
             $param_sex = $_POST["gender"];
@@ -77,6 +104,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_jinindustry_id = $_POST["jinindustry"];
             $param_company_name = !empty($_POST["company_name"]) ? $_POST["company_name"] : null;
             $param_company_position = !empty($_POST["company_position"]) ? $_POST["company_position"] : null;
+            $param_fourps_member = !empty($_POST["fourps_member"]) ? $_POST["fourps_member"] : null;
+            $param_pwd = !empty($_POST["pwd"]) ? $_POST["pwd"] : null;
+            $param_disability_type = !empty($_POST["disability_type"]) ? $_POST["disability_type"] : null;
+            $param_civil_status = $_POST["civil_status"];
 
 
 
@@ -546,13 +577,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
             </div><br>
             <div class="form-group">
+                <label for="civil_status">Civil Status</label>
+                <select name="civil_status" class="form-control" required>
+                    <option value="">-- Please Select --</option>
+                    <option value="single" <?php echo ($civil_status == 'single') ? 'selected' : ''; ?>>Single</option>
+                    <option value="married" <?php echo ($civil_status == 'married') ? 'selected' : ''; ?>>Married</option>
+                    <option value="widowed" <?php echo ($civil_status == 'widowed') ? 'selected' : ''; ?>>Widowed</option>
+                    <option value="separated" <?php echo ($civil_status == 'separated') ? 'selected' : ''; ?>>Separated</option>
+                    <option value="divorced" <?php echo ($civil_status == 'divorced') ? 'selected' : ''; ?>>Divorced</option>
+                </select>
+            </div><br>
+            <div class="form-group">
                 <label for="birth_day">Birth Day</label>
                 <input type="number" name="birth_day" class="form-control" value="<?php echo $birth_day; ?>" min="1" max="31" placeholder="DD" required>
             </div><br>
             <div class="form-group">
                 <label for="birth_month">Birth Month</label>
-                <div class="form-text">Please use numbers for month (e.g. 1 for January, 2 for February, etc.)</div>
-                <input type="number" name="birth_month" class="form-control" value="<?php echo $birth_month; ?>" min="1" max="12" placeholder="MM" required>
+                <select name="birth_month" class="form-control" required>
+                    <option value="">-- Please Select --</option>
+                    <option value="1" <?php echo ($birth_month == 1) ? 'selected' : ''; ?>>January</option>
+                    <option value="2" <?php echo ($birth_month == 2) ? 'selected' : ''; ?>>February</option>
+                    <option value="3" <?php echo ($birth_month == 3) ? 'selected' : ''; ?>>March</option>
+                    <option value="4" <?php echo ($birth_month == 4) ? 'selected' : ''; ?>>April</option>
+                    <option value="5" <?php echo ($birth_month == 5) ? 'selected' : ''; ?>>May</option>
+                    <option value="6" <?php echo ($birth_month == 6) ? 'selected' : ''; ?>>June</option>
+                    <option value="7" <?php echo ($birth_month == 7) ? 'selected' : ''; ?>>July</option>
+                    <option value="8" <?php echo ($birth_month == 8) ? 'selected' : ''; ?>>August</option>
+                    <option value="9" <?php echo ($birth_month == 9) ? 'selected' : ''; ?>>September</option>
+                    <option value="10" <?php echo ($birth_month == 10) ? 'selected' : ''; ?>>October</option>
+                    <option value="11" <?php echo ($birth_month == 11) ? 'selected' : ''; ?>>November</option>
+                    <option value="12" <?php echo ($birth_month == 12) ? 'selected' : ''; ?>>December</option>
+                </select>
             </div><br>
             <div class="form-group">
                 <label for="birth_year">Birth Year</label>
@@ -560,35 +615,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div><br>
             <div class="form-group">
                 <label for="contact_number">Contact Number</label>
-                <input type="text" name="contact_number" class="form-control" value="<?php echo $contact_number; ?>" placeholder="09xxxxxxxxx" required>
+                <input type="number" name="contact_number" class="form-control" value="<?php echo $contact_number; ?>" placeholder="09xxxxxxxxx" required>
             </div><br>
             <div class="form-group">
                 <label for="house_number">House Number</label>
-                <input type="number" name="house_number" class="form-control" value="<?php echo $house_number; ?>" placeholder="60" required>
+                <input type="number" name="house_number" class="form-control" value="<?php echo $house_number; ?>" required>
             </div><br>
             <div class="form-group">
                 <label for="street">Street</label>
-                <input type="text" name="street" class="form-control" value="<?php echo $street; ?>" placeholder="Juan Street" required>
+                <input type="text" name="street" class="form-control" value="<?php echo $street; ?>" required>
             </div><br>
             <div class="form-group">
                 <label for="subdivision">Subdivision/Suburb</label>
-                <input type="text" name="subdivision" class="form-control" value="<?php echo $subdivision; ?>" placeholder="San Jose Village" required>
+                <input type="text" name="subdivision" class="form-control" value="<?php echo $subdivision; ?>" required>
             </div><br>
             <div class="form-group">
                 <label for="barangay">Barangay</label>
-                <input type="text" name="barangay" class="form-control" value="<?php echo $barangay; ?>" placeholder="Alabang" required>
+                <input type="text" name="barangay" class="form-control" value="<?php echo $barangay; ?>" required>
             </div><br>
             <div class="form-group">
                 <label for="city">City</label>
-                <input type="text" name="city" class="form-control" value="<?php echo $city; ?>" placeholder="Muntinlupa City" required>
+                <input type="text" name="city" class="form-control" value="<?php echo $city; ?>" required>
             </div><br>
             <div class="form-group">
-                <label for="province">Province</label>
-                <input type="text" name="province" class="form-control" value="<?php echo $province; ?>" placeholder="Metro Manila" required>
+                <label for="province">Province/Region</label>
+                <input type="text" name="province" class="form-control" value="<?php echo $province; ?>" required>
             </div><br>
             <div class="form-group">
                 <label for="zip_code">Zip Code</label>
-                <input type="text" name="zip_code" class="form-control" value="<?php echo $zip_code; ?>" placeholder="1780" required>
+                <input type="number" name="zip_code" class="form-control" value="<?php echo $zip_code; ?>" required>
             </div><br>
             <div class="form-group">
                 <label for="school_name">Last Finsihed School Name</label>
@@ -615,6 +670,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="pwd">PWD</label>
                 <div class="form-text">Check this box if you are a PWD</div>
                 <input type="checkbox" name="pwd" value="1" <?php echo ($pwd == 1) ? 'checked' : ''; ?>>
+            </div><br>
+            <div class="form-group">
+                <label for="disability_type">Disability Type</label>
+                <input type="text" name="disability_type" class="form-control" value="<?php echo $disability_type; ?>">
             </div><br>
             <div class="form-group">
                 <label for="skills">Skills</label>
@@ -645,7 +704,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="text" name="former_ofw_country" class="form-control" value="<?php echo $former_ofw_country; ?>">
             </div><br>
             <div class="form-group">
-                <label for="former_ofw_country">Last YEar of Former OFW</label>
+                <label for="former_ofw_country">Last Year of Former OFW</label>
                 <input type="text" name="last_ofw_year" class="form-control" value="<?php echo $last_ofw_year; ?>">
             </div><br>
             <div class="form-group">
@@ -687,8 +746,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <hr>
                 <h2>Company/Business Details</h2>
                 <div class="form-group">
-                    <label for="company_name">Business Name</label>
-                    <input type="text" name="company_name" class="form-control" value="<?php echo $company_name; ?>">
+                    <label for="business_name">Business Name</label>
+                    <input type="text" name="business_name" class="form-control" value="<?php echo $business_name; ?>">
                 </div><br>
                 <div class="form-group">
                     <label for="trade_name">Trade Name</label>
