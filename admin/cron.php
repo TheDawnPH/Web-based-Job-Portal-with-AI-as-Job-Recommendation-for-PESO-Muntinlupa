@@ -1,5 +1,5 @@
 <?php
-$root = "c:/xampp/htdocs";
+$root = "/opt/lampp/htdocs";
 
 require $root . "/config.php";
 

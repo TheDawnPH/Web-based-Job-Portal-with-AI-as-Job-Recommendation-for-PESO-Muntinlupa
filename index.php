@@ -62,6 +62,10 @@ function getJobAcceptanceRate($job_id)
         <!-- <div class="alert alert-danger fade show" role="alert">
             Hello! This site is a capstone project for Muntinlupa PESO, this site is <strong>not affiliated in Muntinlupa PESO, and Muntinlupa City Government. This is only a proposal for Muntinlupa PESO.</strong> Please do not insert actual personal information. Thank you!
         </div> -->
+        <!-- <div class="alert alert-danger fade show" role="alert">
+            <strong>Notice:</strong><br>This site is currently undergoing migration to a new server. Some features may
+            not work as expected. We apologize for the inconvenience.
+        </div> -->
         <?php if ($cverify["company_verified"] == 0 && isset($_SESSION["user_type"]) && $_SESSION["user_type"] === "company") { ?>
         <div class="alert alert-danger fade show" role="alert">
             <strong>Warning!</strong><br>Your company is not yet verified. Please <a
@@ -197,7 +201,7 @@ function getJobAcceptanceRate($job_id)
                                 PESO</a><br><br>
                         </div>
                         <div class="fb-page" data-href="https://www.facebook.com/MuntinlupaPESO" data-show-posts="true"
-                            data-width="" data-height="" data-small-header="false" data-adapt-container-width="true"
+                            data-width="500" data-height="" data-small-header="false" data-adapt-container-width="true"
                             data-hide-cover="false" data-show-facepile="false">
                             <blockquote cite="https://www.facebook.com/MuntinlupaPESO" class="fb-xfbml-parse-ignore"><a
                                     href="https://www.facebook.com/MuntinlupaPESO">Muntinlupa PESO</a></blockquote>
@@ -215,7 +219,8 @@ function getJobAcceptanceRate($job_id)
                             data-bs-target="#PrivacyPopup">
                             Data Privacy Clause
                         </button>
-                        <a href="https://muntinlupacity.gov.ph/" class="btn btn-primary">City Website</a>
+                        <a href="https://muntinlupacity.gov.ph/" class="btn btn-primary" role="button">City Website</a><hr>
+                        <a href="about.php" class="btn btn-primary" role="button">About Website</a>
                     </div>
                 </div>
             </div>
