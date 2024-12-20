@@ -183,6 +183,8 @@ if (!$result) {
         <br class="no-print"><br class="no-print">
         <a class="no-print btn btn-primary" role="button" href="/admin/add_users.php">Add User</a>
         <input type="button" onclick="printTable()" value="Print Displayed" class="no-print btn btn-primary" />
+        <input type="button" onclick="exportTableToExcel('data', 'users')" value="Export to Excel"
+            class="no-print btn btn-primary" />
         <br class="no-print"><br class="no-print">
         <!-- search bar -->
         <input type="text" id="search" class="form-control no-print" onkeyup="searchTable()"
@@ -333,6 +335,39 @@ if (!$result) {
         myWindow.print();
         myWindow.close();
         return true;
+    }
+    </script>
+    // convert to excel file
+    <script>
+    function exportTableToExcel(tableID, filename = '') {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+        // Specify file name
+        filename = filename ? filename + '.xls' : 'export_excel_data.xls';
+
+        // Create download link element
+        downloadLink = document.createElement("a");
+
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+            // Setting the file name
+            downloadLink.download = filename;
+
+            //triggering the function
+            downloadLink.click();
+        }
     }
     </script>
 </body>
