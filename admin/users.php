@@ -7,6 +7,7 @@ ini_set('session.use_only_cookies', 1);
 session_start();
 
 $root = $_SERVER['DOCUMENT_ROOT'];
+$website = $_ENV['WEBSITE_URL'];
 
 require $root . "/config.php";
 
@@ -305,7 +306,7 @@ if (!$result) {
                         echo "<td>No company details</td>";
                     } else {
                         // Display the link for viewing the company details
-                        echo "<td>" . "<a href='/company/company_details.php?cdocu_id=" . htmlspecialchars($cdocu_id) . "'>View Company Details</a>" . "</td>";
+                        echo "<td>" . "<a href='" . $website . "/company/company_details.php?cdocu_id=" . htmlspecialchars($cdocu_id) . "'>View Company Details</a>" . "</td>";
                     }
 
                     echo "<td>" . htmlspecialchars($row['user_type']) . "</td>";
@@ -327,10 +328,21 @@ if (!$result) {
         var downloadLink;
         var dataType = 'application/vnd.ms-excel';
         var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+        // Clone the table to avoid modifying the original
+        var clonedTable = tableSelect.cloneNode(true);
+
+        // Remove the action column from the cloned table
+        var actionColumnIndex = 0; // Replace with the zero-based index of the Action column
+        for (var i = 0; i < clonedTable.rows.length; i++) {
+            clonedTable.rows[i].deleteCell(actionColumnIndex);
+        }
+
+        // Convert the cloned table to HTML
+        var tableHTML = clonedTable.outerHTML.replace(/ /g, '%20');
 
         // Specify file name
-        filename = filename ? filename + '.xls' : 'users.xls';
+        filename = filename ? filename + '.xls' : 'excel_data.xls';
 
         // Create download link element
         downloadLink = document.createElement("a");
@@ -349,7 +361,7 @@ if (!$result) {
             // Setting the file name
             downloadLink.download = filename;
 
-            //triggering the function
+            // Triggering the function
             downloadLink.click();
         }
     }
