@@ -204,7 +204,7 @@ if ($_SESSION["user_type"] != "admin") {
         var clonedTable = tableSelect.cloneNode(true);
 
         // Remove the action column from the cloned table
-        var actionColumnIndex = 7; // Replace with the zero-based index of the Action column
+        var actionColumnIndex = 8; // Replace with the zero-based index of the Action column
         for (var i = 0; i < clonedTable.rows.length; i++) {
             clonedTable.rows[i].deleteCell(actionColumnIndex);
         }
