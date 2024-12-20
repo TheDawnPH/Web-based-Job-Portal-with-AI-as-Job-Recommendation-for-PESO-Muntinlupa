@@ -151,7 +151,7 @@ if (!$result) {
                     <?php
                         }
                     } else {
-                        echo "No job listings found.";
+                        echo "<br>No job listings found.";
                     }
                     ?>
                 </tbody>
