@@ -68,14 +68,50 @@ function getJobAcceptanceRate($job_id)
         </div> -->
         <?php
         $today = date('Y-m-d');
-        $dec25 = date('Y') . '-12-21';
-        $dec30 = date('Y') . '-12-30';
+        // non working days holiday api
+        $holiday_api = "https://date.nager.at/Api/v2/PublicHoliday/2022/ph";
+        $holiday_json = file_get_contents($holiday_api);
+        $holiday_array = json_decode($holiday_json, true);
+        $holidays = array_column($holiday_array, 'date');
+        $holidays = array_map(function ($holiday) {
+            return date('Y-m-d', strtotime($holiday));
+        }
+        , $holidays);
+        $holidays = array_filter($holidays, function ($holiday) use ($today) {
+            return $holiday === $today;
+        });
 
-        if ($today === $dec25 || $today === $dec30) {
-            echo '<div class="alert alert-danger fade show" role="alert">
-            A Message from PESO Muntinlupa:<br>
-            <strong>We wish you a Merry Christmas and a Happy New Year!</strong>
-        </div>';
+        $christmas = date('Y') . '-12-21';
+        $new_year = date('Y') . '-01-01';
+
+        if (!empty($holidays)) {
+            echo "<div class='alert alert-warning fade show' role='alert'>
+            <h4 class='alert-heading'>A Message from PESO Muntinlupa</h4>
+            <p>Today is a non-working holiday. Please be advised that there may be delays in processing your applications.</p>
+            <p>Thank you for your understanding.</p>
+            </div>";
+        }
+
+        if ($today === $christmas) {
+            echo "<div class='alert alert-success fade show' role='alert'>
+            <h4 class='alert-heading'>A Message from PESO Muntinlupa</h4>
+            <p>Today is Christmas Day. Please be advised that there may be delays in processing your applications.</p>
+            <p>Thank you for your understanding.</p>
+            <hr>
+            <p class='mb-0'>Merry Christmas and Happy Holidays!</p>
+            <p class='mb-0'>- PESO Muntinlupa</p>
+            </div>";
+        }
+
+        if ($today === $new_year) {
+            echo "<div class='alert alert-success fade show' role='alert'>
+            <h4 class='alert-heading'>A Message from PESO Muntinlupa</h4>
+            <p>Today is New Year's Day. Please be advised that there may be delays in processing your applications.</p>
+            <p>Thank you for your understanding.</p>
+            <hr>
+            <p class='mb-0'>We wish you a Happy New Year!</p>
+            <p class='mb-0'>- PESO Muntinlupa</p>
+            </div>";
         }
 
         ?>
@@ -230,7 +266,8 @@ function getJobAcceptanceRate($job_id)
                             data-bs-target="#PrivacyPopup">
                             Data Privacy Clause
                         </button>
-                        <a href="https://muntinlupacity.gov.ph/" class="btn btn-primary" role="button">City Website</a><hr>
+                        <a href="https://muntinlupacity.gov.ph/" class="btn btn-primary" role="button">City Website</a>
+                        <hr>
                         <a href="about.php" class="btn btn-primary" role="button">About Website</a>
                     </div>
                 </div>
