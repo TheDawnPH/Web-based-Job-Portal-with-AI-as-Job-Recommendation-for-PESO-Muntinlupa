@@ -197,12 +197,12 @@ if ($_SESSION["user_type"] != "admin") {
     <script>
     function exportTableToExcel(tableID, filename = '') {
         var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
+        var dataType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
         var tableSelect = document.getElementById(tableID);
         var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
 
         // Specify file name
-        filename = filename ? filename + '.xls' : 'excel_data.xls';
+        filename = filename ? filename + '.xlsx' : 'export_excel_data.xlsx';
 
         // Create download link element
         downloadLink = document.createElement("a");
