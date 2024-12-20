@@ -115,7 +115,7 @@ if (mysqli_stmt_execute($stmt)) {
                     $mail = new PHPMailer();
                     $mail->IsSMTP();
                     $mail->Mailer = "smtp";
-                    $mail->SMTPDebug  = 0;
+                    $mail->SMTPDebug  = 2;
                     $mail->SMTPAuth   = TRUE;
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port       = $_ENV['SMTP_PORT'];
