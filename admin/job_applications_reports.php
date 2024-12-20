@@ -120,21 +120,22 @@ if ($_SESSION["user_type"] != "admin") {
         </div>
     </div>
     <script>
+    // hide action column when printing
     function printTable() {
-        // make a copy of the table with border, then exclude Action column
-        var table = document.getElementById("data").cloneNode(true);
-        table.deleteColumn(8);
-        // print the table
-        var printWindow = window.open('', '', 'height=600,width=800');
-        printWindow.document.write('<html><head><title>Job Applications Reports</title>');
-        printWindow.document.write('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">');
-        printWindow.document.write('</head><body>');
-        printWindow.document.write('<h1>Job Applications Reports</h1>');
-        printWindow.document.write(table.outerHTML);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-    }
+        // make it plain table
+        var table = document.getElementById("data");
+        table.classList.remove("table-striped");
+        table.classList.remove("table-bordered");
+        table.classList.remove("border-start");
+        // hide action column
+        var th = table.getElementsByTagName("th")[8];
+        th.style.display = "none";
+        var tr = table.getElementsByTagName("tr");
+        for (var i = 0; i < tr.length; i++) {
+            var td = tr[i].getElementsByTagName("td")[8];
+            td.style.display = "none";
+        }
+        window.print();
 
     // Function to count visible rows and update the result count
     function countVisibleRows() {
