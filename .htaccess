@@ -9,4 +9,7 @@ Options -Indexes
 </Files>
 
 # block folders
-RedirectMatch 503 ^/.git/.*$
+RedirectMatch 404 ^/.git/.*$
+
+# block all not existent files to 404
+ErrorDocument 404 /404.php
