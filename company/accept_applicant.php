@@ -131,7 +131,7 @@ if (mysqli_stmt_execute($stmt)) {
                     $content .= "Congratulations! Applicant " . $row['fname'] . " " . $row['lname'] . " has been accepted to the job " . $row3['job_title'] . "<br>";
                     $content .= "Here are the details of the applicant:<br>";
                     $content .= "Name: " . $row['fname'] . " " . $row['lname'] . "<br>";
-                    $content .= "Profile: <a href='" . $website . "/view_profile.php?user_id=" . $row['user_id'] . "'>View Profile</a><br>";
+                    $content .= "Profile: <a href='" . $website . "/profile.php?user_id=" . $row['user_id'] . "'>View Profile</a><br>";
                     $content .= "Thank you for using PESO Muntinlupa Job Portal.<br>";
                     $biodata_path = $root . "/uploads/" . $row['user_id'] . "/" . $row['biodata_form'];
                     if (file_exists($biodata_path)) {
