@@ -69,7 +69,7 @@ function getJobAcceptanceRate($job_id)
         <?php
         $today = date('Y-m-d');
         // non working days holiday api
-        $holiday_api = "https://date.nager.at/Api/v2/PublicHoliday/2022/ph";
+        $holiday_api = "https://holidayapi.com/countries/ph/" . date('Y');
         $holiday_json = file_get_contents($holiday_api);
         $holiday_array = json_decode($holiday_json, true);
         $holidays = array_column($holiday_array, 'date');
