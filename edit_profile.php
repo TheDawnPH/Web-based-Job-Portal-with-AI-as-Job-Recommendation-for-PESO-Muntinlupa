@@ -81,8 +81,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sssssssssssssssssssssss", $param_sex, $param_birth_day, $param_birth_month, $param_birth_year, $param_contact_number, $param_house_number, $param_street, $param_subdivision, $param_barangay, $param_city, $param_province, $param_zip_code, $param_school_name, $param_school_year_begin, $param_school_year_end, $param_technicalschool_name, $param_nsrp_form, $param_biodata_form, $param_profile_picture, $param_jinindustry_id, $param_company_name, $param_company_position, $param_civil_status, $param_user_id);
-
+            mysqli_stmt_bind_param(
+                $stmt, 
+                "ssssssssssssssssssssssss", 
+                $param_sex, 
+                $param_birth_day, 
+                $param_birth_month, 
+                $param_birth_year, 
+                $param_contact_number, 
+                $param_house_number, 
+                $param_street, 
+                $param_subdivision, 
+                $param_barangay, 
+                $param_city, 
+                $param_province, 
+                $param_zip_code, 
+                $param_school_name, 
+                $param_school_year_begin, 
+                $param_school_year_end, 
+                $param_technicalschool_name, 
+                $param_nsrp_form, 
+                $param_biodata_form, 
+                $param_profile_picture, 
+                $param_jinindustry_id, 
+                $param_company_name, 
+                $param_company_position, 
+                $param_civil_status, 
+                $param_user_id
+            );
+            
             // Set parameters
             $param_sex = $_POST["gender"];
             $param_birth_day = $_POST["birth_day"];
@@ -502,13 +529,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="icon" type="image/png" href="/img/peso_muntinlupa.png">
     <link rel="manifest" href="/site.webmanifest">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
     <script>
-        function confirmAction() {
-            return confirm("Are you sure you want to update your profile?");
-        }
+    function confirmAction() {
+        return confirm("Are you sure you want to update your profile?");
+    }
     </script>
 </head>
 
@@ -516,21 +545,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include "nav.php"; ?>
     <div class="container">
         <h1>Edit Profile</h1>
-        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
+        <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg"
+            class="img-fluid" alt="Responsive image">
         <br><br>
         <?php if (isset($success)) : ?>
-            <div class="alert alert-success" role="alert">
-                <?php echo $success; ?>
-            </div>
+        <div class="alert alert-success" role="alert">
+            <?php echo $success; ?>
+        </div>
         <?php endif; ?>
         <?php if (isset($error)) : ?>
-            <div class="alert alert-danger" role="alert">
-                <?php echo $error; ?>
-            </div>
+        <div class="alert alert-danger" role="alert">
+            <?php echo $error; ?>
+        </div>
         <?php endif; ?>
-        <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="post" enctype="multipart/form-data">
+        <form action="<?php echo htmlentities(htmlspecialchars($_SERVER["PHP_SELF"]), ENT_QUOTES); ?>" method="post"
+            enctype="multipart/form-data">
             <!-- display user type, First Name, Middle Name, Last Name, Suffix, Email -->
-             <h2>Personal Information</h2>
+            <h2>Personal Information</h2>
             <div class="form-group">
                 <label for="user_type">User Type</label>
                 <select class="form-control" disabled>
@@ -556,7 +587,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="form-group">
                 <label for="suffix">Suffix</label>
-                <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['suffix']); ?>" disabled>
+                <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['suffix']); ?>"
+                    disabled>
             </div><br>
 
             <div class="form-group">
@@ -581,15 +613,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <select name="civil_status" class="form-control" required>
                     <option value="">-- Please Select --</option>
                     <option value="single" <?php echo ($civil_status == 'single') ? 'selected' : ''; ?>>Single</option>
-                    <option value="married" <?php echo ($civil_status == 'married') ? 'selected' : ''; ?>>Married</option>
-                    <option value="widowed" <?php echo ($civil_status == 'widowed') ? 'selected' : ''; ?>>Widowed</option>
-                    <option value="separated" <?php echo ($civil_status == 'separated') ? 'selected' : ''; ?>>Separated</option>
-                    <option value="divorced" <?php echo ($civil_status == 'divorced') ? 'selected' : ''; ?>>Divorced</option>
+                    <option value="married" <?php echo ($civil_status == 'married') ? 'selected' : ''; ?>>Married
+                    </option>
+                    <option value="widowed" <?php echo ($civil_status == 'widowed') ? 'selected' : ''; ?>>Widowed
+                    </option>
+                    <option value="separated" <?php echo ($civil_status == 'separated') ? 'selected' : ''; ?>>Separated
+                    </option>
+                    <option value="divorced" <?php echo ($civil_status == 'divorced') ? 'selected' : ''; ?>>Divorced
+                    </option>
                 </select>
             </div><br>
             <div class="form-group">
                 <label for="birth_day">Birth Day</label>
-                <input type="number" name="birth_day" class="form-control" value="<?php echo $birth_day; ?>" min="1" max="31" placeholder="DD" required>
+                <input type="number" name="birth_day" class="form-control" value="<?php echo $birth_day; ?>" min="1"
+                    max="31" placeholder="DD" required>
             </div><br>
             <div class="form-group">
                 <label for="birth_month">Birth Month</label>
@@ -611,15 +648,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div><br>
             <div class="form-group">
                 <label for="birth_year">Birth Year</label>
-                <input type="number" name="birth_year" class="form-control" value="<?php echo $birth_year; ?>" maxlength="4" min="0" max="9999" step="1" placeholder="YYYY" pattern="[0-9]{4}" required>
+                <input type="number" name="birth_year" class="form-control" value="<?php echo $birth_year; ?>"
+                    maxlength="4" min="0" max="9999" step="1" placeholder="YYYY" pattern="[0-9]{4}" required>
             </div><br>
             <div class="form-group">
                 <label for="contact_number">Contact Number</label>
-                <input type="number" name="contact_number" class="form-control" value="<?php echo $contact_number; ?>" placeholder="09xxxxxxxxx" required>
+                <input type="number" name="contact_number" class="form-control" value="<?php echo $contact_number; ?>"
+                    placeholder="09xxxxxxxxx" required>
             </div><br>
             <div class="form-group">
                 <label for="house_number">House Number</label>
-                <input type="number" name="house_number" class="form-control" value="<?php echo $house_number; ?>" required>
+                <input type="number" name="house_number" class="form-control" value="<?php echo $house_number; ?>"
+                    required>
             </div><br>
             <div class="form-group">
                 <label for="street">Street</label>
@@ -651,20 +691,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div><br>
             <div class="form-group">
                 <label for="school_year_begin">School Year Begin</label>
-                <input type="text" name="school_year_begin" class="form-control" value="<?php echo $school_year_begin; ?>" maxlength="4" min="0" max="9999" step="1" placeholder="YYYY" pattern="[0-9]{4}">
+                <input type="text" name="school_year_begin" class="form-control"
+                    value="<?php echo $school_year_begin; ?>" maxlength="4" min="0" max="9999" step="1"
+                    placeholder="YYYY" pattern="[0-9]{4}">
             </div><br>
             <div class="form-group">
                 <label for="school_year_end">School Year End</label>
-                <input type="text" name="school_year_end" class="form-control" value="<?php echo $school_year_end; ?>" maxlength="4" min="0" max="9999" step="1" placeholder="YYYY" pattern="[0-9]{4}">
+                <input type="text" name="school_year_end" class="form-control" value="<?php echo $school_year_end; ?>"
+                    maxlength="4" min="0" max="9999" step="1" placeholder="YYYY" pattern="[0-9]{4}">
             </div><br>
             <div class="form-group">
                 <label for="technicalschool_name">Technical School Name</label>
-                <input type="text" name="technicalschool_name" class="form-control" value="<?php echo $technicalschool_name; ?>">
+                <input type="text" name="technicalschool_name" class="form-control"
+                    value="<?php echo $technicalschool_name; ?>">
             </div><br>
             <div class="form-group">
                 <label for="4ps_member">4Ps Member</label>
                 <div class="form-text">Check this box if you are a 4Ps Member</div>
-                <input type="checkbox" name="4ps_member" value="1" <?php echo ($fourps_member == 1) ? 'checked' : ''; ?>>
+                <input type="checkbox" name="4ps_member" value="1"
+                    <?php echo ($fourps_member == 1) ? 'checked' : ''; ?>>
             </div><br>
             <div class="form-group">
                 <label for="pwd">PWD</label>
@@ -688,7 +733,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label for="ofw">OFW</label>
                 <div class="form-text">Check this box if you are an current OFW</div>
-                <input type="checkbox" name="ofw" value="1" <?php echo ($ofw == 1) ? 'checked' : ''; ?>>    
+                <input type="checkbox" name="ofw" value="1" <?php echo ($ofw == 1) ? 'checked' : ''; ?>>
             </div><br>
             <div class="form-group">
                 <label for="ofw_country">Current OFW Country</label>
@@ -697,11 +742,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label for="former_ofw">Former OFW</label>
                 <div class="form-text">Check this box if you are an current OFW</div>
-                <input type="checkbox" name="ofw" value="1" <?php echo ($former_ofw == 1) ? 'checked' : ''; ?>>    
+                <input type="checkbox" name="ofw" value="1" <?php echo ($former_ofw == 1) ? 'checked' : ''; ?>>
             </div><br>
             <div class="form-group">
                 <label for="former_ofw_country">Former OFW Country</label>
-                <input type="text" name="former_ofw_country" class="form-control" value="<?php echo $former_ofw_country; ?>">
+                <input type="text" name="former_ofw_country" class="form-control"
+                    value="<?php echo $former_ofw_country; ?>">
             </div><br>
             <div class="form-group">
                 <label for="former_ofw_country">Last Year of Former OFW</label>
@@ -710,7 +756,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label for="jinindustry">Select Job Industry</label>
                 <div class="form-text">Select a Job Industry you want to apply on</div>
-                <select class="form-select" aria-label="Default select example" id="jinindustry" name="jinindustry" required>
+                <select class="form-select" aria-label="Default select example" id="jinindustry" name="jinindustry"
+                    required>
                     <?php
                     $sql3 = "SELECT * FROM jinindustry";
                     $result3 = mysqli_query($conn, $sql3);
@@ -723,176 +770,185 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div><br>
             <div class="form-group">
                 <label for="profile_picture">Profile Picture (PNG, JPG, or JPEG Format)</label>
-                <input type="file" name="profile_picture" class="form-control" accept="image/png, image/jpeg, image/jpg">
+                <input type="file" name="profile_picture" class="form-control"
+                    accept="image/png, image/jpeg, image/jpg">
             </div><br>
 
             <?php if ($user_type == 'applicant') : ?>
-                <hr>
-                <h2>Applicant Documents</h2>
-                <div class="form-group">
-                    <label for="nsrp_form">NSRP Form (PDF or DOCX only)</label>
-                    <div class="form-text">No NSRP Form? <a href="admin/forms/NSRP-Form.pdf" target="_blank">Click here
-                            to obtain one</a>.</div>
-                    <input type="file" name="nsrp_form" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="biodata_form">Biodata Form (PDF or DOCX only)</label>
-                    <input type="file" name="biodata_form" class="form-control" accept="application/pdf,.docx">
-                </div><br>
+            <hr>
+            <h2>Applicant Documents</h2>
+            <div class="form-group">
+                <label for="nsrp_form">NSRP Form (PDF or DOCX only)</label>
+                <div class="form-text">No NSRP Form? <a href="admin/forms/NSRP-Form.pdf" target="_blank">Click here
+                        to obtain one</a>.</div>
+                <input type="file" name="nsrp_form" class="form-control" accept="application/pdf,.docx">
+            </div><br>
+            <div class="form-group">
+                <label for="biodata_form">Biodata Form (PDF or DOCX only)</label>
+                <input type="file" name="biodata_form" class="form-control" accept="application/pdf,.docx">
+            </div><br>
             <?php endif; ?>
 
             <!-- loi, cp, sec_accredit, cda_license, dole_license, loc, mbpermit, job_vacant, job_solicitation, phjobnet_reg, cert_nopendingcase, cert_regSSS, cert_regPhHealth, cert_regPGIBG, setch_map, 2303_bir document upload as company -->
             <?php if ($user_type == 'company') : ?>
-                <hr>
-                <h2>Company/Business Details</h2>
-                <div class="form-group">
-                    <label for="business_name">Business Name</label>
-                    <input type="text" name="business_name" class="form-control" value="<?php echo $business_name; ?>">
-                </div><br>
-                <div class="form-group">
-                    <label for="trade_name">Trade Name</label>
-                    <input type="text" name="trade_name" class="form-control" value="<?php echo $trade_name; ?>">
-                </div><br>
-                <div class="form-group">
-                    <label for="company_position">Position on the Company</label>
-                    <input type="text" name="company_position" class="form-control" value="<?php echo $company_position; ?>">
-                </div><br>
-                <hr>
-                <div class="form-group">
-                    <label for="tin_number">Tax Identification Number</label>
-                    <input type="text" name="tin_number" class="form-control" value="<?php echo $tin_number; ?>">
-                </div><br>
-                <div class="form-group">
-                    <label for="pjn_accredit">PhilJobNet Accreditation</label>
-                    <div class="form-text">Check this box if you are accredited by PhilJobNet</div>
-                    <input type="checkbox" name="pjn_accredited" value="1" <?php echo ($pjn_accredited == 1) ? 'checked' : ''; ?>>
-                </div>
-                <div class="form-group">
-                    <label for="employment_type">Employment Type</label>
-                    <input type="text" name="employment_type" class="form-control" value="<?php echo $employment_type; ?>">
-                </div><br>
-                <div class="form-group">
-                    <label for="employment_size">Employment Size</label>
-                    <input type="text" name="employment_size" class="form-control" value="<?php echo $employment_size; ?>">
-                </div><br>
-                <div class="form-group">
-                    <label for="location_address">Address</label>
-                    <input type="text" name="location_address" class="form-control" value="<?php echo $location_address; ?>">
-                </div><br>
-                <div class="form-group">
-                    <label for="barangay">Barangay</label>
-                    <input type="text" name="barangay" class="form-control" value="<?php echo $barangay; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="city">City</label>
-                    <input type="text" name="city" class="form-control" value="<?php echo $city; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="province">Province</label>
-                    <input type="text" name="province" class="form-control" value="<?php echo $province; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="region">Region</label>
-                    <input type="text" name="region" class="form-control" value="<?php echo $region; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="contact_person_name">Name of Contact Person</label>
-                    <input type="text" name="contact_person_name" class="form-control" value="<?php echo $contact_person_name; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="contact_person_position">Position of Contact Person</label>
-                    <input type="text" name="contact_person_position" class="form-control" value="<?php echo $contact_person_position; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="cellphone_number">Cellphone Number of Contact Person</label>
-                    <input type="text" name="cellphone_number" class="form-control" value="<?php echo $cellphone_number; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email of Contact Person</label>
-                    <input type="text" name="email" class="form-control" value="<?php echo $email; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="telephone_number">Telephone Number of Company</label>
-                    <input type="text" name="telephone_number" class="form-control" value="<?php echo $telephone_number; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="fax_number">Fax Number of Company</label>
-                    <input type="text" name="fax_number" class="form-control" value="<?php echo $fax_number; ?>">
-                </div>
-                <hr>
-                <h2>Company Documents</h2>
-                <div class="form-group"></div>
-                    <label for="registration_date">Date of Company Registration to BPLO (Business Permit and Licensing Office)</label>
-                    <input type="date" name="registration_date" class="form-control" value="<?php echo $registration_date; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="loi">Letter of Intent (PDF or DOCX only)</label>
-                    <input type="file" name="loi" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="cp">Company Profile (PDF or DOCX only)</label>
-                    <input type="file" name="cp" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="sec_accredit">SEC Accreditation (PDF or DOCX only)</label>
-                    <input type="file" name="sec_accredit" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="cda_license">CDA License (PDF or DOCX only)</label>
-                    <input type="file" name="cda_license" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="dole_license">DOLE License (PDF or DOCX only)</label>
-                    <input type="file" name="dole_license" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="loc">Location Map (PDF or DOCX only)</label>
-                    <input type="file" name="loc" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="mbpermit">Mayor's Business Permit (PDF or DOCX only)</label>
-                    <input type="file" name="mbpermit" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="job_vacant">Job Vacant (PDF or DOCX only)</label>
-                    <input type="file" name="job_vacant" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="job_solicitation">Job Solicitation (PDF or DOCX only)</label>
-                    <input type="file" name="job_solicitation" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="phjobnet_reg">PhilJobNet Registration (PDF or DOCX only)</label>
-                    <input type="file" name="phjobnet_reg" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="cert_nopendingcase">Certificate of No Pending Case (PDF or DOCX only)</label>
-                    <input type="file" name="cert_nopendingcase" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="cert_regSSS">Certificate of Registration with SSS (PDF or DOCX only)</label>
-                    <input type="file" name="cert_regSSS" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="">Certificate of Registration with PhilHealth (PDF or DOCX only)</label>
-                    <input type="file" name="cert_regPhHealth" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="">Certificate of Registration with Pag-IBIG (PDF or DOCX only)</label>
-                    <input type="file" name="cert_regPGIBG" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="">Sketch Map (PDF or DOCX only)</label>
-                    <input type="file" name="sketch_map" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-                <div class="form-group">
-                    <label for="">BIR Form 2303 (PDF or DOCX only)</label>
-                    <input type="file" name="2303_bir" class="form-control" accept="application/pdf,.docx">
-                </div><br>
-            <?php endif; ?>
-            <!-- submit button -->
+            <hr>
+            <h2>Company/Business Details</h2>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" onclick="return confirmAction();" value="Update Profile">
+                <label for="business_name">Business Name</label>
+                <input type="text" name="business_name" class="form-control" value="<?php echo $business_name; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="trade_name">Trade Name</label>
+                <input type="text" name="trade_name" class="form-control" value="<?php echo $trade_name; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="company_position">Position on the Company</label>
+                <input type="text" name="company_position" class="form-control"
+                    value="<?php echo $company_position; ?>">
+            </div><br>
+            <hr>
+            <div class="form-group">
+                <label for="tin_number">Tax Identification Number</label>
+                <input type="text" name="tin_number" class="form-control" value="<?php echo $tin_number; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="pjn_accredit">PhilJobNet Accreditation</label>
+                <div class="form-text">Check this box if you are accredited by PhilJobNet</div>
+                <input type="checkbox" name="pjn_accredited" value="1"
+                    <?php echo ($pjn_accredited == 1) ? 'checked' : ''; ?>>
+            </div>
+            <div class="form-group">
+                <label for="employment_type">Employment Type</label>
+                <input type="text" name="employment_type" class="form-control" value="<?php echo $employment_type; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="employment_size">Employment Size</label>
+                <input type="text" name="employment_size" class="form-control" value="<?php echo $employment_size; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="location_address">Address</label>
+                <input type="text" name="location_address" class="form-control"
+                    value="<?php echo $location_address; ?>">
+            </div><br>
+            <div class="form-group">
+                <label for="barangay">Barangay</label>
+                <input type="text" name="barangay" class="form-control" value="<?php echo $barangay; ?>">
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" name="city" class="form-control" value="<?php echo $city; ?>">
+            </div>
+            <div class="form-group">
+                <label for="province">Province</label>
+                <input type="text" name="province" class="form-control" value="<?php echo $province; ?>">
+            </div>
+            <div class="form-group">
+                <label for="region">Region</label>
+                <input type="text" name="region" class="form-control" value="<?php echo $region; ?>">
+            </div>
+            <div class="form-group">
+                <label for="contact_person_name">Name of Contact Person</label>
+                <input type="text" name="contact_person_name" class="form-control"
+                    value="<?php echo $contact_person_name; ?>">
+            </div>
+            <div class="form-group">
+                <label for="contact_person_position">Position of Contact Person</label>
+                <input type="text" name="contact_person_position" class="form-control"
+                    value="<?php echo $contact_person_position; ?>">
+            </div>
+            <div class="form-group">
+                <label for="cellphone_number">Cellphone Number of Contact Person</label>
+                <input type="text" name="cellphone_number" class="form-control"
+                    value="<?php echo $cellphone_number; ?>">
+            </div>
+            <div class="form-group">
+                <label for="email">Email of Contact Person</label>
+                <input type="text" name="email" class="form-control" value="<?php echo $email; ?>">
+            </div>
+            <div class="form-group">
+                <label for="telephone_number">Telephone Number of Company</label>
+                <input type="text" name="telephone_number" class="form-control"
+                    value="<?php echo $telephone_number; ?>">
+            </div>
+            <div class="form-group">
+                <label for="fax_number">Fax Number of Company</label>
+                <input type="text" name="fax_number" class="form-control" value="<?php echo $fax_number; ?>">
+            </div>
+            <hr>
+            <h2>Company Documents</h2>
+            <div class="form-group"></div>
+            <label for="registration_date">Date of Company Registration to BPLO (Business Permit and Licensing
+                Office)</label>
+            <input type="date" name="registration_date" class="form-control" value="<?php echo $registration_date; ?>">
+    </div>
+    <div class="form-group">
+        <label for="loi">Letter of Intent (PDF or DOCX only)</label>
+        <input type="file" name="loi" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="cp">Company Profile (PDF or DOCX only)</label>
+        <input type="file" name="cp" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="sec_accredit">SEC Accreditation (PDF or DOCX only)</label>
+        <input type="file" name="sec_accredit" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="cda_license">CDA License (PDF or DOCX only)</label>
+        <input type="file" name="cda_license" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="dole_license">DOLE License (PDF or DOCX only)</label>
+        <input type="file" name="dole_license" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="loc">Location Map (PDF or DOCX only)</label>
+        <input type="file" name="loc" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="mbpermit">Mayor's Business Permit (PDF or DOCX only)</label>
+        <input type="file" name="mbpermit" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="job_vacant">Job Vacant (PDF or DOCX only)</label>
+        <input type="file" name="job_vacant" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="job_solicitation">Job Solicitation (PDF or DOCX only)</label>
+        <input type="file" name="job_solicitation" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="phjobnet_reg">PhilJobNet Registration (PDF or DOCX only)</label>
+        <input type="file" name="phjobnet_reg" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="cert_nopendingcase">Certificate of No Pending Case (PDF or DOCX only)</label>
+        <input type="file" name="cert_nopendingcase" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="cert_regSSS">Certificate of Registration with SSS (PDF or DOCX only)</label>
+        <input type="file" name="cert_regSSS" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="">Certificate of Registration with PhilHealth (PDF or DOCX only)</label>
+        <input type="file" name="cert_regPhHealth" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="">Certificate of Registration with Pag-IBIG (PDF or DOCX only)</label>
+        <input type="file" name="cert_regPGIBG" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="">Sketch Map (PDF or DOCX only)</label>
+        <input type="file" name="sketch_map" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <div class="form-group">
+        <label for="">BIR Form 2303 (PDF or DOCX only)</label>
+        <input type="file" name="2303_bir" class="form-control" accept="application/pdf,.docx">
+    </div><br>
+    <?php endif; ?>
+    <!-- submit button -->
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" onclick="return confirmAction();" value="Update Profile">
         </form>
 
     </div>
