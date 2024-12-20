@@ -124,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_stmt_execute($stmt) && empty($error)) {
         $upload_dir = "uploads/" . ($submit_job_id ? $submit_job_id : mysqli_insert_id($conn)) . "/";
 
-        if (!is_dir($upload_dir) && !mkdir($upload_dir, 0755, true) && !is_writable($upload_dir)) {
+        if (!is_dir($upload_dir) && !mkdir($upload_dir, 0775, true) && !is_writable($upload_dir)) {
             die("Failed to create or access upload directory.");
         }
 
