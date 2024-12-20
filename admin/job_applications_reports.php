@@ -122,7 +122,9 @@ if ($_SESSION["user_type"] != "admin") {
     <script>
     // hide action column when printing
     function printTable() {
+        // make table responsive
         var table = document.getElementById("data");
+        table.classList.add("table-responsive");
         table.classList.add("table-print");
         window.print();
         table.classList.remove("table-print");
