@@ -120,12 +120,17 @@ if ($_SESSION["user_type"] != "admin") {
         </div>
     </div>
     <script>
-    // hide action column when printing
     function printTable() {
-        var table = document.getElementById("data");
-        table.classList.add("table-print");
-        window.print();
-        table.classList.remove("table-print");
+        // make a copy of the table
+        var table = document.getElementById("data").cloneNode(true);
+        // remove the no-print class from the copy
+        table.classList.remove("no-print");
+        // create a new window
+        var w = window.open();
+        // add the table to the new window
+        w.document.body.appendChild(table);
+        // print the new window
+        w.print();
     }
 
     // Function to count visible rows and update the result count
