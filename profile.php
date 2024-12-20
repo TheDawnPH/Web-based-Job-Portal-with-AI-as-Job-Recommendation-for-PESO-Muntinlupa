@@ -185,7 +185,7 @@ $stmt2->close();
                 <div class="card h-100">
                     <br>
                     <div class="d-flex justify-content-center align-items-center">
-                        <br>
+                        <br><br>
                         <?php
                         if ($profile_picture == "uploads/{$profile_user_id}/") {
                             echo '<img src="img/cat.png" style="width:20vw;" class="card-img-top" alt="Profile Picture">';
