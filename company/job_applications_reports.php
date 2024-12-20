@@ -197,6 +197,8 @@ if ($_SESSION["user_type"] != "admin") {
     </script>
     <script>
     function exportTableToExcel(tableID, filename = '') {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
         var tableSelect = document.getElementById(tableID);
 
         // Clone the table to avoid modifying the original
@@ -208,37 +210,32 @@ if ($_SESSION["user_type"] != "admin") {
             clonedTable.rows[i].deleteCell(actionColumnIndex);
         }
 
-        // Initialize CSV content
-        var csvContent = '';
-        var rows = clonedTable.rows;
-
-        // Loop through rows and build CSV content
-        for (var i = 0; i < rows.length; i++) {
-            var row = [],
-                cols = rows[i].cells;
-            for (var j = 0; j < cols.length; j++) {
-                var cellText = cols[j].innerText.replace(/"/g, '""'); // Escape quotes
-                row.push('"' + cellText + '"'); // Wrap each value in double quotes
-            }
-            csvContent += row.join(',') + '\n'; // Join columns with commas and add newline
-        }
+        // Convert the cloned table to HTML
+        var tableHTML = clonedTable.outerHTML.replace(/ /g, '%20');
 
         // Specify file name
-        filename = filename ? filename + '.csv' : 'data.csv';
+        filename = filename ? filename + '.xls' : 'excel_data.xls';
 
-        // Create a download link
-        var downloadLink = document.createElement("a");
-        var blob = new Blob([csvContent], {
-            type: 'text/csv;charset=utf-8;'
-        });
-        var url = URL.createObjectURL(blob);
-        downloadLink.href = url;
-        downloadLink.download = filename;
+        // Create download link element
+        downloadLink = document.createElement("a");
 
-        // Trigger download
         document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+            // Setting the file name
+            downloadLink.download = filename;
+
+            // Triggering the function
+            downloadLink.click();
+        }
     }
     </script>
 </body>
