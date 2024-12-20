@@ -182,7 +182,6 @@ if (!$result) {
             class="img-fluid" alt="Responsive image">
         <br class="no-print"><br class="no-print">
         <a class="no-print btn btn-primary" role="button" href="/admin/add_users.php">Add User</a>
-        <input type="button" onclick="printTable()" value="Print Displayed" class="no-print btn btn-primary" />
         <input type="button" onclick="exportTableToExcel('data', 'users')" value="Export to Excel"
             class="no-print btn btn-primary" />
         <br class="no-print"><br class="no-print">
@@ -321,23 +320,6 @@ if (!$result) {
             ?>
         </div>
     </div>
-    <script>
-    // plain print, hinde action column when printing
-    function printTable() {
-        var tableData = '<table border="1" style="text-align:center;">' + document.getElementsByTagName('table')[0]
-            .innerHTML + '</table>';
-        var data = tableData;
-        var myWindow = window.open('', '', 'width=2000,height=600');
-        data = data.replace(/<td class="no-print">.*?<\/td>/g, '');
-        myWindow.document.write(data);
-        myWindow.document.close();
-        myWindow.focus();
-        myWindow.print();
-        myWindow.close();
-        return true;
-    }
-    </script>
-    // convert to excel file
     <script>
     function exportTableToExcel(tableID, filename = '') {
         var downloadLink;

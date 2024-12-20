@@ -59,6 +59,8 @@ if ($_SESSION["user_type"] != "admin") {
         <br class="no-print">
         <br class="no-print">
         <input type="button" onclick="printTable()" value="Print Everything" class="no-print btn btn-primary" />
+        <input type="button" onclick="exportTableToExcel('data', 'Job Applications Reports')" value="Export to Excel"
+            class="no-print btn btn-success" />
         <br class="no-print"><br class="no-print">
         <!-- search bar for job listings -->
         <input type="text" id="search" onkeyup="searchTable()" placeholder="Search for Job title/Company.."
@@ -191,6 +193,38 @@ if ($_SESSION["user_type"] != "admin") {
     document.addEventListener("DOMContentLoaded", function() {
         countVisibleRows();
     });
+    </script>
+    <script>
+    function exportTableToExcel(tableID, filename = '') {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+        // Specify file name
+        filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+        // Create download link element
+        downloadLink = document.createElement("a");
+
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+            // Setting the file name
+            downloadLink.download = filename;
+
+            //triggering the function
+            downloadLink.click();
+        }
+    }
     </script>
 </body>
 
