@@ -123,8 +123,6 @@ if ($_SESSION["user_type"] != "admin") {
     function printTable() {
         // make a copy of the table
         var table = document.getElementById("data").cloneNode(true);
-        // remove the no-print class from the copy
-        table.classList.remove("no-print");
         // create a new window
         var w = window.open();
         // add the table to the new window
