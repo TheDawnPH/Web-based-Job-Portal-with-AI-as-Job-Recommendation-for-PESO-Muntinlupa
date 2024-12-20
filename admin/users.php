@@ -278,14 +278,14 @@ if (!$result) {
                     echo "<td>" . htmlspecialchars($industry_name) . "</td>";
 
                     // if user is not a company, display "N/A" for company name and position
-                    if ($row['user_type'] != 'company') {
+                    if ($row['user_type'] != 'company' && $row['user_type'] != 'admin') {
                         echo "<td>N/A</td>";
                         echo "<td>N/A</td>";
                     } else {
                         // Retrieve the cdocu_id from the current user
-                        $cdocu_id_user = $row['user_id'];
                         echo "<td>" . htmlspecialchars($row['company_name']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['company_position']) . "</td>";
+                        $cdocu_id_user = $row['user_id'];
                     }
 
                     // Retrieve the cdocu_id from the current user
