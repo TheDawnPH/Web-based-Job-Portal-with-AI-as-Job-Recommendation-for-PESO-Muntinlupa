@@ -136,6 +136,7 @@ if ($_SESSION["user_type"] != "admin") {
             td.style.display = "none";
         }
         window.print();
+    }
 
     // Function to count visible rows and update the result count
     function countVisibleRows() {
