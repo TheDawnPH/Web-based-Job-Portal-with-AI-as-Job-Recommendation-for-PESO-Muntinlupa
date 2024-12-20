@@ -135,8 +135,18 @@ if (mysqli_stmt_execute($stmt)) {
                     $content .= "Thank you for using PESO Muntinlupa Job Portal.<br>";
                     $biodata_path = $root . "/uploads/" . $row['user_id'] . $row['biodata_form'];
                     if (file_exists($biodata_path)) {
+                        error_log("Attachment found: $biodata_path");
                         $mail->AddAttachment($biodata_path, "biodata_" . $row['lname'] . "_" . $row['fname'] . ".pdf");
+                    } else {
+                        error_log("Attachment missing: $biodata_path");
                     }
+                    $mail->MsgHTML($content);
+                    if (!$mail->Send()) {
+                        error_log("Mailer Error: " . $mail->ErrorInfo);
+                    } else {
+                        error_log("Mail sent successfully.");
+                    }
+
                     $mail->MsgHTML($content);
                     if (!$mail->Send()) {
                         // echo $warning = "Error while sending Email.";
@@ -167,8 +177,8 @@ if (mysqli_stmt_execute($stmt)) {
 
 <head>
     <script>
-    alert("Applicant has been accepted.");
-    window.location.href = "/company/job_applicants.php";
+        alert("Applicant has been accepted.");
+        window.location.href = "/company/job_applicants.php";
     </script>
 </head>
 
