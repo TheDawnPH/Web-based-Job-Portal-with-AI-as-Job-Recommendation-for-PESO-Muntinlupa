@@ -129,8 +129,6 @@ function getJobAcceptanceRate($job_id)
                                                         class="btn btn-primary">Apply</a>
                                                 </div>
                                             </td>
-                                            <td><?php echo htmlspecialchars($job['job_acceptance_rate']); ?>% Acceptance
-                                                Rate</td>
                                         </tr>
                                     </tbody>
                                 </table>
