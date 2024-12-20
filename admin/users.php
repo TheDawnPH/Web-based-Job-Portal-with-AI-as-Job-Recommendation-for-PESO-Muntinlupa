@@ -7,9 +7,9 @@ ini_set('session.use_only_cookies', 1);
 session_start();
 
 $root = $_SERVER['DOCUMENT_ROOT'];
-$website = $_ENV['WEBSITE_URL'];
-
 require $root . "/config.php";
+
+$website = $_ENV['WEBSITE_URL'];
 
 // if user is not logged in redirect to login page
 if (!isset($_SESSION["user_type"]) || empty($_SESSION["user_type"])) {
