@@ -123,7 +123,7 @@ if (mysqli_stmt_execute($stmt)) {
                     $mail->Username   = $_ENV['SMTP_USER']; // email address
                     $mail->Password   = $_ENV['SMTP_PASS']; // password
                     $mail->IsHTML(true);
-                    $mail->AddAddress("lycoatwork@gmail.com", $row4['fname'] . " " . $row4['lname']);
+                    $mail->AddAddress($row4['email'], $row4['fname'] . " " . $row4['lname']);
                     $mail->SetFrom($_ENV['SMTP_EMAIL'], "PESO Muntinlupa");
                     $mail->Subject = "PESO Muntinlupa Job Portal - Applicant " . $row['fname'] . " " . $row['lname'] . " has been accepted";
                     // set content of email that the applicant details and attach files
