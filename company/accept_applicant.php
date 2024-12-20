@@ -109,42 +109,41 @@ if (mysqli_stmt_execute($stmt)) {
                     }
                     // end of phpmailer
                     // $success = "Applicant accepted successfully";
+
+                    // email the employer the applicant details and files
+                    $website = $_ENV['WEBSITE_URL'];
+                    $mail = new PHPMailer();
+                    $mail->IsSMTP();
+                    $mail->Mailer = "smtp";
+                    $mail->SMTPDebug  = 0;
+                    $mail->SMTPAuth   = TRUE;
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port       = $_ENV['SMTP_PORT'];
+                    $mail->Host       = $_ENV['SMTP_HOST'];
+                    $mail->Username   = $_ENV['SMTP_USER']; // email address
+                    $mail->Password   = $_ENV['SMTP_PASS']; // password
+                    $mail->IsHTML(true);
+                    $mail->AddAddress($row4['email'], $row4['fname'] . " " . $row4['lname']);
+                    $mail->SetFrom($_ENV['SMTP_EMAIL'], $row['fname'] . " " . $row['lname']);
+                    $mail->Subject = "PESO Muntinlupa Job Portal - Applicant " . $row['fname'] . " " . $row['lname'] . " has been accepted";
+                    // set content of email that the applicant details and attach files
+                    $content = "<b>Dear " . $row4['fname'] . " " . $row4['lname'] . ",</b><br><br>";
+                    $content .= "Congratulations! Applicant " . $row['fname'] . " " . $row['lname'] . " has been accepted to the job " . $row3['job_title'] . "<br>";
+                    $content .= "Here are the details of the applicant:<br>";
+                    $content .= "Name: " . $row['fname'] . " " . $row['lname'] . "<br>";
+                    $content .= "Thank you for using PESO Muntinlupa Job Portal.<br>";
+                    $mail->MsgHTML($content);
+                    $biodata_path = $root . "/uploads/" . $row['biodata']; 
+                    if (file_exists($biodata_path)) {
+                        $mail->AddAttachment($biodata_path, "biodata_" . $row['lname'] . "_" . $row['fname'] . ".pdf");
+                    }
+                    if (!$mail->Send()) {
+                        // echo $warning = "Error while sending Email.";
+                        // var_dump($mail);
+                    } else {
+                        // echo $alert = "Please check your email for the verification link.";
+                    }
                 }
-            
-                // email the employer the applicant details and files
-                $website = $_ENV['WEBSITE_URL'];
-                $mail = new PHPMailer();
-                $mail->IsSMTP();
-                $mail->Mailer = "smtp";
-                $mail->SMTPDebug  = 0;
-                $mail->SMTPAuth   = TRUE;
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                $mail->Port       = $_ENV['SMTP_PORT'];
-                $mail->Host       = $_ENV['SMTP_HOST'];
-                $mail->Username   = $_ENV['SMTP_USER']; // email address
-                $mail->Password   = $_ENV['SMTP_PASS']; // password
-                $mail->IsHTML(true);
-                $mail->AddAddress($row4['email'], $row4['fname'] . " " . $row4['lname']);
-                $mail->SetFrom($_ENV['SMTP_EMAIL'], $row['fname'] . " " . $row['lname']);
-                $mail->Subject = "PESO Muntinlupa Job Portal - Applicant " . $row['fname'] . " " . $row['lname'] . " has been accepted";
-                // set content of email that the applicant details and attach files
-                $content = "<b>Dear " . $row4['fname'] . " " . $row4['lname'] . ",</b><br><br>";
-                $content .= "Congratulations! Applicant " . $row['fname'] . " " . $row['lname'] . " has been accepted to the job " . $row3['job_title'] . "<br>";
-                $content .= "Here are the details of the applicant:<br>";
-                $content .= "Name: " . $row['fname'] . " " . $row['lname'] . "<br>";
-                $content .= "Thank you for using PESO Muntinlupa Job Portal.<br>";
-                $mail->MsgHTML($content);
-                $biodata_path = $root . "/uploads/" . $row['biodata']; 
-                if (file_exists($biodata_path)) {
-                    $mail->AddAttachment($biodata_path, "biodata_" . $row['lname'] . "_" . $row['fname'] . ".pdf");
-                }
-                if (!$mail->Send()) {
-                    // echo $warning = "Error while sending Email.";
-                    // var_dump($mail);
-                } else {
-                    // echo $alert = "Please check your email for the verification link.";
-                }
-                
             }
         }
     }
@@ -166,10 +165,10 @@ if (mysqli_stmt_execute($stmt)) {
 <html>
 
 <head>
-<script>
-            alert("Applicant has been accepted.");
-            window.location.href = "/company/job_applicants.php";
-        </script>
+    <script>
+    alert("Applicant has been accepted.");
+    window.location.href = "/company/job_applicants.php";
+    </script>
 </head>
 
 </html>
