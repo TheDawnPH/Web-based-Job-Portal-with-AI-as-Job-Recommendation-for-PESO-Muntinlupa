@@ -121,14 +121,19 @@ if ($_SESSION["user_type"] != "admin") {
     </div>
     <script>
     function printTable() {
-        // make a copy of the table
+        // make a copy of the table with border, then exclude Action column
         var table = document.getElementById("data").cloneNode(true);
-        // create a new window
-        var w = window.open();
-        // add the table to the new window
-        w.document.body.appendChild(table);
-        // print the new window
-        w.print();
+        table.deleteColumn(8);
+        // print the table
+        var printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Job Applications Reports</title>');
+        printWindow.document.write('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write('<h1>Job Applications Reports</h1>');
+        printWindow.document.write(table.outerHTML);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
     }
 
     // Function to count visible rows and update the result count
