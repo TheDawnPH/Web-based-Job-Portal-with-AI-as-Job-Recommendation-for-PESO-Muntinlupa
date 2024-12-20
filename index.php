@@ -66,10 +66,9 @@ function getJobAcceptanceRate($job_id)
             <strong>Notice:</strong><br>This site is currently undergoing migration to a new server. Some features may
             not work as expected. We apologize for the inconvenience.
         </div> -->
-        // show this alert if December 25 or December 30 is today
         <?php
         $today = date('Y-m-d');
-        $dec25 = date('Y') . '-12-25';
+        $dec25 = date('Y') . '-12-21';
         $dec30 = date('Y') . '-12-30';
 
         if ($today === $dec25 || $today === $dec30) {
