@@ -320,14 +320,18 @@ if (!$result) {
         </div>
     </div>
     <script>
-    // hide action column when printing
+    // plain print, hinde action column when printing
     function printTable() {
-        var table = document.getElementById("data");
-        document.body.style.margin = "0";
-        table.classList.add("table-responsive");
-        table.classList.add("table-print");
-        window.print();
-        table.classList.remove("table-print");
+        var tableData = '<table border="1" style="text-align:center;">' + document.getElementsByTagName('table')[0]
+            .innerHTML + '</table>';
+        var data = tableData;
+        var myWindow = window.open('', '', 'width=800,height=600');
+        myWindow.document.write(data);
+        myWindow.document.close();
+        myWindow.focus();
+        myWindow.print();
+        myWindow.close();
+        return true;
     }
     </script>
 </body>
