@@ -58,7 +58,6 @@ $result = mysqli_stmt_get_result($stmt);
 
 <body>
     <?php include $root . "/nav.php"; ?>
-    <br>
     <div class="container">
         <h1>Job Listings</h1>
         <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg" class="img-fluid" alt="Responsive image">
