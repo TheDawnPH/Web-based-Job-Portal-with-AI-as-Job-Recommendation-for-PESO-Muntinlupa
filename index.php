@@ -66,6 +66,20 @@ function getJobAcceptanceRate($job_id)
             <strong>Notice:</strong><br>This site is currently undergoing migration to a new server. Some features may
             not work as expected. We apologize for the inconvenience.
         </div> -->
+        // show this alert if December 25 or December 30 is today
+        <?php
+        $today = date('Y-m-d');
+        $dec25 = date('Y') . '-12-25';
+        $dec30 = date('Y') . '-12-30';
+
+        if ($today === $dec25 || $today === $dec30) {
+            echo '<div class="alert alert-danger fade show" role="alert">
+            A Message from PESO Muntinlupa:<br>
+            <strong>We wish you a Merry Christmas and a Happy New Year!</strong>
+        </div>';
+        }
+
+        ?>
         <?php if ($cverify["company_verified"] == 0 && isset($_SESSION["user_type"]) && $_SESSION["user_type"] === "company") { ?>
         <div class="alert alert-danger fade show" role="alert">
             <strong>Warning!</strong><br>Your company is not yet verified. Please <a
