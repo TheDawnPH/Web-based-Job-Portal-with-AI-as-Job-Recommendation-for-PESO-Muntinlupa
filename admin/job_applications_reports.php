@@ -122,20 +122,10 @@ if ($_SESSION["user_type"] != "admin") {
     <script>
     // hide action column when printing
     function printTable() {
-        // make it plain table
         var table = document.getElementById("data");
-        table.classList.remove("table-striped");
-        table.classList.remove("table-bordered");
-        table.classList.remove("border-start");
-        // hide action column
-        var th = table.getElementsByTagName("th")[8];
-        th.style.display = "none";
-        var tr = table.getElementsByTagName("tr");
-        for (var i = 0; i < tr.length; i++) {
-            var td = tr[i].getElementsByTagName("td")[8];
-            td.style.display = "none";
-        }
+        table.classList.add("table-print");
         window.print();
+        table.classList.remove("table-print");
     }
 
     // Function to count visible rows and update the result count
