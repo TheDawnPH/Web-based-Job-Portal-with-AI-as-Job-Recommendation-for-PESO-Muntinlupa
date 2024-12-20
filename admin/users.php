@@ -183,7 +183,7 @@ if (!$result) {
         <br class="no-print"><br class="no-print">
         <a class="no-print btn btn-primary" role="button" href="/admin/add_users.php">Add User</a>
         <input type="button" onclick="exportTableToExcel('data', 'users')" value="Export to Excel"
-            class="no-print btn btn-primary" />
+            class="no-print btn btn-sucess" />
         <br class="no-print"><br class="no-print">
         <!-- search bar -->
         <input type="text" id="search" class="form-control no-print" onkeyup="searchTable()"
