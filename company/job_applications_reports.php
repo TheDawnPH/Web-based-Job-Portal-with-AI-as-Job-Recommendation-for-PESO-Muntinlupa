@@ -127,6 +127,16 @@ if ($_SESSION["user_type"] != "admin") {
     function printTable() {
         // make table responsive
         var table = document.getElementById("data");
+        // remove action column
+        var th = table.getElementsByTagName("th")[8];
+        th.style.display = "none";
+        var tr = table.getElementsByTagName("tr");
+        for (var i = 0; i < tr.length; i++) {
+            var td = tr[i].getElementsByTagName("td")[8];
+            if (td) {
+                td.style.display = "none";
+            }
+        }
         document.body.style.margin = "0";
         table.classList.add("table-responsive");
         table.classList.add("table-print");
