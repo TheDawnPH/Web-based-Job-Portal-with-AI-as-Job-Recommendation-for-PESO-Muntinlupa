@@ -68,29 +68,9 @@ function getJobAcceptanceRate($job_id)
         </div> -->
         <?php
         $today = date('Y-m-d');
-        // non working days holiday api
-        $holiday_api = "https://date.nager.at/api/v3/publicholidays/" . date('Y') . "/PH";
-        $holiday_json = file_get_contents($holiday_api);
-        $holiday_array = json_decode($holiday_json, true);
-        $holidays = array_column($holiday_array, 'date');
-        $holidays = array_map(function ($holiday) {
-            return date('Y-m-d', strtotime($holiday));
-        }
-        , $holidays);
-        $holidays = array_filter($holidays, function ($holiday) use ($today) {
-            return $holiday === $today;
-        });
 
         $christmas = date('Y') . '-12-21';
         $new_year = date('Y') . '-01-01';
-
-        if (!empty($holidays)) {
-            echo "<div class='alert alert-warning fade show' role='alert'>
-            <h4 class='alert-heading'>A Message from PESO Muntinlupa</h4>
-            <p>Today is a non-working holiday. Please be advised that there may be delays in processing your applications.</p>
-            <p>Thank you for your understanding.</p>
-            </div>";
-        }
 
         if ($today === $christmas) {
             echo "<div class='alert alert-success fade show' role='alert'>
