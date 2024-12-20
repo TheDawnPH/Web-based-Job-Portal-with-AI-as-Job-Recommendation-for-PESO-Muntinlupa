@@ -124,10 +124,9 @@ if ($_SESSION["user_type"] != "admin") {
     function printTable() {
         // make table responsive
         var table = document.getElementById("data");
+        document.body.style.margin = "0";
         table.classList.add("table-responsive");
         table.classList.add("table-print");
-        // set margin to 0
-        document.body.style.margin = "0";
         window.print();
         table.classList.remove("table-print");
     }

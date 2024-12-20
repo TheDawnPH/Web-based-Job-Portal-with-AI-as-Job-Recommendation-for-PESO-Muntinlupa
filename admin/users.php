@@ -323,6 +323,8 @@ if (!$result) {
     // hide action column when printing
     function printTable() {
         var table = document.getElementById("data");
+        document.body.style.margin = "0";
+        table.classList.add("table-responsive");
         table.classList.add("table-print");
         window.print();
         table.classList.remove("table-print");
