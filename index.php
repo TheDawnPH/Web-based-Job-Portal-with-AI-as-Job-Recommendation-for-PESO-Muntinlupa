@@ -69,7 +69,7 @@ function getJobAcceptanceRate($job_id)
         <?php
         $today = date('Y-m-d');
 
-        $christmas = date('Y') . '-12-21';
+        $christmas = date('Y') . '-12-25';
         $new_year = date('Y') . '-01-01';
         $rizal_day = date('Y') . '-12-30';
 
