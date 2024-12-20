@@ -52,6 +52,7 @@ $applications = "<a class='nav-link' href='/job_applications.php'> Job Applicati
               <li><a class="dropdown-item" href="/company/add_job_applications.php">Add Job Listing</a></li>
               <li><a class="dropdown-item" href="/company/job_listings.php">View Job Listing</a></li>
               <li><a class="dropdown-item" href="/company/job_applicants.php">View Job Applicants</a></li>
+              <li><a class="dropdown-item" href="/company/job_applications_reports.php">Job Application Reports</a></li>
             </ul>
           </li>
         <?php
