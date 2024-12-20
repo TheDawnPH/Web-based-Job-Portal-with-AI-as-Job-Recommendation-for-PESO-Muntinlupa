@@ -71,6 +71,7 @@ function getJobAcceptanceRate($job_id)
 
         $christmas = date('Y') . '-12-21';
         $new_year = date('Y') . '-01-01';
+        $rizal_day = date('Y') . '-12-30';
 
         if ($today === $christmas) {
             echo "<div class='alert alert-success fade show' role='alert'>
@@ -80,6 +81,14 @@ function getJobAcceptanceRate($job_id)
             <hr>
             <p class='mb-0'>Merry Christmas and Happy Holidays!</p>
             <p class='mb-0'>- PESO Muntinlupa</p>
+            </div>";
+        }
+
+        if ($today === $rizal_day) {
+            echo "<div class='alert alert-success fade show' role='alert'>
+            <h4 class='alert-heading'>A Message from PESO Muntinlupa</h4>
+            <p>Today is New Year's Day. Please be advised that there may be delays in processing your applications.</p>
+            <p>Thank you for your understanding.</p>
             </div>";
         }
 
