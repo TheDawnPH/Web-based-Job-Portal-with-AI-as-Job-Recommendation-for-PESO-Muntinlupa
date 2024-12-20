@@ -284,6 +284,8 @@ if (!$result) {
                     } else {
                         // Retrieve the cdocu_id from the current user
                         $cdocu_id_user = $row['user_id'];
+                        echo "<td>" . htmlspecialchars($row['company_name']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['company_position']) . "</td>";
                     }
 
                     // Retrieve the cdocu_id from the current user
