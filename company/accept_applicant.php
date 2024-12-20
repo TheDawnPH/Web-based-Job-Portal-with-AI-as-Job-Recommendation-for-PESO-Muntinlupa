@@ -131,12 +131,13 @@ if (mysqli_stmt_execute($stmt)) {
                     $content .= "Congratulations! Applicant " . $row['fname'] . " " . $row['lname'] . " has been accepted to the job " . $row3['job_title'] . "<br>";
                     $content .= "Here are the details of the applicant:<br>";
                     $content .= "Name: " . $row['fname'] . " " . $row['lname'] . "<br>";
+                    $content .= "Profile: <a href='" . $website . "/admin/view_profile.php?user_id=" . $row['user_id'] . "'>View Profile</a><br>";
                     $content .= "Thank you for using PESO Muntinlupa Job Portal.<br>";
-                    $mail->MsgHTML($content);
                     $biodata_path = $root . "/uploads/" . $row['biodata']; 
                     if (file_exists($biodata_path)) {
                         $mail->AddAttachment($biodata_path, "biodata_" . $row['lname'] . "_" . $row['fname'] . ".pdf");
                     }
+                    $mail->MsgHTML($content);
                     if (!$mail->Send()) {
                         // echo $warning = "Error while sending Email.";
                         // var_dump($mail);
