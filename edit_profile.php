@@ -172,7 +172,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Create a directory for the user if it doesn't exist
                 $user_upload_dir = "uploads/" . $user_id;
                 if (!is_dir($user_upload_dir)) {
-                    mkdir($user_upload_dir, 0755, true);
+                    mkdir($user_upload_dir, 0775, true);
                 }
 
                 if (!empty($_FILES["nsrp_form"]["name"])) {
@@ -361,7 +361,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Move uploaded files to the user-specific folder
                     $user_upload_dir = "uploads/" . $user_id;
                     if (!is_dir($user_upload_dir)) {
-                        mkdir($user_upload_dir, 0755, true);
+                        mkdir($user_upload_dir, 0775, true);
                     }
 
                     if (!empty($_FILES["loi"]["name"])) {
@@ -455,7 +455,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Move uploaded files to the user-specific folder
                     $user_upload_dir = "uploads/" . $user_id;
                     if (!is_dir($user_upload_dir)) {
-                        mkdir($user_upload_dir, 0755, true);
+                        mkdir($user_upload_dir, 0775, true);
                     }
 
                     if (!empty($_FILES["loi"]["name"])) {
