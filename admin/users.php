@@ -325,7 +325,8 @@ if (!$result) {
         var tableData = '<table border="1" style="text-align:center;">' + document.getElementsByTagName('table')[0]
             .innerHTML + '</table>';
         var data = tableData;
-        var myWindow = window.open('', '', 'width=800,height=600');
+        var myWindow = window.open('', '', 'width=2000,height=600');
+        data = data.replace(/<td class="no-print">.*?<\/td>/g, '');
         myWindow.document.write(data);
         myWindow.document.close();
         myWindow.focus();
