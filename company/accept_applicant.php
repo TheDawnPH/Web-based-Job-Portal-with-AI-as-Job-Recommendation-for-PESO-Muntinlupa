@@ -139,7 +139,7 @@ if (mysqli_stmt_execute($stmt)) {
                     }
                     if (!$mail->Send()) {
                         // echo $warning = "Error while sending Email.";
-                        // var_dump($mail);
+                        var_dump($mail);
                     } else {
                         // echo $alert = "Please check your email for the verification link.";
                     }
