@@ -229,13 +229,13 @@ function getJobAcceptanceRate($job_id)
                         <h4 class="card-title">Facebook Feed</h4>
                         <img src="https://muntinlupacity.gov.ph/wp-content/uploads/2022/10/line_blue_yellow_red-scaled.jpg"
                             class="img-fluid" alt="Responsive image"><br>
-                        <div class="d-block d-sm-none">
+                        <!-- <div class="d-block d-sm-none">
                             <br>
                             <p class="text-center">Facebook feed is not available on mobile/tablet devices. Click the
                                 button below to view our Facebook page.</p>
                             <a href="https://www.facebook.com/MuntinlupaPESO" class="btn btn-primary">ⓕ Muntinlupa
                                 PESO</a><br><br>
-                        </div>
+                        </div> -->
                         <div class="fb-page" data-href="https://www.facebook.com/MuntinlupaPESO" data-show-posts="true"
                             data-width="500" data-height="" data-small-header="false" data-adapt-container-width="true"
                             data-hide-cover="false" data-show-facepile="false">
