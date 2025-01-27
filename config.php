@@ -221,7 +221,7 @@ if ($conn === false) {
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) == 0) {
         $admin = "INSERT INTO users (sex, user_type, fname, mname, lname, suffix, email, user_password, verification_status, verification_code, company_verified) VALUES 
-    ('male','admin', 'PESO', 'Super', 'Admin', '', 'admin@muntinlupajobportal.site', '" . password_hash('PESOAdmin!', PASSWORD_DEFAULT) . "', 1, '" . md5('admin@muntinlupajobportal.site' . time()) . "', 1)";
+    ('male','admin', 'PESO', 'Super', 'Admin', '', 'admin@nodomain.com', '" . password_hash('PESOAdmin!', PASSWORD_DEFAULT) . "', 1, '" . md5('admin@nodomain.com' . time()) . "', 1)";
         if (mysqli_query($conn, $admin)) {
             //echo "Admin user added successfully.";
         } else {
