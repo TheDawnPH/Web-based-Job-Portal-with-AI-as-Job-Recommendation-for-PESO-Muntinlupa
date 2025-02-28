@@ -218,8 +218,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="number" class="form-control" id="job_salary" name="job_salary" value="<?php echo $job_salary ?>" placeholder="15000" required>  
                         </div>
                         <div class="mb-3">
-                                <label for="show_salary" class="form-label">Show Salary</label>
                                 <input type="checkbox" id="show_salary" name="show_salary" value="1" <?php echo ($show_salary == 1) ? 'checked' : ''; ?>>
+                                <label for="show_salary" class="form-label">Show Salary</label>
                         </div>
                         <div class="mb-3">
                             <label for="job_type" class="form-label">Job Type</label>
