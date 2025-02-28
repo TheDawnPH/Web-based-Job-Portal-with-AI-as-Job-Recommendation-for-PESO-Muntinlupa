@@ -31,22 +31,25 @@ $user_id = filter_input(INPUT_GET, 'user_id', FILTER_SANITIZE_NUMBER_INT);
 $sql_delete_jobs = "DELETE FROM job_listing WHERE user_id = ?";
 $stmt_delete_jobs = mysqli_prepare($conn, $sql_delete_jobs);
 mysqli_stmt_bind_param($stmt_delete_jobs, "i", $user_id);
-mysqli_stmt_execute($stmt_delete_jobs);
-
-$sql = "DELETE FROM users WHERE user_id = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "i", $user_id);
-if (!mysqli_stmt_execute($stmt)) {
+if (!mysqli_stmt_execute($stmt_delete_jobs)) {
     die("Error executing query: " . mysqli_error($conn));
+} else {
+    $sql = "DELETE FROM users WHERE user_id = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $user_id);
+    if (!mysqli_stmt_execute($stmt)) {
+        die("Error executing query: " . mysqli_error($conn));
+    }
 }
-
 ?>
 
 <html>
-    <head>
-        <script>
-            alert("User has been deleted.");
-            window.location.href = "/admin/users.php";
-        </script>
-    </head>
+
+<head>
+    <script>
+        alert("User has been deleted.");
+        window.location.href = "/admin/users.php";
+    </script>
+</head>
+
 </html>
