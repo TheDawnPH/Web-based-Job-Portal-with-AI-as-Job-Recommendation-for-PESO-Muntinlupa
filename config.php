@@ -220,8 +220,8 @@ if ($conn === false) {
     $sql = "SELECT * FROM users WHERE user_type = 'admin'";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) == 0) {
-        $admin = "INSERT INTO users (sex, user_type, fname, mname, lname, suffix, email, user_password, verification_status, verification_code, company_verified) VALUES 
-    ('male','admin', 'PESO', 'Super', 'Admin', '', 'admin@nodomain.com', '" . password_hash('PESOAdmin!', PASSWORD_DEFAULT) . "', 1, '" . md5('admin@nodomain.com' . time()) . "', 1)";
+        $admin = "INSERT INTO users (sex, user_type, fname, mname, lname, suffix, email, user_password, verification_status, verification_code, company_verified, company_name) VALUES 
+    ('male','admin', 'PESO', 'Super', 'Admin', '', 'admin@nodomain.com', '" . password_hash('PESOAdmin!', PASSWORD_DEFAULT) . "', 1, '" . md5('admin@nodomain.com' . time()) . "', 1, Muntinlupa PESO)";
         if (mysqli_query($conn, $admin)) {
             //echo "Admin user added successfully.";
         } else {
