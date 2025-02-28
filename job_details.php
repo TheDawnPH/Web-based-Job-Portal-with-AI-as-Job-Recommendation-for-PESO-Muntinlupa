@@ -94,7 +94,11 @@ $stmt3->close();
                         <h5 class="card-subtitle mb-2 text-muted">Job Requirements</h5>
                         <p class="card-text"><?php echo nl2br($row['job_requirements']); ?></p>
                         <h5 class="card-subtitle mb-2 text-muted">Job Salary</h5>
-                        <p class="card-text"><?php echo "₱" . number_format($row['job_salary']); ?></p>
+                        <?php if ($row['show_salary'] == 1) {
+                                echo '<p class="card-text"> ₱' . $row['job_salary'] . '</p>';
+                            } else {
+                                echo '<p class="card-text"> <i>Not Specified</i></p>';
+                            } ?>
                         <h5 class="card-subtitle mb-2 text-muted">Job Type</h5>
                         <p class="card-text"><?php echo $row['job_type']; ?></p>
                         <h5 class="card-subtitle mb-2 text-muted">Is SHS Qualified</h5>

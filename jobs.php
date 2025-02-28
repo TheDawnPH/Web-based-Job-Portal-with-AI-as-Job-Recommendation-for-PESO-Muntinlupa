@@ -60,8 +60,8 @@ include 'config.php';
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {
                     ?>
-                    <option value="<?php echo $row['jinindustry_name']; ?>"><?php echo $row['jinindustry_name']; ?>
-                    </option>
+                            <option value="<?php echo $row['jinindustry_name']; ?>"><?php echo $row['jinindustry_name']; ?>
+                            </option>
                     <?php
                         }
                     }
@@ -86,69 +86,69 @@ include 'config.php';
 
                 <!-- JavaScript code for search and filter -->
                 <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var searchInput = document.getElementById('searchInput');
-                    var filterType = document.getElementById('filterType');
-                    var filterIndustry = document.getElementById('filterIndustry');
-                    var salaryRange = document.getElementById('salaryRange');
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var searchInput = document.getElementById('searchInput');
+                        var filterType = document.getElementById('filterType');
+                        var filterIndustry = document.getElementById('filterIndustry');
+                        var salaryRange = document.getElementById('salaryRange');
 
-                    // Add event listeners
-                    searchInput.addEventListener('input', applyFilters);
-                    filterType.addEventListener('change', applyFilters);
-                    filterIndustry.addEventListener('change', applyFilters);
-                    salaryRange.addEventListener('change', applyFilters);
+                        // Add event listeners
+                        searchInput.addEventListener('input', applyFilters);
+                        filterType.addEventListener('change', applyFilters);
+                        filterIndustry.addEventListener('change', applyFilters);
+                        salaryRange.addEventListener('change', applyFilters);
 
-                    // Initial load
-                    applyFilters();
+                        // Initial load
+                        applyFilters();
 
-                    function applyFilters() {
-                        var searchQuery = searchInput.value.toLowerCase();
-                        var selectedType = filterType.value;
-                        var selectedIndustry = filterIndustry.value;
-                        var selectedSalary = salaryRange.value;
+                        function applyFilters() {
+                            var searchQuery = searchInput.value.toLowerCase();
+                            var selectedType = filterType.value;
+                            var selectedIndustry = filterIndustry.value;
+                            var selectedSalary = salaryRange.value;
 
-                        // Fetch the rows from the table
-                        var rows = document.querySelectorAll('.job-row');
+                            // Fetch the rows from the table
+                            var rows = document.querySelectorAll('.job-row');
 
-                        rows.forEach(function(row) {
-                            var title = row.dataset.title.toLowerCase();
-                            var jobType = row.dataset.type;
-                            var jobIndustry = row.dataset.industry;
-                            var jobSalary = parseInt(row.dataset.salary, 10);
+                            rows.forEach(function(row) {
+                                var title = row.dataset.title.toLowerCase();
+                                var jobType = row.dataset.type;
+                                var jobIndustry = row.dataset.industry;
+                                var jobSalary = parseInt(row.dataset.salary, 10);
 
-                            var titleMatch = title.includes(searchQuery);
-                            var typeMatch = selectedType === '' || selectedType === jobType;
-                            var industryMatch = selectedIndustry === '' || selectedIndustry ===
-                                jobIndustry;
-                            var salaryMatch = selectedSalary === '' ||
-                                (selectedSalary === '10000' && jobSalary < 10999) ||
-                                (selectedSalary === '11000' && jobSalary >= 11000 && jobSalary <=
-                                20999) ||
-                                (selectedSalary === '21000' && jobSalary >= 21000 && jobSalary <=
-                                30999) ||
-                                (selectedSalary === '31000' && jobSalary >= 31000 && jobSalary <=
-                                40999) ||
-                                (selectedSalary === '41000' && jobSalary >= 41000 && jobSalary <=
-                                50999) ||
-                                (selectedSalary === '51000' && jobSalary >= 51000 && jobSalary <=
-                                60999) ||
-                                (selectedSalary === '61000' && jobSalary >= 61000 && jobSalary <=
-                                70999) ||
-                                (selectedSalary === '71000' && jobSalary >= 71000 && jobSalary <=
-                                80999) ||
-                                (selectedSalary === '81000' && jobSalary >= 81000 && jobSalary <=
-                                90999) ||
-                                (selectedSalary === '91000' && jobSalary >= 91000 && jobSalary <=
-                                    100999) ||
-                                (selectedSalary === '100000' && jobSalary > 100000);
-                            if (titleMatch && typeMatch && industryMatch && salaryMatch) {
-                                row.style.display = '';
-                            } else {
-                                row.style.display = 'none';
-                            }
-                        });
-                    }
-                });
+                                var titleMatch = title.includes(searchQuery);
+                                var typeMatch = selectedType === '' || selectedType === jobType;
+                                var industryMatch = selectedIndustry === '' || selectedIndustry ===
+                                    jobIndustry;
+                                var salaryMatch = selectedSalary === '' ||
+                                    (selectedSalary === '10000' && jobSalary < 10999) ||
+                                    (selectedSalary === '11000' && jobSalary >= 11000 && jobSalary <=
+                                        20999) ||
+                                    (selectedSalary === '21000' && jobSalary >= 21000 && jobSalary <=
+                                        30999) ||
+                                    (selectedSalary === '31000' && jobSalary >= 31000 && jobSalary <=
+                                        40999) ||
+                                    (selectedSalary === '41000' && jobSalary >= 41000 && jobSalary <=
+                                        50999) ||
+                                    (selectedSalary === '51000' && jobSalary >= 51000 && jobSalary <=
+                                        60999) ||
+                                    (selectedSalary === '61000' && jobSalary >= 61000 && jobSalary <=
+                                        70999) ||
+                                    (selectedSalary === '71000' && jobSalary >= 71000 && jobSalary <=
+                                        80999) ||
+                                    (selectedSalary === '81000' && jobSalary >= 81000 && jobSalary <=
+                                        90999) ||
+                                    (selectedSalary === '91000' && jobSalary >= 91000 && jobSalary <=
+                                        100999) ||
+                                    (selectedSalary === '100000' && jobSalary > 100000);
+                                if (titleMatch && typeMatch && industryMatch && salaryMatch) {
+                                    row.style.display = '';
+                                } else {
+                                    row.style.display = 'none';
+                                }
+                            });
+                        }
+                    });
                 </script>
 
             </div>
@@ -167,32 +167,40 @@ include 'config.php';
                                 $result3 = mysqli_query($conn, $sql3);
                                 $row3 = mysqli_fetch_assoc($result3);
                         ?>
-                        <tr class="job-row" data-title="<?php echo htmlspecialchars($row['job_title']); ?> - <?php echo htmlspecialchars($row3['company_name']); ?>"
-                            data-type="<?php echo htmlspecialchars($row['job_type']); ?>"
-                            data-industry="<?php echo htmlspecialchars($row2['jinindustry_name']); ?>"
-                            data-salary="<?php echo htmlspecialchars($row['job_salary']); ?>"
-                            data-date="<?php echo date('F d, Y', strtotime($row['created_at'])); ?>">
-                            <td>
-                                <h5><?php echo $row['job_title']; ?> - <?php echo $row3['company_name']; ?></h5>
-                                <p>
-                                    <strong>Job Type:</strong> <?php echo $row['job_type']; ?><br>
-                                    <strong>Job Industry:</strong> <?php echo $row2['jinindustry_name']; ?><br>
-                                    <strong>Job Salary:</strong> ₱<?php echo number_format($row['job_salary']); ?><br>
-                                    <strong>Date Posted:</strong>
-                                    <?php echo date('F d, Y', strtotime($row['created_at'])); ?>
-                                </p>
-                            </td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <a href="job_details.php?job_id=<?php echo $row['id']; ?>"
-                                        class="btn btn-warning">View</a>&nbsp;
-                                    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>
-                                    <a href="job_applications.php?job_id=<?php echo $row['id']; ?>"
-                                        class="btn btn-primary">Apply</a>
-                                    <?php endif; ?>
-                                </div>
-                            </td>
-                        </tr>
+                                <tr class="job-row" data-title="<?php echo htmlspecialchars($row['job_title']); ?> - <?php echo htmlspecialchars($row3['company_name']); ?>"
+                                    data-type="<?php echo htmlspecialchars($row['job_type']); ?>"
+                                    data-industry="<?php echo htmlspecialchars($row2['jinindustry_name']); ?>"
+                                    <?php if ($row['show_salary'] == 1) {
+                                        echo 'data-salary="' . $row['job_salary'] . '"';
+                                    } else {
+                                        echo 'data-salary="0"';
+                                    } ?>
+                                    data-date="<?php echo date('F d, Y', strtotime($row['created_at'])); ?>">
+                                    <td>
+                                        <h5><?php echo $row['job_title']; ?> - <?php echo $row3['company_name']; ?></h5>
+                                        <p>
+                                            <strong>Job Type:</strong> <?php echo $row['job_type']; ?><br>
+                                            <strong>Job Industry:</strong> <?php echo $row2['jinindustry_name']; ?><br>
+                                            <?php if ($row['show_salary'] == 1) {
+                                                echo '<strong>Job Salary:</strong> ₱' . number_format($row['job_salary']) . '<br>';
+                                            } else {
+                                                echo '<strong>Job Salary:</strong> <i>Not specified</i><br>';
+                                            } ?>
+                                            <strong>Date Posted:</strong>
+                                            <?php echo date('F d, Y', strtotime($row['created_at'])); ?>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="job_details.php?job_id=<?php echo $row['id']; ?>"
+                                                class="btn btn-warning">View</a>&nbsp;
+                                            <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>
+                                                <a href="job_applications.php?job_id=<?php echo $row['id']; ?>"
+                                                    class="btn btn-primary">Apply</a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
                         <?php
                             }
                         } else {
