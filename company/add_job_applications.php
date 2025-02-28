@@ -106,23 +106,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $update_visible = 1;
 
     if ($submit_job_id && $submit_job_id !== $job_id) {
-        $sql = "UPDATE job_listing SET job_title = ?, job_description = ?, job_requirements = ?, job_salary = ?, job_type = ?, image_name = IFNULL(?, image_name), jinindustry_id = ?, shs_qualified = ?, visible = ? WHERE id = ?";
+        $sql = "UPDATE job_listing SET job_title = ?, job_description = ?, job_requirements = ?, job_salary = ?, job_type = ?, image_name = IFNULL(?, image_name), jinindustry_id = ?, shs_qualified = ?, visible = ?, updated_at = NOW(), show_salary = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
 
         if (!$stmt) {
             die("MySQL prepare error: " . mysqli_error($conn));
         }
 
-        mysqli_stmt_bind_param($stmt, "sssssssssi", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $update_visible, $submit_job_id);
+        mysqli_stmt_bind_param($stmt, "ssssssssssi", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $update_visible, $show_salary, $submit_job_id);
     } else {
-        $sql = "INSERT INTO job_listing (job_title, job_description, job_requirements, job_salary, job_type, image_name, jinindustry_id, shs_qualified, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO job_listing (job_title, job_description, job_requirements, job_salary, job_type, image_name, jinindustry_id, shs_qualified, show_salary, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
 
         if (!$stmt) {
             die("MySQL prepare error: " . mysqli_error($conn));
         }
 
-        mysqli_stmt_bind_param($stmt, "sssssssss", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $user_id);
+        mysqli_stmt_bind_param($stmt, "ssssssssss", $job_title, $job_description, $job_requirements, $job_salary, $job_type, $job_image, $jinindustry, $shs_qualified, $show_salary, $user_id);
     }
 
     if (mysqli_stmt_execute($stmt) && empty($error)) {
@@ -218,7 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="number" class="form-control" id="job_salary" name="job_salary" value="<?php echo $job_salary ?>" placeholder="15000" required>  
                         </div>
                         <div class="mb-3">
-                                <input type="checkbox" id="show_salary" name="show_salary" value="0" <?php echo ($show_salary == 1) ? 'checked' : ''; ?>>
+                                <input type="checkbox" id="show_salary" name="show_salary" value="0" <?php echo ($show_salary == 0) ? 'checked' : ''; ?>>
                                 <label for="show_salary" class="form-label">Hide Salary to Applicants?</label>
                         </div>
                         <div class="mb-3">
