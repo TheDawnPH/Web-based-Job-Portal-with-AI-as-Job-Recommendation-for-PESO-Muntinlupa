@@ -27,6 +27,12 @@ if ($_SESSION["user_type"] != "admin") {
 $user_id = filter_input(INPUT_GET, 'user_id', FILTER_SANITIZE_NUMBER_INT);
 
 // delete user from users table
+// Delete job listings related to the user
+$sql_delete_jobs = "DELETE FROM job_listing WHERE user_id = ?";
+$stmt_delete_jobs = mysqli_prepare($conn, $sql_delete_jobs);
+mysqli_stmt_bind_param($stmt_delete_jobs, "i", $user_id);
+mysqli_stmt_execute($stmt_delete_jobs);
+
 $sql = "DELETE FROM users WHERE user_id = ?";
 $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, "i", $user_id);
