@@ -163,14 +163,17 @@ include 'config.php';
                                 $sql2 = "SELECT jinindustry_name FROM jinindustry WHERE jinindustry_id = " . $row['jinindustry_id'];
                                 $result2 = mysqli_query($conn, $sql2);
                                 $row2 = mysqli_fetch_assoc($result2);
+                                $sql3 = "SELECT company_name FROM users WHERE user_id = " . $row['user_id'];
+                                $result3 = mysqli_query($conn, $sql3);
+                                $row3 = mysqli_fetch_assoc($result3);
                         ?>
-                        <tr class="job-row" data-title="<?php echo htmlspecialchars($row['job_title']); ?>"
+                        <tr class="job-row" data-title="<?php echo htmlspecialchars($row['job_title']); ?> - <?php echo htmlspecialchars($row3['company_name']); ?>"
                             data-type="<?php echo htmlspecialchars($row['job_type']); ?>"
                             data-industry="<?php echo htmlspecialchars($row2['jinindustry_name']); ?>"
                             data-salary="<?php echo htmlspecialchars($row['job_salary']); ?>"
                             data-date="<?php echo date('F d, Y', strtotime($row['created_at'])); ?>">
                             <td>
-                                <h5><?php echo $row['job_title']; ?></h5>
+                                <h5><?php echo $row['job_title']; ?> - <?php echo $row3['company_name']; ?></h5>
                                 <p>
                                     <strong>Job Type:</strong> <?php echo $row['job_type']; ?><br>
                                     <strong>Job Industry:</strong> <?php echo $row2['jinindustry_name']; ?><br>
