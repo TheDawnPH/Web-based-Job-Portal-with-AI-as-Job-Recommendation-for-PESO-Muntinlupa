@@ -30,7 +30,7 @@ $stmt2->execute();
 // Get the result
 $result2 = $stmt2->get_result();
 $row2 = $result2->fetch_assoc();
-$name = $row2['fname'] . " " . $row2['lname'];
+$name = $row2['fname'];
 
 // function to next line when next line in database
 function nl2br2($string)
@@ -107,7 +107,7 @@ $stmt3->close();
                                                 echo $industryRow['jinindustry_name'];
                                                 ?></p>
                         <h5 class="card-subtitle mb-2 text-muted">Posted by</h5>
-                        <p class="card-text"><?php echo $name; ?></p>
+                        <p class="card-text"><?php echo $name; ?> at <?php echo $company_name; ?></p>
                     </div>
                     <div class="card-footer text-muted">
                         <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] == "applicant") : ?>

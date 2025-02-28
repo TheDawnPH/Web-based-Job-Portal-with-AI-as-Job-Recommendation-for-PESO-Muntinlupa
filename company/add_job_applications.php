@@ -50,6 +50,7 @@ if ($job_id) {
         $job_description = $row2['job_description'];
         $job_requirements = $row2['job_requirements'];
         $job_salary = $row2['job_salary'];
+        $show_salary = $row2['show_salary'];
         $job_type = $row2['job_type'];
         $jinindustry = $row2['jinindustry_id'];
         $shs_qualified = $row2['shs_qualified'];
@@ -59,6 +60,7 @@ if ($job_id) {
         $job_description = "";
         $job_requirements = "";
         $job_salary = "";
+        $show_salary = "";
         $job_type = "";
         $jinindustry = "";
         $shs_qualified = "";
@@ -69,6 +71,7 @@ if ($job_id) {
     $job_description = "";
     $job_requirements = "";
     $job_salary = "";
+    $show_salary = "";
     $job_type = "";
     $jinindustry = "";
     $shs_qualified = "";
@@ -93,6 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $job_description = htmlspecialchars($_POST["job_description"], ENT_QUOTES);
     $job_requirements = htmlspecialchars($_POST["job_requirements"], ENT_QUOTES);
     $job_salary = htmlspecialchars($_POST["job_salary"], ENT_QUOTES);
+    $show_salary = !empty($_POST["show_salary"]) ? 1 : 0;
     $job_type = htmlspecialchars($_POST["job_type"], ENT_QUOTES);
     $jinindustry = intval($_POST["jinindustry"]);
     $shs_qualified = !empty($_POST["shs_qualified"]) ? 1 : 0;
@@ -211,7 +215,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="mb-3">
                             <label for="job_salary" class="form-label">Job Salary</label>
-                            <input type="number" class="form-control" id="job_salary" name="job_salary" value="<?php echo $job_salary ?>" placeholder="15000" required>
+                            <input type="number" class="form-control" id="job_salary" name="job_salary" value="<?php echo $job_salary ?>" placeholder="15000" required>  
+                        </div>
+                        <div class="mb-3">
+                                <label for="show_salary" class="form-label">Show Salary</label>
+                                <input type="checkbox" id="show_salary" name="show_salary" value="1" <?php echo ($show_salary == 1) ? 'checked' : ''; ?>>
                         </div>
                         <div class="mb-3">
                             <label for="job_type" class="form-label">Job Type</label>

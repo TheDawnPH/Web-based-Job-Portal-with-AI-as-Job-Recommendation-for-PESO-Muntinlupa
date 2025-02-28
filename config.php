@@ -136,6 +136,7 @@ if ($conn === false) {
         job_description text NOT NULL,
         job_requirements text NOT NULL,
         job_salary VARCHAR(255) NOT NULL,
+        show_salary INT(1) DEFAULT 1,
         job_type VARCHAR(255) NOT NULL,
         image_name text,
         jinindustry_id INT NOT NULL,
