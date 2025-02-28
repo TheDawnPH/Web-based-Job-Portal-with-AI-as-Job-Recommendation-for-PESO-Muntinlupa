@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_FILES["nsrp_form"]) || isset($_FILES["biodata_form"]) || isset($_FILES["profile_picture"]) || isset($_FILES["loi"]) || isset($_FILES["cp"]) || isset($_FILES["sec_accredit"]) || isset($_FILES["cda_license"]) || isset($_FILES["dole_license"]) || isset($_FILES["loc"]) || isset($_FILES["mbpermit"]) || isset($_FILES["job_vacant"]) || isset($_FILES["job_solicitation"]) || isset($_FILES["phjobnet_reg"]) || isset($_FILES["cert_nopendingcase"]) || isset($_FILES["cert_regSSS"]) || isset($_FILES["cert_regPhHealth"]) || isset($_FILES["cert_regPGIBG"]) || isset($_FILES["sketch_map"]) || isset($_FILES["2303_bir"])) {
         // check if nsrp form and biodata is pdf or docx
         // Prepare SQL statement
-        $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, latest_school_name=?, latest_school_year_begin=IFNULL(?, latest_school_year_begin) , latest_school_year_end= IFNULL(?, latest_school_year_end), technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image), jinindustry_id = IFNULL(?, jinindustry_id), company_name = IFNULL(?, company_name), company_position = IFNULL(?, company_position), civil_status = IFNULL(?, civil_status) WHERE user_id=?";
+        $sql = "UPDATE users SET sex=?, birth_day=?, birth_month=?, birth_year=?, contact_number=?, house_number=?, street=?, subdivision=?, barangay=?, city=?, province=?, zip_code=?, latest_school_name=?, latest_school_year_begin=IFNULL(?, latest_school_year_begin) , latest_school_year_end= IFNULL(?, latest_school_year_end), technicalschool_name=?, nsrp_form = IFNULL(?, nsrp_form), biodata_form = IFNULL(?, biodata_form), profile_image = IFNULL(?, profile_image), jinindustry_id = IFNULL(?, jinindustry_id), company_name = IFNULL(?, company_name), company_position = IFNULL(?, company_position), civil_status = IFNULL(?, civil_status) skills = IFNULL(?, skills), work_experience = IFNULL(?, work_experience), ofw = IFNULL(?, ofw), ofw_country = IFNULL(?, ofw_country), former_ofw = IFNULL(?, former_ofw), former_ofw_country = IFNULL(?, former_ofw_country), last_ofw_year = IFNULL(?, last_ofw_year), business_name = IFNULL(?, business_name), trade_name = IFNULL(?, trade_name), tin_number = IFNULL(?, tin_number), pjn_accredited = IFNULL(?, pjn_accredited), employment_type = IFNULL(?, employment_type), employment_size = IFNULL(?, employment_size), location_address = IFNULL(?, location_address), location_barangay = IFNULL(?, location_barangay), location_city = IFNULL(?, location_city), location_province = IFNULL(?, location_province), contact_person_name = IFNULL(?, contact_person_name), contact_person_position = IFNULL(?, contact_person_position), cellphone_number = IFNULL(?, cellphone_number), telephone_number = IFNULL(?, telephone_number), email = ?, registration_date = IFNULL(?, registration_date) WHERE user_id = ?";
 
         if ($stmt = mysqli_prepare($conn, $sql)) {
             // Bind variables to the prepared statement as parameters
@@ -107,6 +107,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $param_company_name, 
                 $param_company_position, 
                 $param_civil_status, 
+                $param_skills,
+                $param_work_experience,
+                $param_ofw,
+                $param_ofw_country,
+                $param_former_ofw,
+                $param_former_ofw_country,
+                $param_last_ofw_year,
+                $param_business_name,
+                $param_trade_name,
+                $param_tin_number,
+                $param_pjn_accredited,
+                $param_employment_type,
+                $param_employment_size,
+                $param_location_address,
+                $param_location_barangay,
+                $param_location_city,
+                $param_location_province,
+                $param_contact_person_name,
+                $param_contact_person_position,
+                $param_cellphone_number,
+                $param_telephone_number,
+                $param_email,
+                $param_registration_date,
                 $param_user_id
             );
             
@@ -135,8 +158,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_pwd = !empty($_POST["pwd"]) ? $_POST["pwd"] : null;
             $param_disability_type = !empty($_POST["disability_type"]) ? $_POST["disability_type"] : null;
             $param_civil_status = $_POST["civil_status"];
-
-
+            $param_skills = $_POST["skills"] ? $_POST["skills"] : null;
+            $param_work_experience = $_POST["work_experience"] ? $_POST["work_experience"] : null;
+            $param_ofw = !empty($_POST["ofw"]) ? $_POST["ofw"] : null;
+            $param_ofw_country = !empty($_POST["ofw_country"]) ? $_POST["ofw_country"] : null;
+            $param_former_ofw = !empty($_POST["former_ofw"]) ? $_POST["former_ofw"] : null;
+            $param_former_ofw_country = !empty($_POST["former_ofw_country"]) ? $_POST["former_ofw_country"] : null;
+            $param_last_ofw_year = !empty($_POST["last_ofw_year"]) ? $_POST["last_ofw_year"] : null;
+            $param_business_name = !empty($_POST["business_name"]) ? $_POST["business_name"] : null;
+            $param_trade_name = !empty($_POST["trade_name"]) ? $_POST["trade_name"] : null;
+            $param_tin_number = !empty($_POST["tin_number"]) ? $_POST["tin_number"] : null;
+            $param_pjn_accredited = !empty($_POST["pjn_accredited"]) ? $_POST["pjn_accredited"] : null;
+            $param_employment_type = !empty($_POST["employment_type"]) ? $_POST["employment_type"] : null;
+            $param_employment_size = !empty($_POST["employment_size"]) ? $_POST["employment_size"] : null;
+            $param_location_address = !empty($_POST["location_address"]) ? $_POST["location_address"] : null;
+            $param_location_barangay = !empty($_POST["location_barangay"]) ? $_POST ["location_barangay"] : null;
+            $param_location_city = !empty($_POST["location_city"]) ? $_POST["location_city"] : null;
+            $param_location_province = !empty($_POST["location_province"]) ? $_POST["location_province"] : null;
+            $param_contact_person_name = !empty($_POST["contact_person_name"]) ? $_POST["contact_person_name"] : null;
+            $param_contact_person_position = !empty($_POST["contact_person_position"]) ? $_POST["contact_person_position"] : null;
+            $param_cellphone_number = !empty($_POST["cellphone_number"]) ? $_POST["cellphone_number"] : null;
+            $param_telephone_number = !empty($_POST["telephone_number"]) ? $_POST["telephone_number"] : null;
+            $param_email = $_POST["email"];
+            $param_registration_date = !empty($_POST["registration_date"]) ? $_POST["registration_date"] : null;
 
             // Execute the prepared statement
             if (!empty($_FILES["profile_picture"]["name"])) {
